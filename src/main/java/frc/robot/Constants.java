@@ -10,4 +10,10 @@ package frc.robot;
         public static final int MOTOR_ID = 0;
 
     }
+
+    public static class WristSubystemConstants {
+        public static final int MOTOR_ID = 0;
+
+    }
+
 }

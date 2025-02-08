@@ -16,4 +16,10 @@ package frc.robot;
 
     }
 
+
+
+public static class ElevatorSubystemConstants {
+    public static final int LEAD_MOTOR_ID = 0;
+    public static final int FOLLOW_MOTOR_ID =0;
 }
+    }

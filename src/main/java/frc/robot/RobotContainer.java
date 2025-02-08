@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.subsystems.AlgaeCollectorSubsystem;
 import frc.robot.subsystems.CoralSubystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import swervelib.SwerveInputStream;
@@ -18,7 +19,7 @@ public class RobotContainer {
   // Subsystems
   private final SwerveDriveSubsystem swerveDriveSubsystem = new SwerveDriveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve-2025"));
   private final CoralSubystem coralSubystem = new CoralSubystem();
-
+ private final AlgaeCollectorSubsystem algaeCollectorSubsystem = new AlgaeCollectorSubsystem();
   // Controllers
   final CommandXboxController driverXbox = new CommandXboxController(0);
 

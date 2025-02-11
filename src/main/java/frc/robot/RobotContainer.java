@@ -19,9 +19,9 @@ import swervelib.SwerveInputStream;
 public class RobotContainer {
   // Subsystems
   private final SwerveDriveSubsystem swerveDriveSubsystem = new SwerveDriveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve-2025"));
-  private final CoralSubystem coralSubystem = new CoralSubystem();
- private final AlgaeCollectorSubsystem algaeCollectorSubsystem = new AlgaeCollectorSubsystem();
- private final WristSubsystem wristSubsystem = new WristSubsystem();
+  //private final CoralSubystem coralSubystem = new CoralSubystem();
+  //private final AlgaeCollectorSubsystem algaeCollectorSubsystem = new AlgaeCollectorSubsystem();
+  //private final WristSubsystem wristSubsystem = new WristSubsystem();
   // Controllers
   final CommandXboxController driverXbox = new CommandXboxController(0);
 

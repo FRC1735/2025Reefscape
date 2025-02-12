@@ -73,6 +73,9 @@ public class RobotContainer {
     driverXbox.start().onTrue((Commands.runOnce(swerveDriveSubsystem::zeroGyro)));
     */
 
+    // TODO - delete me
+    driverXbox.a().onTrue(new InstantCommand(wristSubsystem::goToReefLevelZero, wristSubsystem));
+
   }
 
   public Command getAutonomousCommand() {

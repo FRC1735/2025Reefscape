@@ -6,10 +6,14 @@ package frc.robot;
 
 import java.io.File;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.LockOnAprilTag;
 import frc.robot.subsystems.AlgaeCollectorSubsystem;
 import frc.robot.subsystems.CoralSubystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -51,6 +55,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureBindings();
+
   }
 
   private void configureBindings() {
@@ -61,7 +66,15 @@ public class RobotContainer {
     swerveDriveSubsystem.setDefaultCommand(driveRobotOrientedAngularVelocity);
 
     driverXbox.start().onTrue((Commands.runOnce(swerveDriveSubsystem::zeroGyro)));
+    driverXbox.y().whileTrue(new LockOnAprilTag(swerveDriveSubsystem, 
+      ()->MathUtil.applyDeadband(-driverXbox.getLeftY(), 0.05),
+      ()->MathUtil.applyDeadband(-driverXbox.getLeftX(), 0.05),
+      driverXbox
+      ));
+  }
 
+  public void setRumble(double val) {
+    driverXbox.setRumble(RumbleType.kRightRumble, 1);
   }
 
   public Command getAutonomousCommand() {

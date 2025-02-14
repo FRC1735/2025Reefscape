@@ -14,6 +14,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import swervelib.SwerveDrive;
@@ -26,6 +30,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
   private final SwerveDrive swerveDrive;
   public double maximumSpeed = Units.feetToMeters(18.84);
+  NetworkTableEntry validLimeLightTarget;
+  NetworkTableEntry targetXOffset;
 
   public SwerveDriveSubsystem(File directory) {
     SwerveDriveTelemetry.verbosity = DEBUG ? TelemetryVerbosity.HIGH : TelemetryVerbosity.NONE;
@@ -39,6 +45,12 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     } catch(Exception e) {
       throw new RuntimeException(e);
     }
+
+    ////
+    NetworkTable limeLightTable = NetworkTableInstance.getDefault().getTable("limelight");
+    validLimeLightTarget = limeLightTable.getEntry("tv");
+    targetXOffset = limeLightTable.getEntry("tx");
+    /// 
 
     setupPathPlanner();
   }
@@ -61,6 +73,14 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if (DEBUG) {
+      SmartDashboard.putBoolean(
+        "Has Target", hasTarget()
+      );
+      SmartDashboard.putNumber(
+        "Target X Offset", getTargetXOffset()
+      );
+    }
   }
 
   public void zeroGyro()
@@ -70,5 +90,17 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
   private void setupPathPlanner() {
     // TODO
+  }
+
+  public boolean hasTarget() {
+    return validLimeLightTarget.getDouble(0.0) != 0.0;
+  }
+
+  public double getTargetXOffset() {
+    return targetXOffset.getDouble(0.0);
+  }
+
+  public SwerveDrive getSwerve() {
+    return swerveDrive;
   }
 }

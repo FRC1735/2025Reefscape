@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.ControllerRumbleCallback;
+import frc.robot.RumbleState;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 public class LockOnAprilTag extends Command {
@@ -19,17 +21,17 @@ public class LockOnAprilTag extends Command {
   private DoubleSupplier translationY;
   private double heading;
   private double lastGoodHeading;
-  private CommandXboxController controller;
+  private ControllerRumbleCallback controllerRumbleCallback;
 
   private static final boolean DEBUG = true;
 
   /** Creates a new driveAimAtTarget. */
-  public LockOnAprilTag(SwerveDriveSubsystem swerveDriveSubsystem, DoubleSupplier translationX, DoubleSupplier translationY, CommandXboxController controller ) {
+  public LockOnAprilTag(SwerveDriveSubsystem swerveDriveSubsystem, DoubleSupplier translationX, DoubleSupplier translationY, ControllerRumbleCallback controllerRumbleCallback) {
     this.swerve = swerveDriveSubsystem;
     this.translationX = translationX;
     this.translationY = translationY;
     lastGoodHeading = 0;
-    this.controller = controller;
+    this.controllerRumbleCallback = controllerRumbleCallback;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(swerve);
   }
@@ -51,11 +53,12 @@ public class LockOnAprilTag extends Command {
       
       // TODO - would be cool to utilize haptic feedback to notify driver that this is working
       //obotContainer.setRightRumbleDriver(0);
-      controller.setRumble(RumbleType.kBothRumble, 1);
+      controllerRumbleCallback.update(RumbleState.TARGET_LOCKED_ON);
     }else{
       System.out.println("Warning: Swerve Aim: Lost Target!");
       // TODO - would be cool to utilize haptic feedback to notify driver that this is working
       //RobotContainer.setRightRumbleDriver(1);
+      controllerRumbleCallback.update(RumbleState.TARGET_NONE);
       heading = 0;
     }
     lastGoodHeading = heading;
@@ -82,7 +85,7 @@ false);
     //RobotContainer.setRightRumbleDriver(0);
     //System.out.println("Warning: Swerve Aim: Target Lost!");
 
-    controller.setRumble(RumbleType.kBothRumble, 0);
+    controllerRumbleCallback.update(RumbleState.TARGET_NONE);
   }
 
   // Returns true when the command should end.

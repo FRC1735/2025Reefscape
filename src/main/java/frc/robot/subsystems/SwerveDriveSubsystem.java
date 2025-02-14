@@ -20,7 +20,8 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.ControllerCallback;
+import frc.robot.ControllerRumbleCallback;
+import frc.robot.RumbleState;
 import swervelib.SwerveDrive;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
@@ -33,9 +34,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   public double maximumSpeed = Units.feetToMeters(18.84);
   NetworkTableEntry validLimeLightTarget;
   NetworkTableEntry targetXOffset;
-  private final ControllerCallback controllerCallback;
+  private final ControllerRumbleCallback controllerRumbleCallback;
 
-  public SwerveDriveSubsystem(File directory, ControllerCallback controllerCallback) {
+  public SwerveDriveSubsystem(File directory, ControllerRumbleCallback controllerRumbleCallback) {
     SwerveDriveTelemetry.verbosity = DEBUG ? TelemetryVerbosity.HIGH : TelemetryVerbosity.NONE;
 
     try {
@@ -48,7 +49,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
       throw new RuntimeException(e);
     }
 
-    this.controllerCallback = controllerCallback;
+    this.controllerRumbleCallback = controllerRumbleCallback;
 
     ////
     NetworkTable limeLightTable = NetworkTableInstance.getDefault().getTable("limelight");
@@ -79,9 +80,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   public void periodic() {
 
     if (hasTarget()) {
-      controllerCallback.setRumble(0.3);
+      controllerRumbleCallback.update(RumbleState.TARGET_FOUND);
     } else {
-      controllerCallback.setRumble(0);
+      controllerRumbleCallback.update(RumbleState.TARGET_NONE);
     }
 
     if (DEBUG) {

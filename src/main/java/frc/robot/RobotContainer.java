@@ -21,19 +21,21 @@ import frc.robot.subsystems.WristSubsystem;
 import swervelib.SwerveInputStream;
 
 public class RobotContainer {
+
   // Controllers
-  final CommandXboxController driverXbox = new CommandXboxController(0);
+  final CommandXboxController driver = new CommandXboxController(0);
+  RumbleState driverRumbleState = RumbleState.TARGET_NONE;
+  double driverRumbleIntensity = 0;
 
   // Subsystems
   private final SwerveDriveSubsystem swerveDriveSubsystem = new SwerveDriveSubsystem(
                               new File(Filesystem.getDeployDirectory(), "swerve-2025"),
-                              new ControllerCallback() {
-                                @Override
-                                public void setRumble(double val) {
-                                    // TODO Auto-generated method stub
-                                    driverXbox.setRumble(RumbleType.kLeftRumble, val);
+                              new ControllerRumbleCallback() {
+                                  @Override
+                                  public void update(RumbleState rumbleState) {
+                                    driverRumbleState = rumbleState;
+                                  }
                                 }
-                              }
                               );
   //private final CoralSubystem coralSubystem = new CoralSubystem();
   //private final AlgaeCollectorSubsystem algaeCollectorSubsystem = new AlgaeCollectorSubsystem();
@@ -44,9 +46,9 @@ public class RobotContainer {
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(swerveDriveSubsystem.getSwerveDrive(),
-                                                                () -> driverXbox.getLeftY() * -1,
-                                                                () -> driverXbox.getLeftX() * -1)
-                                                            .withControllerRotationAxis(driverXbox::getRightX)
+                                                                () -> driver.getLeftY() * -1,
+                                                                () -> driver.getLeftX() * -1)
+                                                            .withControllerRotationAxis(driver::getRightX)
                                                             .deadband(0.1)
                                                             .scaleTranslation(0.8)
                                                             .allianceRelativeControl(true);
@@ -54,8 +56,8 @@ public class RobotContainer {
   /**
    * Clone's the angular velocity input stream and converts it to a fieldRelative input stream.
    */
-  SwerveInputStream driveDirectAngle = driveAngularVelocity.copy().withControllerHeadingAxis(driverXbox::getRightX,
-                                                                                             driverXbox::getRightY)
+  SwerveInputStream driveDirectAngle = driveAngularVelocity.copy().withControllerHeadingAxis(driver::getRightX,
+                                                                                             driver::getRightY)
                                                            .headingWhile(true);
 
   /**
@@ -76,19 +78,51 @@ public class RobotContainer {
     //swerveDriveSubsystem.setDefaultCommand(driveFieldOrientedDirectAngle);
     swerveDriveSubsystem.setDefaultCommand(driveRobotOrientedAngularVelocity);
 
-    driverXbox.start().onTrue((Commands.runOnce(swerveDriveSubsystem::zeroGyro)));
-    driverXbox.rightBumper().whileTrue(new LockOnAprilTag(swerveDriveSubsystem, 
-      ()->MathUtil.applyDeadband(-driverXbox.getLeftY(), 0.05),
-      ()->MathUtil.applyDeadband(-driverXbox.getLeftX(), 0.05),
-      driverXbox
+    driver.start().onTrue((Commands.runOnce(swerveDriveSubsystem::zeroGyro)));
+    driver.rightBumper().whileTrue(new LockOnAprilTag(swerveDriveSubsystem, 
+      ()->MathUtil.applyDeadband(-driver.getLeftY(), 0.05),
+      ()->MathUtil.applyDeadband(-driver.getLeftX(), 0.05),
+      new ControllerRumbleCallback() {
+        @Override
+        public void update(RumbleState rumbleState) {
+          driverRumbleState = rumbleState;
+        }
+      }
       ));
   }
 
   public void setRumble(double val) {
-    driverXbox.setRumble(RumbleType.kRightRumble, 1);
+    driver.setRumble(RumbleType.kRightRumble, 1);
   }
 
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
+  }
+
+  public void rumblePeriodic() {
+    switch (driverRumbleState) {
+      case TARGET_FOUND:
+        if (driverRumbleIntensity > 0.5) {
+          driverRumbleIntensity = 0.2;
+        } else {
+          driverRumbleIntensity += 0.1;
+        }
+        break;
+          
+      case TARGET_LOCKED_ON:
+        driverRumbleIntensity = 1;
+        break;
+          
+      case TARGET_NONE:
+      default:
+        driverRumbleIntensity = 0;
+        break;
+    }
+
+    driver.setRumble(RumbleType.kBothRumble, driverRumbleIntensity);
+  }
+
+  public void onDisabledInit() {
+    driver.setRumble(RumbleType.kBothRumble, 0);
   }
 }

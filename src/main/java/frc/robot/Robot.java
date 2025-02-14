@@ -19,11 +19,16 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+    // TODO - this might impact performance negatively
+    m_robotContainer.rumblePeriodic();
+
     CommandScheduler.getInstance().run();
   }
 
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    m_robotContainer.onDisabledInit();
+  }
 
   @Override
   public void disabledPeriodic() {}

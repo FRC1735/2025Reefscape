@@ -8,6 +8,7 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -20,8 +21,10 @@ public class LockOnAprilTag extends Command {
   private double lastGoodHeading;
   private CommandXboxController controller;
 
+  private static final boolean DEBUG = true;
+
   /** Creates a new driveAimAtTarget. */
-  public LockOnAprilTag(SwerveDriveSubsystem swerveDriveSubsystem, DoubleSupplier translationX, DoubleSupplier translation, CommandXboxController controller ) {
+  public LockOnAprilTag(SwerveDriveSubsystem swerveDriveSubsystem, DoubleSupplier translationX, DoubleSupplier translationY, CommandXboxController controller ) {
     this.swerve = swerveDriveSubsystem;
     this.translationX = translationX;
     this.translationY = translationY;
@@ -65,6 +68,12 @@ public class LockOnAprilTag extends Command {
     heading * swerve.getSwerve().getMaximumChassisAngularVelocity(),
 true,
 false);
+
+    if (DEBUG) {
+      SmartDashboard.putNumber(
+        "Last good heading", lastGoodHeading
+      );
+    }
   }
 
   // Called once the command ends or is interrupted.

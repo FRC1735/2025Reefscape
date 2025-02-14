@@ -21,13 +21,24 @@ import frc.robot.subsystems.WristSubsystem;
 import swervelib.SwerveInputStream;
 
 public class RobotContainer {
+  // Controllers
+  final CommandXboxController driverXbox = new CommandXboxController(0);
+
   // Subsystems
-  private final SwerveDriveSubsystem swerveDriveSubsystem = new SwerveDriveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve-2025"));
+  private final SwerveDriveSubsystem swerveDriveSubsystem = new SwerveDriveSubsystem(
+                              new File(Filesystem.getDeployDirectory(), "swerve-2025"),
+                              new ControllerCallback() {
+                                @Override
+                                public void setRumble(double val) {
+                                    // TODO Auto-generated method stub
+                                    driverXbox.setRumble(RumbleType.kLeftRumble, val);
+                                }
+                              }
+                              );
   //private final CoralSubystem coralSubystem = new CoralSubystem();
   //private final AlgaeCollectorSubsystem algaeCollectorSubsystem = new AlgaeCollectorSubsystem();
   //private final WristSubsystem wristSubsystem = new WristSubsystem();
-  // Controllers
-  final CommandXboxController driverXbox = new CommandXboxController(0);
+
 
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.

@@ -77,7 +77,7 @@ public class RobotContainer {
     swerveDriveSubsystem.setDefaultCommand(driveRobotOrientedAngularVelocity);
 
     driverXbox.start().onTrue((Commands.runOnce(swerveDriveSubsystem::zeroGyro)));
-    driverXbox.y().whileTrue(new LockOnAprilTag(swerveDriveSubsystem, 
+    driverXbox.rightBumper().whileTrue(new LockOnAprilTag(swerveDriveSubsystem, 
       ()->MathUtil.applyDeadband(-driverXbox.getLeftY(), 0.05),
       ()->MathUtil.applyDeadband(-driverXbox.getLeftX(), 0.05),
       driverXbox

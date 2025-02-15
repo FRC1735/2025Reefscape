@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.LockHeadingOnAprilTag;
+import frc.robot.commands.LockXOnAprilTag;
 import frc.robot.subsystems.AlgaeCollectorSubsystem;
 import frc.robot.subsystems.CoralSubystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -90,6 +91,17 @@ public class RobotContainer {
         }
       }
       ));
+
+    driver.leftBumper().whileTrue(new LockXOnAprilTag(
+      swerveDriveSubsystem, 
+      () -> 0, 
+      driver::getRightX, 
+      new ControllerRumbleCallback() {
+        @Override
+        public void update(RumbleState rumbleState) {
+          // TODO
+        }
+      }));
   }
 
   public void setRumble(double val) {

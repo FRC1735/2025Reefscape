@@ -20,7 +20,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     // TODO - this might impact performance negatively
-    m_robotContainer.rumblePeriodic();
+    // m_robotContainer.rumblePeriodic();
 
     CommandScheduler.getInstance().run();
   }

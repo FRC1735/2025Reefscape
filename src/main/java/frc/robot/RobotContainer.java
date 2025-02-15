@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.LockOnAprilTag;
+import frc.robot.commands.LockHeadingOnAprilTag;
 import frc.robot.subsystems.AlgaeCollectorSubsystem;
 import frc.robot.subsystems.CoralSubystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -80,7 +80,7 @@ public class RobotContainer {
     swerveDriveSubsystem.setDefaultCommand(driveRobotOrientedAngularVelocity);
 
     driver.start().onTrue((Commands.runOnce(swerveDriveSubsystem::zeroGyro)));
-    driver.rightBumper().whileTrue(new LockOnAprilTag(swerveDriveSubsystem, 
+    driver.rightBumper().whileTrue(new LockHeadingOnAprilTag(swerveDriveSubsystem, 
       ()->MathUtil.applyDeadband(-driver.getLeftY(), 0.05),
       ()->MathUtil.applyDeadband(-driver.getLeftX(), 0.05),
       new ControllerRumbleCallback() {

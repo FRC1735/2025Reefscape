@@ -15,7 +15,7 @@ import frc.robot.ControllerRumbleCallback;
 import frc.robot.RumbleState;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
-public class LockOnAprilTag extends Command {
+public class LockHeadingOnAprilTag extends Command {
   private final SwerveDriveSubsystem swerve;
   private DoubleSupplier translationX;
   private DoubleSupplier translationY;
@@ -25,7 +25,7 @@ public class LockOnAprilTag extends Command {
 
   private static final boolean DEBUG = true;
 
-  public LockOnAprilTag(SwerveDriveSubsystem swerveDriveSubsystem, DoubleSupplier translationX, DoubleSupplier translationY, ControllerRumbleCallback controllerRumbleCallback) {
+  public LockHeadingOnAprilTag(SwerveDriveSubsystem swerveDriveSubsystem, DoubleSupplier translationX, DoubleSupplier translationY, ControllerRumbleCallback controllerRumbleCallback) {
     this.swerve = swerveDriveSubsystem;
     this.translationX = translationX;
     this.translationY = translationY;
@@ -63,6 +63,13 @@ false);
       SmartDashboard.putNumber(
         "Last good heading", lastGoodHeading
       );
+      SmartDashboard.putNumber(
+        "Translation X", translationX.getAsDouble()
+      );
+      SmartDashboard.putNumber(
+        "Translation Y", translationY.getAsDouble()
+      );
+
     }
   }
 

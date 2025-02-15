@@ -7,6 +7,7 @@ package frc.robot;
 import java.io.File;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -100,29 +101,29 @@ public class RobotContainer {
   }
 
   public void rumblePeriodic() {
-    switch (driverRumbleState) {
-      case TARGET_FOUND:
-        if (driverRumbleIntensity > 0.5) {
-          driverRumbleIntensity = 0.2;
-        } else {
-          driverRumbleIntensity += 0.1;
-        }
-        break;
-          
-      case TARGET_LOCKED_ON:
-        driverRumbleIntensity = 1;
-        break;
-          
-      case TARGET_NONE:
-      default:
-        driverRumbleIntensity = 0;
-        break;
+    if (DriverStation.isTeleopEnabled()) {
+      switch (driverRumbleState) {
+        case TARGET_FOUND:
+          if (driverRumbleIntensity > 0.5) {
+            driverRumbleIntensity = 0.2;
+          } else {
+            driverRumbleIntensity += 0.01;
+          }
+          break;
+            
+        case TARGET_LOCKED_ON:
+          driverRumbleIntensity = 1;
+          break;
+            
+        case TARGET_NONE:
+        default:
+          driverRumbleIntensity = 0;
+          break;
+      } 
+    } else {
+      driverRumbleState = RumbleState.TARGET_NONE;
     }
 
     driver.setRumble(RumbleType.kBothRumble, driverRumbleIntensity);
-  }
-
-  public void onDisabledInit() {
-    driver.setRumble(RumbleType.kBothRumble, 0);
   }
 }

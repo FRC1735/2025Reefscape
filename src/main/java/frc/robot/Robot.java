@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -36,6 +38,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    setLimelightPipeline();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     if (m_autonomousCommand != null) {
@@ -54,6 +57,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    setLimelightPipeline();
   }
 
   @Override
@@ -72,4 +77,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testExit() {}
+
+  private void setLimelightPipeline() {
+    if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+      LimelightHelpers.setPipelineIndex("limelight", 0);
+    } else {
+      LimelightHelpers.setPipelineIndex("limelight", 1);
+    }
+  }
 }

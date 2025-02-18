@@ -7,6 +7,7 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -42,7 +43,8 @@ public class LockHeadingOnAprilTag extends Command {
   @Override
   public void execute() {
     if(swerve.hasTarget()){
-      heading = -swerve.getTargetXOffset() / 70;
+      // TODO - adjustements assuming we are targeting the pole to the left of the tag
+      heading = -(swerve.getTargetXOffset() + (Units.inchesToMeters(6.47) * 100)) / 70;
       controllerRumbleCallback.update(RumbleState.TARGET_LOCKED_ON);
     }else{
       if (DEBUG) {

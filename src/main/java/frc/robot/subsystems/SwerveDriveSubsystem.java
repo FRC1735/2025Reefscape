@@ -34,6 +34,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   public double maximumSpeed = Units.feetToMeters(18.84);
   NetworkTableEntry validLimeLightTarget;
   NetworkTableEntry targetXOffset;
+  NetworkTableEntry targetYOffset;
   private final ControllerRumbleCallback controllerRumbleCallback;
 
   public SwerveDriveSubsystem(File directory, ControllerRumbleCallback controllerRumbleCallback) {
@@ -55,6 +56,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     NetworkTable limeLightTable = NetworkTableInstance.getDefault().getTable("limelight");
     validLimeLightTarget = limeLightTable.getEntry("tv");
     targetXOffset = limeLightTable.getEntry("tx");
+    targetYOffset = limeLightTable.getEntry("ty");
     /// 
 
     setupPathPlanner();
@@ -110,6 +112,10 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
   public double getTargetXOffset() {
     return targetXOffset.getDouble(0.0);
+  }
+
+  public double getTargetYOffset() {
+    return targetYOffset.getDouble(0.0);
   }
 
   public SwerveDrive getSwerve() {

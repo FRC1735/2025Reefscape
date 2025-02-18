@@ -23,7 +23,17 @@ public class LockXOnAprilTag extends Command {
   private double targetX;
   private ControllerRumbleCallback controllerRumbleCallback;
 
+  private double startingYOffset;
+
   private PIDController xPIDController = new PIDController(0.01, 0, 0);
+  private PIDController yPIDController = new PIDController(0.1, 0, 0);
+
+  // I think we may care more about the heading here as opposed to 'Y'
+  // Strafe on X and only adjust heading to be consistent w/ the specific tag we are looking at
+  // ie
+  // we are zeroed facing directly towards an id on the reef
+  // we detect the tag we are looking at and adjust the desired heading based on that and the original
+  // 0 heading
 
   private static final boolean DEBUG = true;
 
@@ -38,13 +48,18 @@ public class LockXOnAprilTag extends Command {
 
   @Override
   public void initialize() {
+    startingYOffset = swerve.getTargetYOffset();
   }
 
   @Override
   public void execute() {
     double translateX = 0;
+    double translateY = 0;
+
     if(swerve.hasTarget()){
       translateX = xPIDController.calculate(swerve.getTargetXOffset(), 0);
+      translateY = yPIDController.calculate(swerve.getTargetYOffset(), startingYOffset);
+
       //controllerRumbleCallback.update(RumbleState.TARGET_LOCKED_ON);
     }else{
       if (DEBUG) {
@@ -54,7 +69,7 @@ public class LockXOnAprilTag extends Command {
     }
  
     swerve.getSwerve().drive(
-      new Translation2d(translationY.getAsDouble() * swerve.getSwerve().getMaximumChassisVelocity(),
+      new Translation2d(-translateY * swerve.getSwerve().getMaximumChassisVelocity(),
       (-translateX) * swerve.getSwerve().getMaximumChassisVelocity()
       ),
     heading.getAsDouble() * swerve.getSwerve().getMaximumChassisAngularVelocity(),
@@ -62,7 +77,7 @@ true,
 false);
 
     if (DEBUG) {
-
+      SmartDashboard.putNumber("Target Y Offset", startingYOffset);
     }
   }
 

@@ -8,11 +8,14 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.ControllerRumbleCallback;
+import frc.robot.LimelightHelpers;
 import frc.robot.RumbleState;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
@@ -38,13 +41,41 @@ public class LockHeadingOnAprilTag extends Command {
 
   @Override
   public void initialize() {
+
   }
 
   @Override
   public void execute() {
+
+    // TODO - this is bad?
+    if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+      if (SmartDashboard.getBoolean("Target Left Reef", true)) {
+        LimelightHelpers.setPipelineIndex("limelight", 2);
+      } else {
+        LimelightHelpers.setPipelineIndex("limelight", 3);
+      }
+    } else {
+      if (SmartDashboard.getBoolean("Target Left Reef", true)) {
+        LimelightHelpers.setPipelineIndex("limelight", 4);
+      } else {
+        LimelightHelpers.setPipelineIndex("limelight",5);
+      }
+    }
+    ////////////
+
+
     if(swerve.hasTarget()){
       // TODO - adjustements assuming we are targeting the pole to the left of the tag
-      heading = -(swerve.getTargetXOffset() + (Units.inchesToMeters(6.47) * 100)) / 70;
+
+      // TODO - need ability to switch left or right on targeting (-7 or +7)
+
+      boolean targetLeft = true;
+
+      heading = (
+        -(swerve.getTargetXOffset() 
+        //+ (targetLeft? 7 : -7) 
+        //+ ((targetLeft? -0.1: 0.1) * LimelightHelpers.getTY("limelight"))
+        ) / 70);
       controllerRumbleCallback.update(RumbleState.TARGET_LOCKED_ON);
     }else{
       if (DEBUG) {

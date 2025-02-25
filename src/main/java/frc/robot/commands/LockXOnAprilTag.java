@@ -8,11 +8,14 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.ControllerRumbleCallback;
+import frc.robot.LimelightHelpers;
 import frc.robot.RumbleState;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
@@ -53,12 +56,29 @@ public class LockXOnAprilTag extends Command {
 
   @Override
   public void execute() {
+
+        // TODO - this is bad?
+    if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+      if (SmartDashboard.getBoolean("Target Left Reef", true)) {
+        LimelightHelpers.setPipelineIndex("limelight", 2);
+      } else {
+        LimelightHelpers.setPipelineIndex("limelight", 3);
+      }
+    } else {
+      if (SmartDashboard.getBoolean("Target Left Reef", true)) {
+        LimelightHelpers.setPipelineIndex("limelight", 4);
+      } else {
+        LimelightHelpers.setPipelineIndex("limelight",5);
+      }
+    }
+    ////////////
+
     double translateX = 0;
     double translateY = 0;
 
     if(swerve.hasTarget()){
       translateX = xPIDController.calculate(swerve.getTargetXOffset(), 0);
-      translateY = yPIDController.calculate(swerve.getTargetYOffset(), startingYOffset);
+      translateY = 0; //yPIDController.calculate(swerve.getTargetYOffset(), startingYOffset);
 
       //controllerRumbleCallback.update(RumbleState.TARGET_LOCKED_ON);
     }else{

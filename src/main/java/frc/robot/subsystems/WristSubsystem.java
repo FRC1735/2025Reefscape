@@ -10,22 +10,28 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.WristSubystemConstants;
+import frc.robot.util.SmartDashboardPIDTuner;
 
 public class WristSubsystem extends SubsystemBase {
   private SparkFlex motor = new SparkFlex(WristSubystemConstants.MOTOR_ID, MotorType.kBrushless);
+  private SmartDashboardPIDTuner smartDashboardPIDTuner;
+  private final boolean DEBUG = true;
 
     public WristSubsystem() {
       SparkFlexConfig motorConfig = new SparkFlexConfig();
       motorConfig.idleMode(IdleMode.kBrake);
       motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+
+      this.smartDashboardPIDTuner = new SmartDashboardPIDTuner(getSubsystem(), motor, motorConfig, 0, 0, 0, 0, 1, FeedbackSensor.kAbsoluteEncoder, false, DEBUG);
     }
   
     @Override
     public void periodic() {
-      // This method will be called once per scheduler run
+      smartDashboardPIDTuner.periodic();
     }
   
     public void up() {

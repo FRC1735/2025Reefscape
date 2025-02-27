@@ -16,14 +16,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AlgaeSubystemConstants;
 
 public class AlgaeCollectorSubsystem extends SubsystemBase {
-  private static final SparkBaseConfig MotorConfig = null;
   private SparkFlex motor = new SparkFlex(AlgaeSubystemConstants.MOTOR_ID, MotorType.kBrushless);
   
     /** Creates a new CoralSubystem. */
     public AlgaeCollectorSubsystem() {
       SparkFlexConfig motorConfig = new SparkFlexConfig();
       motorConfig.idleMode(IdleMode.kBrake);
-      motor.configure(MotorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+      motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
     }
   
     @Override

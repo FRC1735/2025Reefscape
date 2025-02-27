@@ -14,10 +14,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.ElevatorSubystemConstants;
 import frc.robot.commands.LockHeadingOnAprilTag;
 import frc.robot.commands.LockXOnAprilTag;
 import frc.robot.subsystems.AlgaeCollectorSubsystem;
 import frc.robot.subsystems.CoralSubystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import swervelib.SwerveInputStream;
@@ -39,9 +41,10 @@ public class RobotContainer {
                                   }
                                 }
                               );
-  //private final CoralSubystem coralSubystem = new CoralSubystem();
-  //private final AlgaeCollectorSubsystem algaeCollectorSubsystem = new AlgaeCollectorSubsystem();
-  //private final WristSubsystem wristSubsystem = new WristSubsystem();
+  private final CoralSubystem coralSubystem = new CoralSubystem();
+  private final AlgaeCollectorSubsystem algaeCollectorSubsystem = new AlgaeCollectorSubsystem();
+  private final WristSubsystem wristSubsystem = new WristSubsystem();
+  private final ElevatorSubsystem elevator = new ElevatorSubsystem();
 
 
   /**
@@ -102,7 +105,11 @@ public class RobotContainer {
           // TODO
         }
       }));
-  }
+
+      driver.a().onTrue(new InstantCommand(elevator::up, elevator)).onFalse(new InstantCommand(elevator::stop, elevator));
+      driver.b().onTrue(new InstantCommand(elevator::down, elevator)).onFalse(new InstantCommand(elevator::stop, elevator));
+
+    }
 
   public void setRumble(double val) {
     driver.setRumble(RumbleType.kRightRumble, 1);

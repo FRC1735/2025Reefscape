@@ -24,7 +24,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     leadMotor.configure(leadMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
     SparkFlexConfig followMotorConfig = new SparkFlexConfig();
-    followMotorConfig.follow(ElevatorSubystemConstants.LEAD_MOTOR_ID, true);
+    followMotorConfig.follow(ElevatorSubystemConstants.LEAD_MOTOR_ID, false);
     followMotor.configure(followMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
@@ -34,11 +34,11 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void up() {
-    leadMotor.set(-1);
+    leadMotor.set(1);
   } 
 
   public void down() {
-    leadMotor.set(1);
+    leadMotor.set(-0.4);
   }
 
   public void stop() {

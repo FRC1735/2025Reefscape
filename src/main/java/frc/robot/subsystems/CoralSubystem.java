@@ -46,6 +46,7 @@ private SparkFlex followMotor = new SparkFlex(CoralSubystemConstants.FOLLOW_MOTO
   public void stop() {
     leadMotor.stopMotor();
   }
+  
   public void collect() {
     leadMotor.set(0.25);
   } 

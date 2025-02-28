@@ -110,6 +110,7 @@ public class RobotContainer {
       //driver.b().onTrue(new InstantCommand(elevator::down, elevator)).onFalse(new InstantCommand(elevator::stop, elevator));
 
 
+      /*
       driver
         .a()
         .onTrue(new InstantCommand(coralSubystem::shoot, coralSubystem))
@@ -119,6 +120,11 @@ public class RobotContainer {
         .b()
         .onTrue(new InstantCommand(coralSubystem::returnToFunnel, coralSubystem))
         .onFalse(new InstantCommand(coralSubystem::stop, coralSubystem));
+        */
+
+        driver.a().onTrue(new InstantCommand(wristSubsystem::testPositionControl, wristSubsystem));
+
+        driver.b().onTrue(new InstantCommand(wristSubsystem::stop, wristSubsystem));
 
 
     }

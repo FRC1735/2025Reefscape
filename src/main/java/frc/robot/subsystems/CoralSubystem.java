@@ -25,7 +25,8 @@ private SparkFlex followMotor = new SparkFlex(CoralSubystemConstants.FOLLOW_MOTO
     leadMotor.configure(leadMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
     SparkFlexConfig followMotorConfig = new SparkFlexConfig();
-    followMotorConfig.follow(CoralSubystemConstants.LEAD_MOTOR_ID, true);
+    followMotorConfig.idleMode(IdleMode.kBrake);
+    followMotorConfig.follow(CoralSubystemConstants.LEAD_MOTOR_ID, false);
     followMotor.configure(followMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
@@ -34,18 +35,22 @@ private SparkFlex followMotor = new SparkFlex(CoralSubystemConstants.FOLLOW_MOTO
     // This method will be called once per scheduler run
   }
 
-  public void in() {
-    leadMotor.set(-1);
+  public void shoot() {
+    leadMotor.set(0.5);
   } 
 
-  public void out() {
-    leadMotor.set(1);
+  public void returnToFunnel() {
+    leadMotor.set(-0.5);
   }
 
   public void stop() {
     leadMotor.stopMotor();
   }
+  public void collect() {
+    leadMotor.set(0.25);
+  } 
 }
+
 
 
 

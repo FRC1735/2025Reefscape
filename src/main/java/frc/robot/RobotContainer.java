@@ -112,8 +112,14 @@ public class RobotContainer {
 
       driver
         .a()
-        .onTrue(new InstantCommand(algaeCollectorSubsystem::in, algaeCollectorSubsystem))
-        .onFalse(new InstantCommand(algaeCollectorSubsystem::stop, algaeCollectorSubsystem));
+        .onTrue(new InstantCommand(coralSubystem::shoot, coralSubystem))
+        .onFalse(new InstantCommand(coralSubystem::stop, coralSubystem));
+
+      driver
+        .b()
+        .onTrue(new InstantCommand(coralSubystem::returnToFunnel, coralSubystem))
+        .onFalse(new InstantCommand(coralSubystem::stop, coralSubystem));
+
 
     }
 

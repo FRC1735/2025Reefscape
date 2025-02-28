@@ -106,8 +106,14 @@ public class RobotContainer {
         }
       }));
 
-      driver.a().onTrue(new InstantCommand(elevator::up, elevator)).onFalse(new InstantCommand(elevator::stop, elevator));
-      driver.b().onTrue(new InstantCommand(elevator::down, elevator)).onFalse(new InstantCommand(elevator::stop, elevator));
+      //driver.a().onTrue(new InstantCommand(elevator::up, elevator)).onFalse(new InstantCommand(elevator::stop, elevator));
+      //driver.b().onTrue(new InstantCommand(elevator::down, elevator)).onFalse(new InstantCommand(elevator::stop, elevator));
+
+
+      driver
+        .a()
+        .onTrue(new InstantCommand(algaeCollectorSubsystem::in, algaeCollectorSubsystem))
+        .onFalse(new InstantCommand(algaeCollectorSubsystem::stop, algaeCollectorSubsystem));
 
     }
 

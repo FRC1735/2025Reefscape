@@ -23,7 +23,7 @@ public class WristSubsystem extends SubsystemBase {
   private SparkFlex motor = new SparkFlex(WristSubystemConstants.MOTOR_ID, MotorType.kBrushless);
   private SparkClosedLoopController closedLoopController;
 
-  boolean DEBUG = true;
+  boolean DEBUG = false;
   private SmartDashboardPIDTuner smartDashboardPIDTuner;
 
   public WristSubsystem() {

@@ -106,8 +106,8 @@ public class RobotContainer {
         }
       }));
 
-      //driver.a().onTrue(new InstantCommand(elevator::up, elevator)).onFalse(new InstantCommand(elevator::stop, elevator));
-      //driver.b().onTrue(new InstantCommand(elevator::down, elevator)).onFalse(new InstantCommand(elevator::stop, elevator));
+      driver.a().onTrue(new InstantCommand(elevator::up, elevator)).onFalse(new InstantCommand(elevator::stop, elevator));
+      driver.b().onTrue(new InstantCommand(elevator::down, elevator)).onFalse(new InstantCommand(elevator::stop, elevator));
 
 
       /*
@@ -122,13 +122,15 @@ public class RobotContainer {
         .onFalse(new InstantCommand(coralSubystem::stop, coralSubystem));
         */
 
+        /*
         driver.a().onTrue(new InstantCommand(wristSubsystem::testPositionControl, wristSubsystem));
 
         driver.x().onTrue(new InstantCommand(wristSubsystem::testPositionControl2, wristSubsystem));
 
         driver.y().onTrue(new InstantCommand(wristSubsystem::testPositionControl3, wristSubsystem));
+        */
 
-        driver.b().onTrue(new InstantCommand(wristSubsystem::stop, wristSubsystem));
+       //driver.b().onTrue(new InstantCommand(wristSubsystem::stop, wristSubsystem));
 
 
     }

@@ -59,8 +59,8 @@ if device is None:
 print("XK-80 found and ready!")
 
 # Detach kernel driver if necessary (Linux only)
-if device.is_kernel_driver_active(0):
-    device.detach_kernel_driver(0)
+#if device.is_kernel_driver_active(0):
+#    device.detach_kernel_driver(0)
 
 # Set device configuration
 device.set_configuration()

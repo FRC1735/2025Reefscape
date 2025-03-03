@@ -9,7 +9,7 @@ VENDOR_ID = 1523
 PRODUCT_ID = 1089
 
 # Networktables stuff
-SERVER = '10.1.90.2'
+SERVER = '10.17.35.2'
 KEYBOARD = 0
 KEYS = 80
 

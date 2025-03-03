@@ -1,4 +1,4 @@
-package frc.robot.util;
+package frc.robot.utils;
 
 import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
@@ -20,11 +20,7 @@ public class KeyboardController {
   private final Map<EventLoop, Map<Integer, Trigger>> m_buttonCache = new HashMap<>();
 
   // Group of triggers for each subsystem
-  private final Funnel funnel;
-  private final EndEffector endEffector;
-  private final Elevator elevator;
-  private final Climber climber;
-  private final Scoring scoring;
+  private final TestSubsystem test;
 
   public KeyboardController(int port) {
     this(port, 80);
@@ -35,11 +31,7 @@ public class KeyboardController {
     this.inst = NetworkTableInstance.getDefault();
     this.keyboardTable = inst.getTable("/AdvantageKit/DriverStation/Keyboard" + port);
 
-    this.funnel = new Funnel(this);
-    this.endEffector = new EndEffector(this);
-    this.elevator = new Elevator(this);
-    this.climber = new Climber(this);
-    this.scoring = new Scoring(this);
+    this.test = new TestSubsystem(this);
 
     buttonSubscribers = new BooleanSubscriber[this.numButtons];
     for (int i = 0; i < this.numButtons; i++) {
@@ -99,213 +91,17 @@ public class KeyboardController {
     return buttonSubscribers[button].get();
   }
 
-  public Funnel funnel() {
-    return funnel;
-  }
-
-  public EndEffector endEffector() {
-    return endEffector;
-  }
-
-  public Elevator elevator() {
-    return elevator;
-  }
-
-  public Climber climber() {
-    return climber;
-  }
-
-  public Scoring scoring() {
-    return scoring;
+  public TestSubsystem test() {
+    return test;
   }
 
   public Trigger resetHeading() {
     return button(2, 10);
   }
 
-  public static final record Funnel(KeyboardController controller) {
-    public Trigger wingsClose() {
-      return controller.button(2, 1);
-    }
-
-    public Trigger wingsIntake() {
-      return controller.button(3, 2);
-    }
-
-    public Trigger rollerWheelsIn() {
-      return controller.button(4, 1);
-    }
-
-    public Trigger incrementClosedSetpoint() {
-      return controller.button(2, 2);
-    }
-
-    public Trigger incrementIntakeSetpoint() {
-      return controller.button(3, 2);
-    }
-
-    public Trigger rollerWheelsOut() {
-      return controller.button(4, 2);
-    }
-
-    public Trigger decrementClosedSetpoint() {
-      return controller.button(2, 3);
-    }
-
-    public Trigger decrementIntakeSetpoint() {
-      return controller.button(3, 3);
-    }
-
-    public Trigger funnelSensorToggle() {
-      return controller.button(2, 4);
-    }
-
-    public Trigger incrementRollerWheelsSpeed() {
-      return controller.button(4, 3);
-    }
-
-    public Trigger decrementRollerWheelsSpeed() {
-      return controller.button(4, 4);
-    }
-  }
-
-  public static final record EndEffector(KeyboardController controller) {
-    public Trigger wheelsIn() {
-      return controller.button(6, 1);
-    }
-
-    public Trigger wheelsOut() {
-      return controller.button(6, 2);
-    }
-
-    public Trigger toggleSensor() {
-      return controller.button(7, 4);
-    }
-
-    public Trigger incrementSpeed() {
-      return controller.button(6, 3);
-    }
-
-    public Trigger decrementSpeed() {
-      return controller.button(6, 4);
-    }
-
-    public Trigger eject() {
-      return controller.button(7, 1);
-    }
-
-    public Trigger blep() {
-      return controller.button(7, 2);
-    }
-  }
-
-  public static final record Elevator(KeyboardController controller) {
-    public Trigger stow() {
-      return controller.button(2, 5);
-    }
-
-    public Trigger raise() {
-      return controller.button(3, 5);
-    }
-
-    public Trigger primeL4() {
-      return controller.button(4, 5);
-    }
-
-    public Trigger primeL3() {
-      return controller.button(5, 5);
-    }
-
-    public Trigger primeL2() {
-      return controller.button(6, 5);
-    }
-
-    public Trigger primeL1() {
-      return controller.button(7, 5);
-    }
-
-    public Trigger increaseStowSetpoint() {
-      return controller.button(2, 6);
-    }
-
-    public Trigger decreaseStowSetpoint() {
-      return controller.button(2, 7);
-    }
-
-    public Trigger increaseL4Setpoint() {
-      return controller.button(4, 6);
-    }
-
-    public Trigger decreaseL4Setpoint() {
-      return controller.button(4, 7);
-    }
-
-    public Trigger increaseL3Setpoint() {
-      return controller.button(5, 6);
-    }
-
-    public Trigger decreaseL3Setpoint() {
-      return controller.button(5, 7);
-    }
-
-    public Trigger increaseL2Setpoint() {
-      return controller.button(6, 6);
-    }
-
-    public Trigger decreaseL2Setpoint() {
-      return controller.button(6, 7);
-    }
-
-    public Trigger increaseL1Setpoint() {
-      return controller.button(7, 6);
-    }
-
-    public Trigger decreaseL1Setpoint() {
-      return controller.button(7, 7);
-    }
-
-    public Trigger primeAlgae() {
-      return controller.button(8, 5);
-    }
-
-    public Trigger increaseAlgaeSetPoint() {
-      return controller.button(8, 6);
-    }
-
-    public Trigger decreaseAlgaeSetPoint() {
-      return controller.button(8, 7);
-    }
-  }
-
-  public static final record Climber(KeyboardController controller) {
-    public Trigger deployLower() {
-      return controller.button(6, 8);
-    }
-
-    public Trigger stingerOut() {
-      return controller.button(7, 8);
-    }
-
-    public Trigger incrementWintchOut() {
-      return controller.button(6, 9);
-    }
-
-    public Trigger incrementWintchIn() {
-      return controller.button(6, 10);
-    }
-  }
-
-  public static final record Scoring(KeyboardController controller) {
-    public Trigger primeLeft() {
-      return controller.button(4, 8);
-    }
-
-    public Trigger primeRight() {
-      return controller.button(4, 9);
-    }
-
-    public Trigger track() {
-      return controller.button(4, 10);
+  public static final record TestSubsystem(KeyboardController controller) {
+    public Trigger test() {
+        return controller.button(1, 1);
     }
   }
 }

@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.ElevatorSubystemConstants;
 import frc.robot.commands.LockHeadingOnAprilTag;
@@ -22,6 +23,7 @@ import frc.robot.subsystems.CoralSubystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.WristSubsystem;
+import frc.robot.utils.KeyboardController;
 import swervelib.SwerveInputStream;
 
 public class RobotContainer {
@@ -30,6 +32,7 @@ public class RobotContainer {
   final CommandXboxController driver = new CommandXboxController(0);
   RumbleState driverRumbleState = RumbleState.TARGET_NONE;
   double driverRumbleIntensity = 0;
+  final KeyboardController operatorController = new KeyboardController(0);
 
   // Subsystems
   private final SwerveDriveSubsystem swerveDriveSubsystem = new SwerveDriveSubsystem(
@@ -132,8 +135,14 @@ public class RobotContainer {
 
        //driver.b().onTrue(new InstantCommand(wristSubsystem::stop, wristSubsystem));
 
+       configureOperatorController();
 
-    }
+
+  }
+
+  public void configureOperatorController() {
+    operatorController.test().test().onTrue(new PrintCommand("KEYPAD SAYS HI!"));
+  }
 
   public void setRumble(double val) {
     driver.setRumble(RumbleType.kRightRumble, 1);

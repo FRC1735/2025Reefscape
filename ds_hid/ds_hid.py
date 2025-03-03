@@ -6,7 +6,7 @@ from networktables import NetworkTables
 
 # XK-80 Vendor and Product ID
 VENDOR_ID = 1523
-PRODUCT_ID = 1091
+PRODUCT_ID = 1089
 
 # Networktables stuff
 SERVER = '10.1.90.2'

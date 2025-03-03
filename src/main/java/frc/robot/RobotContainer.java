@@ -19,6 +19,7 @@ import frc.robot.Constants.ElevatorSubystemConstants;
 import frc.robot.commands.LockHeadingOnAprilTag;
 import frc.robot.commands.LockXOnAprilTag;
 import frc.robot.subsystems.AlgaeCollectorSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralSubystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -48,6 +49,7 @@ public class RobotContainer {
   private final AlgaeCollectorSubsystem algaeCollectorSubsystem = new AlgaeCollectorSubsystem();
   private final WristSubsystem wristSubsystem = new WristSubsystem();
   private final ElevatorSubsystem elevator = new ElevatorSubsystem();
+  private final ClimberSubsystem climber = new ClimberSubsystem();
 
 
   /**
@@ -129,6 +131,7 @@ public class RobotContainer {
         driver.a().onTrue(new InstantCommand(wristSubsystem::testPositionControl, wristSubsystem));
 
         driver.x().onTrue(new InstantCommand(wristSubsystem::testPositionControl2, wristSubsystem));
+
 
         driver.y().onTrue(new InstantCommand(wristSubsystem::testPositionControl3, wristSubsystem));
         */

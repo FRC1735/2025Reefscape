@@ -82,6 +82,11 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+    configureDriverController();
+    configureOperatorController();
+  }
+
+  public void configureDriverController() {
     Command driveRobotOrientedAngularVelocity = swerveDriveSubsystem.driveFieldOriented(driveRobotOriented);
     Command driveFieldOrientedDirectAngle = swerveDriveSubsystem.driveFieldOriented(driveDirectAngle);
 
@@ -138,13 +143,20 @@ public class RobotContainer {
 
        //driver.b().onTrue(new InstantCommand(wristSubsystem::stop, wristSubsystem));
 
-       configureOperatorController();
-
-
   }
 
   public void configureOperatorController() {
     operatorController.test().test().onTrue(new PrintCommand("KEYPAD SAYS HI!"));
+
+    // TODO - theres gotta be a way to merge these
+    operatorController.coralCollector().score_L().onTrue(new PrintCommand("Coral - Score (L)"));
+    operatorController.coralCollector().score_R().onTrue(new PrintCommand("Coral - Score (L)"));
+
+    
+
+
+
+
   }
 
   public void setRumble(double val) {

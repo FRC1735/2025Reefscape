@@ -15,12 +15,14 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorSubystemConstants;
+import frc.robot.utils.SmartDashboardPIDTuner;
 
 public class ElevatorSubsystem extends SubsystemBase {
   private SparkFlex leadMotor = new SparkFlex(ElevatorSubystemConstants.LEAD_MOTOR_ID, MotorType.kBrushless);
   private SparkFlex followMotor = new SparkFlex(ElevatorSubystemConstants.FOLLOW_MOTOR_ID, MotorType.kBrushless); 
 
   boolean DEBUG = true;
+  private SmartDashboardPIDTuner smartDashboardPIDTuner;
 
   public ElevatorSubsystem() {
     SparkFlexConfig leadMotorConfig = new SparkFlexConfig();
@@ -32,26 +34,35 @@ public class ElevatorSubsystem extends SubsystemBase {
       .positionConversionFactor(100);
 
     leadMotorConfig.softLimit
-      .forwardSoftLimitEnabled(false)
-      .forwardSoftLimit(730) //
+      .forwardSoftLimitEnabled(true)
+      .forwardSoftLimit(730) // TODO - verify this is working again, did not save code where it was "true"
       .reverseSoftLimitEnabled(false) // TODO - figure out how to set this based on where the enocder starts (it prob wont be 0)
       .reverseSoftLimit(100);
 
-    leadMotorConfig.closedLoop.feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder);
+    leadMotorConfig.closedLoop
+      .feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder)
+      .outputRange(-1, 1)
+      .positionWrappingEnabled(false)
+      .maxMotion
+      .maxVelocity(54.272)
+      .maxAcceleration(216) // TODO - this is form teh wrist, need to determine more accurate value
+      .allowedClosedLoopError(0.0025);
     
     leadMotor.configure(leadMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
-
 
     SparkFlexConfig followMotorConfig = new SparkFlexConfig();
     followMotorConfig.follow(ElevatorSubystemConstants.LEAD_MOTOR_ID, false);
     followMotor.configure(followMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    smartDashboardPIDTuner = new SmartDashboardPIDTuner("Elevator", leadMotor, leadMotorConfig, 0, 0, 0, 0, 0, FeedbackSensor.kAlternateOrExternalEncoder, false, DEBUG);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     if (DEBUG) {
-     SmartDashboard.putNumber("Elevator Encoder", leadMotor.getExternalEncoder().getPosition());
+      SmartDashboard.putNumber("Elevator Encoder", leadMotor.getExternalEncoder().getPosition());
+      smartDashboardPIDTuner.periodic();
     }
   }
 

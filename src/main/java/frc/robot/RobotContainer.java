@@ -149,14 +149,94 @@ public class RobotContainer {
     operatorController.test().test().onTrue(new PrintCommand("KEYPAD SAYS HI!"));
 
     // TODO - theres gotta be a way to merge these
+
+    // score with coral
     operatorController.coralCollector().score_L().onTrue(new PrintCommand("Coral - Score (L)"));
-    operatorController.coralCollector().score_R().onTrue(new PrintCommand("Coral - Score (L)"));
+    operatorController.coralCollector().score_R().onTrue(new PrintCommand("Coral - Score (R)"));
 
-    
+    // reverse coral
+    operatorController.coralCollector().reverse_L().onTrue(new PrintCommand("Coral - Reverse (L)"));
+    operatorController.coralCollector().reverse_R().onTrue(new PrintCommand("Coral - Reverse (R)"));
 
+    // climber up
+    operatorController.climber().up_L().onTrue(new PrintCommand("Climber - Up (L)"));
+    operatorController.climber().up_R().onTrue(new PrintCommand("Climber - Up (R)"));
 
+    // climber down
+    operatorController.climber().down_L().onTrue(new PrintCommand("Climber - Down (L)"));
+    operatorController.climber().down_R().onTrue(new PrintCommand("Climber - Down (R)"));
 
+    // wrist rotation
+    operatorController.wrist().rotateDown().onTrue(new PrintCommand("Wrist - Rotate Down"));
+    operatorController.wrist().rotateUp().onTrue(new PrintCommand("Wrist - Rotate Up"));
 
+    // algae storage
+    operatorController.algaeCollector().storage_L().onTrue(new PrintCommand("Algae - Storage (L)"));
+    operatorController.algaeCollector().storage_R().onTrue(new PrintCommand("Algae - Storage (R)"));
+
+    // algae reef
+    operatorController.algaeCollector().reef_L().onTrue(new PrintCommand("Algae - Reef (L)"));
+    operatorController.algaeCollector().reef_R().onTrue(new PrintCommand("Algae - Reef (R)"));
+
+    // algae ground
+    operatorController.algaeCollector().ground_L().onTrue(new PrintCommand("Algae - Ground (L)"));
+    operatorController.algaeCollector().ground_R().onTrue(new PrintCommand("Algae - Ground (R)"));
+
+    // algae collect
+    operatorController.algaeCollector().collect_L().onTrue(new PrintCommand("Algae - Collect (L)"));
+    operatorController.algaeCollector().collect_R().onTrue(new PrintCommand("Algae - Collect (R)"));
+
+    // algae release
+    operatorController.algaeCollector().release_L().onTrue(new PrintCommand("Algae - Release (L)"));
+    operatorController.algaeCollector().release_R().onTrue(new PrintCommand("Algae - Release (R)"));
+
+    // elevator manual control - up
+    operatorController.elevator().up_L().onTrue(new PrintCommand("Elevator - Up (L)"));
+    operatorController.elevator().up_R().onTrue(new PrintCommand("Elevator - Up (R)"));
+
+    // elevator manual control - down
+    operatorController.elevator().down_L().onTrue(new PrintCommand("Elevator - Down (L)"));
+    operatorController.elevator().down_R().onTrue(new PrintCommand("Elevator - Down (R)"));
+
+    // elevator positions (compound commands across subsystems I assume)
+
+    // Algae Barge
+    operatorController.elevator().algaeBarge_L().onTrue(new PrintCommand("Elevator - Algae Barge (L)"));
+    operatorController.elevator().algaeBarge_R().onTrue(new PrintCommand("Elevator - Algae Barge (R)"));
+
+    // Algae L3
+    operatorController.elevator().algaeL3_L().onTrue(new PrintCommand("Elevator - Algae L3 (L)"));
+    operatorController.elevator().algaeL3_R().onTrue(new PrintCommand("Elevator - Algae L3 (R)"));
+
+    // Algae L2
+    operatorController.elevator().algaeL2_L().onTrue(new PrintCommand("Elevator - Algae L2 (L)"));
+    operatorController.elevator().algaeL2_R().onTrue(new PrintCommand("Elevator - Algae L2 (R)"));
+
+    // Algae Processor
+    operatorController.elevator().algaeProcessor_L().onTrue(new PrintCommand("Elevator - Algae Processor (L)"));
+    operatorController.elevator().algaeProcessor_R().onTrue(new PrintCommand("Elevator - Algae Processor (R))"));
+
+    // Coral L4
+    operatorController.elevator().coralL4_L().onTrue(new PrintCommand("Elevator - Coral L4 (L)"));
+    operatorController.elevator().coralL4_R().onTrue(new PrintCommand("Elevator - Coral L4 (R)"));
+
+    // Coral L3
+    operatorController.elevator().coralL3_L().onTrue(new PrintCommand("Elevator - Coral L3 (L)"));
+    operatorController.elevator().coralL3_R().onTrue(new PrintCommand("Elevator - Coral L3 (R)"));
+
+    // Coral L2
+    operatorController.elevator().coralL2_L().onTrue(new PrintCommand("Elevator - Coral L2 (L)"));
+    operatorController.elevator().coralL2_R().onTrue(new PrintCommand("Elevator - Coral L2 (R)"));
+
+    // Coral L1
+    operatorController.elevator().coralL1_L().onTrue(new PrintCommand("Elevator - Coral L1 (L)"));
+    operatorController.elevator().coralL1_R().onTrue(new PrintCommand("Elevator - Coral L1 (R)"));
+
+    // Storage
+    operatorController.elevator().storage_A().onTrue(new PrintCommand("Storage (A)"));
+    operatorController.elevator().storage_B().onTrue(new PrintCommand("Storage (B)"));
+    operatorController.elevator().storage_C().onTrue(new PrintCommand("Storage (C)"));
+    operatorController.elevator().storage_D().onTrue(new PrintCommand("Storage (D)"));
   }
 
   public void setRumble(double val) {

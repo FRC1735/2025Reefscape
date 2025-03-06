@@ -34,8 +34,9 @@ public class ElevatorSubsystem extends SubsystemBase {
       .externalEncoder
       .countsPerRevolution(8192)
       .inverted(false)
-      .positionConversionFactor(100);
+      .positionConversionFactor(1);
 
+      // TODO These numbers were meant for conversion factor of 100 not 1!!
     leadMotorConfig.softLimit
       .forwardSoftLimitEnabled(false) // TODO - up doesn't work when this is true???
       .forwardSoftLimit(730) // TODO - verify this is working again, did not save code where it was "true"
@@ -48,8 +49,8 @@ public class ElevatorSubsystem extends SubsystemBase {
       .positionWrappingEnabled(false)
       .maxMotion
       .maxVelocity(271.36)
-      .maxAcceleration(1084 / 2) // 1084 based on same calculations as wrist but casuing issues TODO - this is form teh wrist, need to determine more accurate value
-      .allowedClosedLoopError(0.25);
+      .maxAcceleration(1084) // TODO - this is form teh wrist, need to determine more accurate value
+      .allowedClosedLoopError(0.0025);
     
     leadMotor.configure(leadMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
@@ -86,7 +87,12 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void algaeL3() {
-    closedLoopController.setReference(151, ControlType.kMAXMotionPositionControl);
+    closedLoopController.setReference(2.2, ControlType.kMAXMotionPositionControl);
   }
+
+  public void algaeBarge() {
+    closedLoopController.setReference(2.6, ControlType.kMAXMotionPositionControl);
+  }
+
 
 }

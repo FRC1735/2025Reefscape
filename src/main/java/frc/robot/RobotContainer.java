@@ -18,7 +18,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.ElevatorSubystemConstants;
 import frc.robot.commands.ElevatorDown;
 import frc.robot.commands.ElevatorUp;
-import frc.robot.commands.EleveatorAlgaeL3;
+import frc.robot.commands.ElevatorAlgaeBarge;
+import frc.robot.commands.ElevatorAlgaeL3;
 import frc.robot.commands.LockHeadingOnAprilTag;
 import frc.robot.commands.LockXOnAprilTag;
 import frc.robot.subsystems.AlgaeCollectorSubsystem;
@@ -206,11 +207,12 @@ public class RobotContainer {
     // elevator positions (compound commands across subsystems I assume)
 
     // Algae Barge
-    operatorController.elevator().algaeBarge_L().onTrue(new PrintCommand("Elevator - Algae Barge (L)"));
-    operatorController.elevator().algaeBarge_R().onTrue(new PrintCommand("Elevator - Algae Barge (R)"));
+    Command elevatorAlgaeBarge = new ElevatorAlgaeBarge(elevator);
+    operatorController.elevator().algaeBarge_L().onTrue(elevatorAlgaeBarge);
+    operatorController.elevator().algaeBarge_R().onTrue(elevatorAlgaeBarge);
 
     // Algae L3
-    Command elevatorAlgaeL3 = new EleveatorAlgaeL3(elevator);
+    Command elevatorAlgaeL3 = new ElevatorAlgaeL3(elevator);
     operatorController.elevator().algaeL3_L().onTrue(elevatorAlgaeL3);
     operatorController.elevator().algaeL3_R().onTrue(elevatorAlgaeL3);
 

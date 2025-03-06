@@ -160,12 +160,14 @@ public class RobotContainer {
     // TODO - theres gotta be a way to merge these
 
     // score with coral
-    operatorController.coralCollector().score_L().onTrue(new PrintCommand("Coral - Score (L)"));
-    operatorController.coralCollector().score_R().onTrue(new PrintCommand("Coral - Score (R)"));
+    Command scoreCoral = new InstantCommand(coralSubystem::shoot, coralSubystem);
+    operatorController.coralCollector().score_L().onTrue(scoreCoral).onFalse(new InstantCommand(coralSubystem::stop, coralSubystem));
+    operatorController.coralCollector().score_R().onTrue(scoreCoral).onFalse(new InstantCommand(coralSubystem::stop, coralSubystem));
 
     // reverse coral
-    operatorController.coralCollector().reverse_L().onTrue(new PrintCommand("Coral - Reverse (L)"));
-    operatorController.coralCollector().reverse_R().onTrue(new PrintCommand("Coral - Reverse (R)"));
+    Command reverseCoral = new InstantCommand(coralSubystem::returnToFunnel, coralSubystem);
+    operatorController.coralCollector().reverse_L().onTrue(reverseCoral).onFalse(new InstantCommand(coralSubystem::stop, coralSubystem));
+    operatorController.coralCollector().reverse_R().onTrue(reverseCoral).onFalse(new InstantCommand(coralSubystem::stop, coralSubystem));
 
     // climber up
     operatorController.climber().up_L().onTrue(new PrintCommand("Climber - Up (L)"));
@@ -176,28 +178,31 @@ public class RobotContainer {
     operatorController.climber().down_R().onTrue(new PrintCommand("Climber - Down (R)"));
 
     // wrist rotation
-    operatorController.wrist().rotateDown().onTrue(new PrintCommand("Wrist - Rotate Down"));
-    operatorController.wrist().rotateUp().onTrue(new PrintCommand("Wrist - Rotate Up"));
+    operatorController.wrist().rotateDown().onTrue(new InstantCommand(wristSubsystem::down, wristSubsystem)).onFalse(new InstantCommand(wristSubsystem::stop, wristSubsystem));
+    operatorController.wrist().rotateUp().onTrue(new InstantCommand(wristSubsystem::up, wristSubsystem)).onFalse(new InstantCommand(wristSubsystem::stop, wristSubsystem));
 
     // algae storage
     operatorController.algaeCollector().storage_L().onTrue(new PrintCommand("Algae - Storage (L)"));
     operatorController.algaeCollector().storage_R().onTrue(new PrintCommand("Algae - Storage (R)"));
 
     // algae reef
-    operatorController.algaeCollector().reef_L().onTrue(new PrintCommand("Algae - Reef (L)"));
-    operatorController.algaeCollector().reef_R().onTrue(new PrintCommand("Algae - Reef (R)"));
+    Command algaeReefCommand = new InstantCommand(wristSubsystem::algaeReef, wristSubsystem);
+    operatorController.algaeCollector().reef_L().onTrue(algaeReefCommand);
+    operatorController.algaeCollector().reef_R().onTrue(algaeReefCommand);
 
     // algae ground
     operatorController.algaeCollector().ground_L().onTrue(new PrintCommand("Algae - Ground (L)"));
     operatorController.algaeCollector().ground_R().onTrue(new PrintCommand("Algae - Ground (R)"));
 
     // algae collect
-    operatorController.algaeCollector().collect_L().onTrue(new PrintCommand("Algae - Collect (L)"));
-    operatorController.algaeCollector().collect_R().onTrue(new PrintCommand("Algae - Collect (R)"));
+    Command algaeCollect = new InstantCommand(algaeCollectorSubsystem::in, algaeCollectorSubsystem);
+    operatorController.algaeCollector().collect_L().onTrue(algaeCollect).onFalse(new InstantCommand(algaeCollectorSubsystem::stop, algaeCollectorSubsystem));
+    operatorController.algaeCollector().collect_R().onTrue(algaeCollect).onFalse(new InstantCommand(algaeCollectorSubsystem::stop, algaeCollectorSubsystem));
 
     // algae release
-    operatorController.algaeCollector().release_L().onTrue(new PrintCommand("Algae - Release (L)"));
-    operatorController.algaeCollector().release_R().onTrue(new PrintCommand("Algae - Release (R)"));
+    Command algaeRelease = new InstantCommand(algaeCollectorSubsystem::out, algaeCollectorSubsystem);
+    operatorController.algaeCollector().release_L().onTrue(algaeRelease).onFalse(new InstantCommand(algaeCollectorSubsystem::stop, algaeCollectorSubsystem));
+    operatorController.algaeCollector().release_R().onTrue(algaeRelease).onFalse(new InstantCommand(algaeCollectorSubsystem::stop, algaeCollectorSubsystem));
 
     // elevator manual control - up
     Command elevatorUp = new ElevatorUp(elevator);

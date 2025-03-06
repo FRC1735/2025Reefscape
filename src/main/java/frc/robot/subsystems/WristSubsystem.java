@@ -23,8 +23,13 @@ public class WristSubsystem extends SubsystemBase {
   private SparkFlex motor = new SparkFlex(WristSubystemConstants.MOTOR_ID, MotorType.kBrushless);
   private SparkClosedLoopController closedLoopController;
 
-  boolean DEBUG = false;
+  boolean DEBUG = true;
   private SmartDashboardPIDTuner smartDashboardPIDTuner;
+
+  private double TOP_LIMIT = 0.5532;
+  private double BOTTOM_LIMIT = 0.2341;
+
+  private double setpoint = 0;
 
   public WristSubsystem() {
     SparkFlexConfig motorConfig = new SparkFlexConfig();
@@ -82,7 +87,22 @@ public class WristSubsystem extends SubsystemBase {
   
   public void testPositionControl3() {
     closedLoopController.setReference(0.5, ControlType.kMAXMotionPositionControl);
+  }
 
+  public void algaeReef() {
+    closedLoopController.setReference(0.5, ControlType.kMAXMotionPositionControl);
+  }
+
+  public void setPosition(double newPosition) {
+
+  }
+
+  public void up() {
+    closedLoopController.setReference(TOP_LIMIT, ControlType.kMAXMotionPositionControl);
+  }
+
+  public void down() {
+    closedLoopController.setReference(BOTTOM_LIMIT, ControlType.kMAXMotionPositionControl);
   }
 
 

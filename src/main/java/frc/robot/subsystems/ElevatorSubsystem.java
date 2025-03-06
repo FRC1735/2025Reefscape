@@ -38,9 +38,9 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     leadMotorConfig.softLimit
       .forwardSoftLimitEnabled(true) 
-      .forwardSoftLimit(7.20)
-      .reverseSoftLimitEnabled(false) // TODO - figure out how to set this based on where the enocder starts (it prob wont be 0)
-      .reverseSoftLimit(0); // ????
+      .forwardSoftLimit(7.25)
+      .reverseSoftLimitEnabled(true) // TODO - figure out how to set this based on where the enocder starts (it prob wont be 0)
+      .reverseSoftLimit(0.1); // ????
 
     leadMotorConfig.closedLoop
       .feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder)
@@ -48,7 +48,7 @@ public class ElevatorSubsystem extends SubsystemBase {
       .positionWrappingEnabled(false)
       .maxMotion
       .maxVelocity(271.36)
-      .maxAcceleration(1084) // TODO - this is form teh wrist, need to determine more accurate value
+      .maxAcceleration(1084)
       .allowedClosedLoopError(0.025);
     
     leadMotor.configure(leadMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
@@ -93,5 +93,23 @@ public class ElevatorSubsystem extends SubsystemBase {
     closedLoopController.setReference(7, ControlType.kMAXMotionPositionControl);
   }
 
+  public void coralL1() {
+    closedLoopController.setReference(1.1, ControlType.kMAXMotionPositionControl);
+  }
 
+  public void coralL2() {
+    closedLoopController.setReference(2.41, ControlType.kMAXMotionPositionControl);
+  }
+
+  public void coralL3() {
+    closedLoopController.setReference(4.27, ControlType.kMAXMotionPositionControl);
+  }
+
+  public void coralL4() {
+    closedLoopController.setReference(7.19, ControlType.kMAXMotionPositionControl);
+  }
+
+  public void storage() {
+    closedLoopController.setReference(0.2, ControlType.kMAXMotionPositionControl);
+  }
 }

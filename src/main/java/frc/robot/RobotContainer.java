@@ -21,6 +21,11 @@ import frc.robot.commands.ElevatorDown;
 import frc.robot.commands.ElevatorUp;
 import frc.robot.commands.ElevatorAlgaeBarge;
 import frc.robot.commands.ElevatorAlgaeL3;
+import frc.robot.commands.ElevatorCoralL1;
+import frc.robot.commands.ElevatorCoralL2;
+import frc.robot.commands.ElevatorCoralL3;
+import frc.robot.commands.ElevatorCoralL4;
+import frc.robot.commands.ElevatorCoralStorage;
 import frc.robot.commands.LockHeadingOnAprilTag;
 import frc.robot.commands.LockXOnAprilTag;
 import frc.robot.sensors.DistanceSensor;
@@ -235,26 +240,31 @@ public class RobotContainer {
     operatorController.elevator().algaeProcessor_R().onTrue(new PrintCommand("Elevator - Algae Processor (R))"));
 
     // Coral L4
-    operatorController.elevator().coralL4_L().onTrue(new PrintCommand("Elevator - Coral L4 (L)"));
-    operatorController.elevator().coralL4_R().onTrue(new PrintCommand("Elevator - Coral L4 (R)"));
-
+    Command elevatorCoralL4 = new ElevatorCoralL4(elevator);
+    operatorController.elevator().coralL4_L().onTrue(elevatorCoralL4);
+    operatorController.elevator().coralL4_R().onTrue(elevatorCoralL4);
     // Coral L3
-    operatorController.elevator().coralL3_L().onTrue(new PrintCommand("Elevator - Coral L3 (L)"));
-    operatorController.elevator().coralL3_R().onTrue(new PrintCommand("Elevator - Coral L3 (R)"));
+    Command elevatorCoralL3 = new ElevatorCoralL3(elevator);
+    operatorController.elevator().coralL3_L().onTrue(elevatorCoralL3);
+    operatorController.elevator().coralL3_R().onTrue(elevatorCoralL3);
 
     // Coral L2
-    operatorController.elevator().coralL2_L().onTrue(new PrintCommand("Elevator - Coral L2 (L)"));
-    operatorController.elevator().coralL2_R().onTrue(new PrintCommand("Elevator - Coral L2 (R)"));
+    Command elevatorCoralL2 = new ElevatorCoralL2(elevator);
+    operatorController.elevator().coralL2_L().onTrue(elevatorCoralL2);
+    operatorController.elevator().coralL2_R().onTrue(elevatorCoralL2);
 
     // Coral L1
-    operatorController.elevator().coralL1_L().onTrue(new PrintCommand("Elevator - Coral L1 (L)"));
-    operatorController.elevator().coralL1_R().onTrue(new PrintCommand("Elevator - Coral L1 (R)"));
+    Command elevatorCoralL1 = new ElevatorCoralL1(elevator);
+    operatorController.elevator().coralL1_L().onTrue(elevatorCoralL1);
+    operatorController.elevator().coralL1_R().onTrue(elevatorCoralL1);
 
     // Storage
-    operatorController.elevator().storage_A().onTrue(new PrintCommand("Storage (A)"));
-    operatorController.elevator().storage_B().onTrue(new PrintCommand("Storage (B)"));
-    operatorController.elevator().storage_C().onTrue(new PrintCommand("Storage (C)"));
-    operatorController.elevator().storage_D().onTrue(new PrintCommand("Storage (D)"));
+    // TODO - this needs to be expanded to include the AlgaeCollector
+    Command elevatorStorage = new ElevatorCoralStorage(elevator);
+    operatorController.elevator().storage_A().onTrue(elevatorStorage);
+    operatorController.elevator().storage_B().onTrue(elevatorStorage);
+    operatorController.elevator().storage_C().onTrue(elevatorStorage);
+    operatorController.elevator().storage_D().onTrue(elevatorStorage);
   }
 
   public void setRumble(double val) {

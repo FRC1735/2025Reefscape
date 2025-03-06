@@ -47,7 +47,7 @@ private SparkFlex followMotor = new SparkFlex(CoralSubystemConstants.FOLLOW_MOTO
   }
 
   public void shoot() {
-    leadMotor.set(0.5);
+    leadMotor.set(0.15);
   } 
 
   public void returnToFunnel() {

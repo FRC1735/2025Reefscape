@@ -16,6 +16,9 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.ElevatorSubystemConstants;
+import frc.robot.commands.ElevatorDown;
+import frc.robot.commands.ElevatorUp;
+import frc.robot.commands.EleveatorAlgaeL3;
 import frc.robot.commands.LockHeadingOnAprilTag;
 import frc.robot.commands.LockXOnAprilTag;
 import frc.robot.subsystems.AlgaeCollectorSubsystem;
@@ -191,12 +194,14 @@ public class RobotContainer {
     operatorController.algaeCollector().release_R().onTrue(new PrintCommand("Algae - Release (R)"));
 
     // elevator manual control - up
-    operatorController.elevator().up_L().onTrue(new PrintCommand("Elevator - Up (L)"));
-    operatorController.elevator().up_R().onTrue(new PrintCommand("Elevator - Up (R)"));
+    Command elevatorUp = new ElevatorUp(elevator);
+    operatorController.elevator().up_L().whileTrue(elevatorUp);
+    operatorController.elevator().up_R().whileTrue(elevatorUp);
 
     // elevator manual control - down
-    operatorController.elevator().down_L().onTrue(new PrintCommand("Elevator - Down (L)"));
-    operatorController.elevator().down_R().onTrue(new PrintCommand("Elevator - Down (R)"));
+    Command elevatorDown = new ElevatorDown(elevator);
+    operatorController.elevator().down_L().whileTrue(elevatorDown);
+    operatorController.elevator().down_R().whileTrue(elevatorDown);
 
     // elevator positions (compound commands across subsystems I assume)
 
@@ -205,8 +210,9 @@ public class RobotContainer {
     operatorController.elevator().algaeBarge_R().onTrue(new PrintCommand("Elevator - Algae Barge (R)"));
 
     // Algae L3
-    operatorController.elevator().algaeL3_L().onTrue(new PrintCommand("Elevator - Algae L3 (L)"));
-    operatorController.elevator().algaeL3_R().onTrue(new PrintCommand("Elevator - Algae L3 (R)"));
+    Command elevatorAlgaeL3 = new EleveatorAlgaeL3(elevator);
+    operatorController.elevator().algaeL3_L().onTrue(elevatorAlgaeL3);
+    operatorController.elevator().algaeL3_R().onTrue(elevatorAlgaeL3);
 
     // Algae L2
     operatorController.elevator().algaeL2_L().onTrue(new PrintCommand("Elevator - Algae L2 (L)"));

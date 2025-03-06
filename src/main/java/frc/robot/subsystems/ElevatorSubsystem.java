@@ -4,8 +4,10 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -23,6 +25,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   boolean DEBUG = true;
   private SmartDashboardPIDTuner smartDashboardPIDTuner;
+  private SparkClosedLoopController closedLoopController;
 
   public ElevatorSubsystem() {
     SparkFlexConfig leadMotorConfig = new SparkFlexConfig();
@@ -34,7 +37,7 @@ public class ElevatorSubsystem extends SubsystemBase {
       .positionConversionFactor(100);
 
     leadMotorConfig.softLimit
-      .forwardSoftLimitEnabled(true)
+      .forwardSoftLimitEnabled(false) // TODO - up doesn't work when this is true???
       .forwardSoftLimit(730) // TODO - verify this is working again, did not save code where it was "true"
       .reverseSoftLimitEnabled(false) // TODO - figure out how to set this based on where the enocder starts (it prob wont be 0)
       .reverseSoftLimit(100);
@@ -44,17 +47,20 @@ public class ElevatorSubsystem extends SubsystemBase {
       .outputRange(-1, 1)
       .positionWrappingEnabled(false)
       .maxMotion
-      .maxVelocity(54.272)
-      .maxAcceleration(216) // TODO - this is form teh wrist, need to determine more accurate value
-      .allowedClosedLoopError(0.0025);
+      .maxVelocity(271.36)
+      .maxAcceleration(1084 / 2) // 1084 based on same calculations as wrist but casuing issues TODO - this is form teh wrist, need to determine more accurate value
+      .allowedClosedLoopError(0.25);
     
     leadMotor.configure(leadMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
     SparkFlexConfig followMotorConfig = new SparkFlexConfig();
     followMotorConfig.follow(ElevatorSubystemConstants.LEAD_MOTOR_ID, false);
+    followMotorConfig.idleMode(IdleMode.kBrake);
     followMotor.configure(followMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-    smartDashboardPIDTuner = new SmartDashboardPIDTuner("Elevator", leadMotor, leadMotorConfig, 0, 0, 0, 0, 0, FeedbackSensor.kAlternateOrExternalEncoder, false, DEBUG);
+    closedLoopController = leadMotor.getClosedLoopController();
+
+    smartDashboardPIDTuner = new SmartDashboardPIDTuner("Elevator", leadMotor, leadMotorConfig, 1, 0, 0, -1, 1, FeedbackSensor.kAlternateOrExternalEncoder, false, DEBUG);
   }
 
   @Override
@@ -63,6 +69,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     if (DEBUG) {
       SmartDashboard.putNumber("Elevator Encoder", leadMotor.getExternalEncoder().getPosition());
       smartDashboardPIDTuner.periodic();
+      SmartDashboard.putNumber("Elevator Voltage", leadMotor.getAppliedOutput());
     }
   }
 
@@ -77,4 +84,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void stop() {
     leadMotor.stopMotor();
   }
+
+  public void algaeL3() {
+    closedLoopController.setReference(151, ControlType.kMAXMotionPositionControl);
+  }
+
 }

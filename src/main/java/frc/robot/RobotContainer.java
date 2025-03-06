@@ -10,6 +10,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -22,6 +23,7 @@ import frc.robot.commands.ElevatorAlgaeBarge;
 import frc.robot.commands.ElevatorAlgaeL3;
 import frc.robot.commands.LockHeadingOnAprilTag;
 import frc.robot.commands.LockXOnAprilTag;
+import frc.robot.sensors.DistanceSensor;
 import frc.robot.subsystems.AlgaeCollectorSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralSubystem;
@@ -56,6 +58,8 @@ public class RobotContainer {
   private final ClimberSubsystem climber = new ClimberSubsystem();
 
 
+
+
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
@@ -82,6 +86,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureBindings();
+
 
   }
 

@@ -36,12 +36,11 @@ public class ElevatorSubsystem extends SubsystemBase {
       .inverted(false)
       .positionConversionFactor(1);
 
-      // TODO These numbers were meant for conversion factor of 100 not 1!!
     leadMotorConfig.softLimit
-      .forwardSoftLimitEnabled(false) // TODO - up doesn't work when this is true???
-      .forwardSoftLimit(730) // TODO - verify this is working again, did not save code where it was "true"
+      .forwardSoftLimitEnabled(true) 
+      .forwardSoftLimit(7.20)
       .reverseSoftLimitEnabled(false) // TODO - figure out how to set this based on where the enocder starts (it prob wont be 0)
-      .reverseSoftLimit(100);
+      .reverseSoftLimit(0); // ????
 
     leadMotorConfig.closedLoop
       .feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder)
@@ -50,7 +49,7 @@ public class ElevatorSubsystem extends SubsystemBase {
       .maxMotion
       .maxVelocity(271.36)
       .maxAcceleration(1084) // TODO - this is form teh wrist, need to determine more accurate value
-      .allowedClosedLoopError(0.0025);
+      .allowedClosedLoopError(0.025);
     
     leadMotor.configure(leadMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
@@ -61,7 +60,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     closedLoopController = leadMotor.getClosedLoopController();
 
-    smartDashboardPIDTuner = new SmartDashboardPIDTuner("Elevator", leadMotor, leadMotorConfig, 1, 0, 0, -1, 1, FeedbackSensor.kAlternateOrExternalEncoder, false, DEBUG);
+    smartDashboardPIDTuner = new SmartDashboardPIDTuner("Elevator", leadMotor, leadMotorConfig, 0.2, 0, 0, -1, 1, FeedbackSensor.kAlternateOrExternalEncoder, false, DEBUG);
   }
 
   @Override
@@ -91,7 +90,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void algaeBarge() {
-    closedLoopController.setReference(2.6, ControlType.kMAXMotionPositionControl);
+    closedLoopController.setReference(7, ControlType.kMAXMotionPositionControl);
   }
 
 

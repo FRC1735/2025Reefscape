@@ -15,6 +15,7 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorSubystemConstants;
 import frc.robot.utils.SmartDashboardPIDTuner;
@@ -73,16 +74,18 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
   }
 
-  public void up() {
-    leadMotor.set(.4);
+  // TODO - don't really like this, should probably be going towards the top and maintain that position
+  public Command up() {
+    return this.runOnce(() -> leadMotor.set(0.4));
   } 
 
-  public void down() {
-    leadMotor.set(-0.4);
+  // TODO - don't really like this, should probably be going towards the bottom and maintain that position
+  public Command down() {
+    return this.runOnce(() -> leadMotor.set(-0.4));
   }
 
-  public void stop() {
-    leadMotor.stopMotor();
+  public Command stop() {
+    return this.runOnce(() -> leadMotor.stopMotor());
   }
 
   public void algaeL3() {

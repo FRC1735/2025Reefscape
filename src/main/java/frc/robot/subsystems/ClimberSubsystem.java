@@ -27,6 +27,4 @@ public class ClimberSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("Climber servo position", servo.getPosition());
     }
   }
-
-
 }

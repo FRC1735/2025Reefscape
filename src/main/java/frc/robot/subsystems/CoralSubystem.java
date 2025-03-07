@@ -11,14 +11,14 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CoralSubystemConstants;
-import frc.robot.sensors.DistanceSensor;
 
 public class CoralSubystem extends SubsystemBase {
-private SparkFlex leadMotor = new SparkFlex(CoralSubystemConstants. LEAD_MOTOR_ID, MotorType.kBrushless);
-private SparkFlex followMotor = new SparkFlex(CoralSubystemConstants.FOLLOW_MOTOR_ID, MotorType.kBrushless); 
+  private SparkFlex leadMotor = new SparkFlex(CoralSubystemConstants.LEAD_MOTOR_ID, MotorType.kBrushless);
+  private SparkFlex followMotor = new SparkFlex(CoralSubystemConstants.FOLLOW_MOTOR_ID, MotorType.kBrushless);
+
   /** Creates a new CoralSubystem. */
   public CoralSubystem() {
     SparkFlexConfig leadMotorConfig = new SparkFlexConfig();
@@ -36,23 +36,20 @@ private SparkFlex followMotor = new SparkFlex(CoralSubystemConstants.FOLLOW_MOTO
     // This method will be called once per scheduler run
   }
 
-  public void shoot() {
-    leadMotor.set(0.15);
-  } 
-
-  public void returnToFunnel() {
-    leadMotor.set(-0.2);
+  public Command shoot() {
+    return this.runOnce(() -> leadMotor.set(0.15));
   }
 
-  public void stop() {
-    leadMotor.stopMotor();
+  public Command reverse() {
+    return this.runOnce(() -> leadMotor.set(-0.2));
   }
-  
-  public void collect() {
-    leadMotor.set(0.25);
-  } 
+
+  public Command stop() {
+    return this.runOnce(() -> leadMotor.stopMotor());
+  }
+
+  // TODO - all elevator related commands should check this and not do anything if coral isn't considered safe (ie it will block the elevator from moving)
+  public boolean isSafeForElevator() {
+    return true;
+  }
 }
-
-
-
-

@@ -10,13 +10,11 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants.ElevatorSubystemConstants;
 import frc.robot.commands.ElevatorDown;
 import frc.robot.commands.ElevatorUp;
 import frc.robot.commands.ElevatorAlgaeBarge;
@@ -28,7 +26,6 @@ import frc.robot.commands.ElevatorCoralL4;
 import frc.robot.commands.ElevatorCoralStorage;
 import frc.robot.commands.LockHeadingOnAprilTag;
 import frc.robot.commands.LockXOnAprilTag;
-import frc.robot.sensors.DistanceSensor;
 import frc.robot.subsystems.AlgaeCollectorSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralSubystem;
@@ -48,50 +45,48 @@ public class RobotContainer {
 
   // Subsystems
   private final SwerveDriveSubsystem swerveDriveSubsystem = new SwerveDriveSubsystem(
-                              new File(Filesystem.getDeployDirectory(), "swerve-2025"),
-                              new ControllerRumbleCallback() {
-                                  @Override
-                                  public void update(RumbleState rumbleState) {
-                                    driverRumbleState = rumbleState;
-                                  }
-                                }
-                              );
+      new File(Filesystem.getDeployDirectory(), "swerve-2025"),
+      new ControllerRumbleCallback() {
+        @Override
+        public void update(RumbleState rumbleState) {
+          driverRumbleState = rumbleState;
+        }
+      });
   private final CoralSubystem coralSubystem = new CoralSubystem();
   private final AlgaeCollectorSubsystem algaeCollectorSubsystem = new AlgaeCollectorSubsystem();
   private final WristSubsystem wristSubsystem = new WristSubsystem();
   private final ElevatorSubsystem elevator = new ElevatorSubsystem();
   private final ClimberSubsystem climber = new ClimberSubsystem();
 
-
-
-
   /**
-   * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
+   * Converts driver input into a field-relative ChassisSpeeds that is controlled
+   * by angular velocity.
    */
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(swerveDriveSubsystem.getSwerveDrive(),
-                                                                () -> driver.getLeftY() * -1,
-                                                                () -> driver.getLeftX() * -1)
-                                                            .withControllerRotationAxis(driver::getRightX)
-                                                            .deadband(0.1)
-                                                            .scaleTranslation(0.8)
-                                                            .allianceRelativeControl(true);
+      () -> driver.getLeftY() * -1,
+      () -> driver.getLeftX() * -1)
+      .withControllerRotationAxis(driver::getRightX)
+      .deadband(0.1)
+      .scaleTranslation(0.8)
+      .allianceRelativeControl(true);
 
   /**
-   * Clone's the angular velocity input stream and converts it to a fieldRelative input stream.
+   * Clone's the angular velocity input stream and converts it to a fieldRelative
+   * input stream.
    */
   SwerveInputStream driveDirectAngle = driveAngularVelocity.copy().withControllerHeadingAxis(driver::getRightX,
-                                                                                             driver::getRightY)
-                                                           .headingWhile(true);
+      driver::getRightY)
+      .headingWhile(true);
 
   /**
-   * Clone's the angular velocity input stream and converts it to a robotRelative input stream.
+   * Clone's the angular velocity input stream and converts it to a robotRelative
+   * input stream.
    */
   SwerveInputStream driveRobotOriented = driveAngularVelocity.copy().robotRelative(true)
-    .allianceRelativeControl(false);
+      .allianceRelativeControl(false);
 
   public RobotContainer() {
     configureBindings();
-
 
   }
 
@@ -104,167 +99,132 @@ public class RobotContainer {
     Command driveRobotOrientedAngularVelocity = swerveDriveSubsystem.driveFieldOriented(driveRobotOriented);
     Command driveFieldOrientedDirectAngle = swerveDriveSubsystem.driveFieldOriented(driveDirectAngle);
 
-    //swerveDriveSubsystem.setDefaultCommand(driveFieldOrientedDirectAngle);
+    // swerveDriveSubsystem.setDefaultCommand(driveFieldOrientedDirectAngle);
     swerveDriveSubsystem.setDefaultCommand(driveRobotOrientedAngularVelocity);
 
     driver.start().onTrue((Commands.runOnce(swerveDriveSubsystem::zeroGyro)));
-    driver.rightBumper().whileTrue(new LockHeadingOnAprilTag(swerveDriveSubsystem, 
-      ()->MathUtil.applyDeadband(-driver.getLeftY(), 0.05),
-      ()->MathUtil.applyDeadband(-driver.getLeftX(), 0.05),
-      new ControllerRumbleCallback() {
-        @Override
-        public void update(RumbleState rumbleState) {
-          driverRumbleState = rumbleState;
-        }
-      }
-      ));
+    driver.rightBumper().whileTrue(new LockHeadingOnAprilTag(swerveDriveSubsystem,
+        () -> MathUtil.applyDeadband(-driver.getLeftY(), 0.05),
+        () -> MathUtil.applyDeadband(-driver.getLeftX(), 0.05),
+        new ControllerRumbleCallback() {
+          @Override
+          public void update(RumbleState rumbleState) {
+            driverRumbleState = rumbleState;
+          }
+        }));
 
     driver.leftBumper().whileTrue(new LockXOnAprilTag(
-      swerveDriveSubsystem, 
-      () -> 0, 
-      driver::getRightX, 
-      new ControllerRumbleCallback() {
-        @Override
-        public void update(RumbleState rumbleState) {
-          // TODO
-        }
-      }));
+        swerveDriveSubsystem,
+        () -> 0,
+        driver::getRightX,
+        new ControllerRumbleCallback() {
+          @Override
+          public void update(RumbleState rumbleState) {
+            // TODO
+          }
+        }));
 
-      driver.a().onTrue(new InstantCommand(elevator::up, elevator)).onFalse(new InstantCommand(elevator::stop, elevator));
-      driver.b().onTrue(new InstantCommand(elevator::down, elevator)).onFalse(new InstantCommand(elevator::stop, elevator));
+    driver.a().onTrue(new InstantCommand(elevator::up, elevator)).onFalse(new InstantCommand(elevator::stop, elevator));
+    driver.b().onTrue(new InstantCommand(elevator::down, elevator))
+        .onFalse(new InstantCommand(elevator::stop, elevator));
 
+    /*
+     * driver
+     * .a()
+     * .onTrue(new InstantCommand(coralSubystem::shoot, coralSubystem))
+     * .onFalse(new InstantCommand(coralSubystem::stop, coralSubystem));
+     * 
+     * driver
+     * .b()
+     * .onTrue(new InstantCommand(coralSubystem::returnToFunnel, coralSubystem))
+     * .onFalse(new InstantCommand(coralSubystem::stop, coralSubystem));
+     */
 
-      /*
-      driver
-        .a()
-        .onTrue(new InstantCommand(coralSubystem::shoot, coralSubystem))
-        .onFalse(new InstantCommand(coralSubystem::stop, coralSubystem));
+    /*
+     * driver.a().onTrue(new InstantCommand(wristSubsystem::testPositionControl,
+     * wristSubsystem));
+     * 
+     * driver.x().onTrue(new InstantCommand(wristSubsystem::testPositionControl2,
+     * wristSubsystem));
+     * 
+     * 
+     * driver.y().onTrue(new InstantCommand(wristSubsystem::testPositionControl3,
+     * wristSubsystem));
+     */
 
-      driver
-        .b()
-        .onTrue(new InstantCommand(coralSubystem::returnToFunnel, coralSubystem))
-        .onFalse(new InstantCommand(coralSubystem::stop, coralSubystem));
-        */
-
-        /*
-        driver.a().onTrue(new InstantCommand(wristSubsystem::testPositionControl, wristSubsystem));
-
-        driver.x().onTrue(new InstantCommand(wristSubsystem::testPositionControl2, wristSubsystem));
-
-
-        driver.y().onTrue(new InstantCommand(wristSubsystem::testPositionControl3, wristSubsystem));
-        */
-
-       //driver.b().onTrue(new InstantCommand(wristSubsystem::stop, wristSubsystem));
+    // driver.b().onTrue(new InstantCommand(wristSubsystem::stop, wristSubsystem));
 
   }
 
   public void configureOperatorController() {
-    operatorController.test().test().onTrue(new PrintCommand("KEYPAD SAYS HI!"));
+    //////////  
+    // Coral Shooter
+    operatorController.coralCollector().score().onTrue(coralSubystem.shoot()).onFalse(coralSubystem.stop());
+    operatorController.coralCollector().reverse().onTrue(coralSubystem.reverse()).onFalse(coralSubystem.stop());
 
-    // TODO - theres gotta be a way to merge these
-
-    // score with coral
-    Command scoreCoral = new InstantCommand(coralSubystem::shoot, coralSubystem);
-    operatorController.coralCollector().score_L().onTrue(scoreCoral).onFalse(new InstantCommand(coralSubystem::stop, coralSubystem));
-    operatorController.coralCollector().score_R().onTrue(scoreCoral).onFalse(new InstantCommand(coralSubystem::stop, coralSubystem));
-
-    // reverse coral
-    Command reverseCoral = new InstantCommand(coralSubystem::returnToFunnel, coralSubystem);
-    operatorController.coralCollector().reverse_L().onTrue(reverseCoral).onFalse(new InstantCommand(coralSubystem::stop, coralSubystem));
-    operatorController.coralCollector().reverse_R().onTrue(reverseCoral).onFalse(new InstantCommand(coralSubystem::stop, coralSubystem));
-
-    // climber up
-    operatorController.climber().up_L().onTrue(new PrintCommand("Climber - Up (L)"));
-    operatorController.climber().up_R().onTrue(new PrintCommand("Climber - Up (R)"));
-
-    // climber down
-    operatorController.climber().down_L().onTrue(new PrintCommand("Climber - Down (L)"));
-    operatorController.climber().down_R().onTrue(new PrintCommand("Climber - Down (R)"));
-
-    // wrist rotation
-    operatorController.wrist().rotateDown().onTrue(new InstantCommand(wristSubsystem::down, wristSubsystem)).onFalse(new InstantCommand(wristSubsystem::stop, wristSubsystem));
-    operatorController.wrist().rotateUp().onTrue(new InstantCommand(wristSubsystem::up, wristSubsystem)).onFalse(new InstantCommand(wristSubsystem::stop, wristSubsystem));
-
-    // algae storage
-    operatorController.algaeCollector().storage_L().onTrue(new PrintCommand("Algae - Storage (L)"));
-    operatorController.algaeCollector().storage_R().onTrue(new PrintCommand("Algae - Storage (R)"));
-
-    // algae reef
-    Command algaeReefCommand = new InstantCommand(wristSubsystem::algaeReef, wristSubsystem);
-    operatorController.algaeCollector().reef_L().onTrue(algaeReefCommand);
-    operatorController.algaeCollector().reef_R().onTrue(algaeReefCommand);
-
-    // algae ground
-    operatorController.algaeCollector().ground_L().onTrue(new PrintCommand("Algae - Ground (L)"));
-    operatorController.algaeCollector().ground_R().onTrue(new PrintCommand("Algae - Ground (R)"));
-
-    // algae collect
-    Command algaeCollect = new InstantCommand(algaeCollectorSubsystem::in, algaeCollectorSubsystem);
-    operatorController.algaeCollector().collect_L().onTrue(algaeCollect).onFalse(new InstantCommand(algaeCollectorSubsystem::stop, algaeCollectorSubsystem));
-    operatorController.algaeCollector().collect_R().onTrue(algaeCollect).onFalse(new InstantCommand(algaeCollectorSubsystem::stop, algaeCollectorSubsystem));
-
-    // algae release
-    Command algaeRelease = new InstantCommand(algaeCollectorSubsystem::out, algaeCollectorSubsystem);
-    operatorController.algaeCollector().release_L().onTrue(algaeRelease).onFalse(new InstantCommand(algaeCollectorSubsystem::stop, algaeCollectorSubsystem));
-    operatorController.algaeCollector().release_R().onTrue(algaeRelease).onFalse(new InstantCommand(algaeCollectorSubsystem::stop, algaeCollectorSubsystem));
-
-    // elevator manual control - up
-    Command elevatorUp = new ElevatorUp(elevator);
-    operatorController.elevator().up_L().whileTrue(elevatorUp);
-    operatorController.elevator().up_R().whileTrue(elevatorUp);
-
-    // elevator manual control - down
-    Command elevatorDown = new ElevatorDown(elevator);
-    operatorController.elevator().down_L().whileTrue(elevatorDown);
-    operatorController.elevator().down_R().whileTrue(elevatorDown);
-
-    // elevator positions (compound commands across subsystems I assume)
-
-    // Algae Barge
+    //////////  
+    // Elevator
+    
+    //// Manual Controls
+    operatorController.elevator().up().onTrue(elevator.up()).onFalse(elevator.stop());
+    operatorController.elevator().down().onTrue(elevator.down()).onFalse(elevator.stop());
+    
+    //// Algae Delivery Setpoints
     Command elevatorAlgaeBarge = new ElevatorAlgaeBarge(elevator);
-    operatorController.elevator().algaeBarge_L().onTrue(elevatorAlgaeBarge);
-    operatorController.elevator().algaeBarge_R().onTrue(elevatorAlgaeBarge);
-
+    operatorController.elevator().algaeBarge().onTrue(elevatorAlgaeBarge);
     // Algae L3
     Command elevatorAlgaeL3 = new ElevatorAlgaeL3(elevator);
-    operatorController.elevator().algaeL3_L().onTrue(elevatorAlgaeL3);
-    operatorController.elevator().algaeL3_R().onTrue(elevatorAlgaeL3);
-
+    operatorController.elevator().algaeL3().onTrue(elevatorAlgaeL3);
     // Algae L2
-    operatorController.elevator().algaeL2_L().onTrue(new PrintCommand("Elevator - Algae L2 (L)"));
-    operatorController.elevator().algaeL2_R().onTrue(new PrintCommand("Elevator - Algae L2 (R)"));
-
+    operatorController.elevator().algaeL2().onTrue(new PrintCommand("Elevator - Algae L2 (L)"));
     // Algae Processor
-    operatorController.elevator().algaeProcessor_L().onTrue(new PrintCommand("Elevator - Algae Processor (L)"));
-    operatorController.elevator().algaeProcessor_R().onTrue(new PrintCommand("Elevator - Algae Processor (R))"));
-
+    operatorController.elevator().algaeProcessor().onTrue(new PrintCommand("Elevator - Algae Processor (L)"));
+    
+    //// Coral Delivery Setpoints
     // Coral L4
     Command elevatorCoralL4 = new ElevatorCoralL4(elevator);
-    operatorController.elevator().coralL4_L().onTrue(elevatorCoralL4);
-    operatorController.elevator().coralL4_R().onTrue(elevatorCoralL4);
+    operatorController.elevator().coralL4().onTrue(elevatorCoralL4);
     // Coral L3
     Command elevatorCoralL3 = new ElevatorCoralL3(elevator);
-    operatorController.elevator().coralL3_L().onTrue(elevatorCoralL3);
-    operatorController.elevator().coralL3_R().onTrue(elevatorCoralL3);
-
+    operatorController.elevator().coralL3().onTrue(elevatorCoralL3);
     // Coral L2
     Command elevatorCoralL2 = new ElevatorCoralL2(elevator);
-    operatorController.elevator().coralL2_L().onTrue(elevatorCoralL2);
-    operatorController.elevator().coralL2_R().onTrue(elevatorCoralL2);
-
+    operatorController.elevator().coralL2().onTrue(elevatorCoralL2);
     // Coral L1
     Command elevatorCoralL1 = new ElevatorCoralL1(elevator);
-    operatorController.elevator().coralL1_L().onTrue(elevatorCoralL1);
-    operatorController.elevator().coralL1_R().onTrue(elevatorCoralL1);
-
-    // Storage
-    // TODO - this needs to be expanded to include the AlgaeCollector
+    operatorController.elevator().coralL1().onTrue(elevatorCoralL1);
+    
+    //// Storage
+    // TODO - this needs to be expanded to include the AlgaeCollector position, verify that CoralCollector is safe, etc
     Command elevatorStorage = new ElevatorCoralStorage(elevator);
-    operatorController.elevator().storage_A().onTrue(elevatorStorage);
-    operatorController.elevator().storage_B().onTrue(elevatorStorage);
-    operatorController.elevator().storage_C().onTrue(elevatorStorage);
-    operatorController.elevator().storage_D().onTrue(elevatorStorage);
+    operatorController.elevator().storage().onTrue(elevatorStorage);
+
+    //////////  
+    // Wrist
+
+    //// Manual Controls
+    operatorController.wrist().rotateDown().onTrue(new InstantCommand(wristSubsystem::down, wristSubsystem))
+        .onFalse(new InstantCommand(wristSubsystem::stop, wristSubsystem));
+    operatorController.wrist().rotateUp().onTrue(new InstantCommand(wristSubsystem::up, wristSubsystem))
+        .onFalse(new InstantCommand(wristSubsystem::stop, wristSubsystem));
+      
+    //// Algae Collector Setpoints
+    // Storage
+    operatorController.algaeCollector().storage().onTrue(new PrintCommand("Algae - Storage (L)"));
+    // Reef
+    Command algaeReefCommand = new InstantCommand(wristSubsystem::algaeReef, wristSubsystem);
+    operatorController.algaeCollector().reef().onTrue(algaeReefCommand);
+    // Ground
+    operatorController.algaeCollector().ground().onTrue(new PrintCommand("Algae - Ground (L)"));
+
+    //////////  
+    // Algae Collector
+    Command algaeCollect = new InstantCommand(algaeCollectorSubsystem::in, algaeCollectorSubsystem);
+    operatorController.algaeCollector().collect().onTrue(algaeCollect)
+        .onFalse(new InstantCommand(algaeCollectorSubsystem::stop, algaeCollectorSubsystem));
+    Command algaeRelease = new InstantCommand(algaeCollectorSubsystem::out, algaeCollectorSubsystem);
+    operatorController.algaeCollector().release().onTrue(algaeRelease)
+        .onFalse(new InstantCommand(algaeCollectorSubsystem::stop, algaeCollectorSubsystem));
   }
 
   public void setRumble(double val) {
@@ -285,16 +245,16 @@ public class RobotContainer {
             driverRumbleIntensity += 0.01;
           }
           break;
-            
+
         case TARGET_LOCKED_ON:
           driverRumbleIntensity = 1;
           break;
-            
+
         case TARGET_NONE:
         default:
           driverRumbleIntensity = 0;
           break;
-      } 
+      }
     } else {
       driverRumbleState = RumbleState.TARGET_NONE;
     }

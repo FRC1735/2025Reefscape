@@ -19,11 +19,6 @@ import frc.robot.sensors.DistanceSensor;
 public class CoralSubystem extends SubsystemBase {
 private SparkFlex leadMotor = new SparkFlex(CoralSubystemConstants. LEAD_MOTOR_ID, MotorType.kBrushless);
 private SparkFlex followMotor = new SparkFlex(CoralSubystemConstants.FOLLOW_MOTOR_ID, MotorType.kBrushless); 
-  // TODO - delete these and put in subsystems
-  DistanceSensor distanceSensor0 = new DistanceSensor(0);
-  DistanceSensor distanceSensor1 = new DistanceSensor(1);
-  DistanceSensor distanceSensor2 = new DistanceSensor(2);
-
   /** Creates a new CoralSubystem. */
   public CoralSubystem() {
     SparkFlexConfig leadMotorConfig = new SparkFlexConfig();
@@ -39,11 +34,6 @@ private SparkFlex followMotor = new SparkFlex(CoralSubystemConstants.FOLLOW_MOTO
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-        // TODO - remove and put in subsystems
-    SmartDashboard.putNumber("Distance Sensor 0", distanceSensor0.getDistance());
-    SmartDashboard.putNumber("Distance Sensor 1", distanceSensor1.getDistance());
-    SmartDashboard.putNumber("Distance Sensor 2", distanceSensor2.getDistance());
-
   }
 
   public void shoot() {

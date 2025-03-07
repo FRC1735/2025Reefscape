@@ -15,15 +15,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.ElevatorDown;
-import frc.robot.commands.ElevatorUp;
-import frc.robot.commands.ElevatorAlgaeBarge;
-import frc.robot.commands.ElevatorAlgaeL3;
-import frc.robot.commands.ElevatorCoralL1;
-import frc.robot.commands.ElevatorCoralL2;
-import frc.robot.commands.ElevatorCoralL3;
-import frc.robot.commands.ElevatorCoralL4;
-import frc.robot.commands.ElevatorCoralStorage;
 import frc.robot.commands.LockHeadingOnAprilTag;
 import frc.robot.commands.LockXOnAprilTag;
 import frc.robot.subsystems.AlgaeCollectorSubsystem;
@@ -166,38 +157,31 @@ public class RobotContainer {
     // Elevator
     
     //// Manual Controls
-    operatorController.elevator().up().onTrue(elevator.up()).onFalse(elevator.stop());
-    operatorController.elevator().down().onTrue(elevator.down()).onFalse(elevator.stop());
+    operatorController.elevator().up().and(coralSubystem.isSafeForElevator()).onTrue(elevator.up()).onFalse(elevator.stop());
+    operatorController.elevator().down().and(coralSubystem.isSafeForElevator()).onTrue(elevator.down()).onFalse(elevator.stop());
     
     //// Algae Delivery Setpoints
-    Command elevatorAlgaeBarge = new ElevatorAlgaeBarge(elevator);
-    operatorController.elevator().algaeBarge().onTrue(elevatorAlgaeBarge);
+    operatorController.elevator().algaeBarge().and(coralSubystem.isSafeForElevator()).onTrue(elevator.algaeBarge());
     // Algae L3
-    Command elevatorAlgaeL3 = new ElevatorAlgaeL3(elevator);
-    operatorController.elevator().algaeL3().onTrue(elevatorAlgaeL3);
+    operatorController.elevator().algaeL3().and(coralSubystem.isSafeForElevator()).onTrue(elevator.algaeL3());
     // Algae L2
-    operatorController.elevator().algaeL2().onTrue(new PrintCommand("Elevator - Algae L2 (L)"));
+    operatorController.elevator().algaeL2().and(coralSubystem.isSafeForElevator()).onTrue(new PrintCommand("Elevator - Algae L2 (L)"));
     // Algae Processor
-    operatorController.elevator().algaeProcessor().onTrue(new PrintCommand("Elevator - Algae Processor (L)"));
+    operatorController.elevator().algaeProcessor().and(coralSubystem.isSafeForElevator()).onTrue(new PrintCommand("Elevator - Algae Processor (L)"));
     
     //// Coral Delivery Setpoints
     // Coral L4
-    Command elevatorCoralL4 = new ElevatorCoralL4(elevator);
-    operatorController.elevator().coralL4().onTrue(elevatorCoralL4);
+    operatorController.elevator().coralL4().and(coralSubystem.isSafeForElevator()).onTrue(elevator.coralL4());
     // Coral L3
-    Command elevatorCoralL3 = new ElevatorCoralL3(elevator);
-    operatorController.elevator().coralL3().onTrue(elevatorCoralL3);
+    operatorController.elevator().coralL3().and(coralSubystem.isSafeForElevator()).onTrue(elevator.coralL3());
     // Coral L2
-    Command elevatorCoralL2 = new ElevatorCoralL2(elevator);
-    operatorController.elevator().coralL2().onTrue(elevatorCoralL2);
+    operatorController.elevator().coralL2().and(coralSubystem.isSafeForElevator()).onTrue(elevator.coralL2());
     // Coral L1
-    Command elevatorCoralL1 = new ElevatorCoralL1(elevator);
-    operatorController.elevator().coralL1().onTrue(elevatorCoralL1);
+    operatorController.elevator().coralL1().and(coralSubystem.isSafeForElevator()).onTrue(elevator.coralL1());
     
     //// Storage
     // TODO - this needs to be expanded to include the AlgaeCollector position, verify that CoralCollector is safe, etc
-    Command elevatorStorage = new ElevatorCoralStorage(elevator);
-    operatorController.elevator().storage().onTrue(elevatorStorage);
+    operatorController.elevator().storage().and(coralSubystem.isSafeForElevator()).onTrue(elevator.storage());
 
     //////////  
     // Wrist
@@ -219,12 +203,8 @@ public class RobotContainer {
 
     //////////  
     // Algae Collector
-    Command algaeCollect = new InstantCommand(algaeCollectorSubsystem::in, algaeCollectorSubsystem);
-    operatorController.algaeCollector().collect().onTrue(algaeCollect)
-        .onFalse(new InstantCommand(algaeCollectorSubsystem::stop, algaeCollectorSubsystem));
-    Command algaeRelease = new InstantCommand(algaeCollectorSubsystem::out, algaeCollectorSubsystem);
-    operatorController.algaeCollector().release().onTrue(algaeRelease)
-        .onFalse(new InstantCommand(algaeCollectorSubsystem::stop, algaeCollectorSubsystem));
+    operatorController.algaeCollector().collect().onTrue(algaeCollectorSubsystem.in()).onFalse(algaeCollectorSubsystem.stop());
+    operatorController.algaeCollector().release().onTrue(algaeCollectorSubsystem.out()).onFalse(algaeCollectorSubsystem.stop());
   }
 
   public void setRumble(double val) {

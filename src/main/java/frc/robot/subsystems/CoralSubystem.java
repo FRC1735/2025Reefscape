@@ -5,12 +5,17 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkFlex;
+
+import java.util.function.BooleanSupplier;
+
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.wpilibj.SharpIR;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CoralSubystemConstants;
@@ -18,6 +23,12 @@ import frc.robot.Constants.CoralSubystemConstants;
 public class CoralSubystem extends SubsystemBase {
   private SparkFlex leadMotor = new SparkFlex(CoralSubystemConstants.LEAD_MOTOR_ID, MotorType.kBrushless);
   private SparkFlex followMotor = new SparkFlex(CoralSubystemConstants.FOLLOW_MOTOR_ID, MotorType.kBrushless);
+
+  // TODO - verify these are the correct sensors
+  private SharpIR topDistanceSensor = SharpIR.GP2Y0A41SK0F(0);
+  private SharpIR bottomDistanceSensor = SharpIR.GP2Y0A41SK0F(1);
+
+  private final boolean DEBUG = true;
 
   /** Creates a new CoralSubystem. */
   public CoralSubystem() {
@@ -34,6 +45,10 @@ public class CoralSubystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if (DEBUG) {
+      SmartDashboard.putNumber("Coral - Top Distance Sensor", topDistanceSensor.getRangeCM());
+      SmartDashboard.putNumber("Coral - Bottom Distance Sensor", bottomDistanceSensor.getRangeCM());
+    }
   }
 
   public Command shoot() {
@@ -48,8 +63,9 @@ public class CoralSubystem extends SubsystemBase {
     return this.runOnce(() -> leadMotor.stopMotor());
   }
 
-  // TODO - all elevator related commands should check this and not do anything if coral isn't considered safe (ie it will block the elevator from moving)
-  public boolean isSafeForElevator() {
-    return true;
+  // TODO - all elevator related commands should check this and not do anything if
+  // coral isn't considered safe (ie it will block the elevator from moving)
+  public BooleanSupplier isSafeForElevator() {
+    return () -> true;
   }
 }

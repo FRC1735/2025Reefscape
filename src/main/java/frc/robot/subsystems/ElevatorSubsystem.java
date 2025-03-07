@@ -88,31 +88,31 @@ public class ElevatorSubsystem extends SubsystemBase {
     return this.runOnce(() -> leadMotor.stopMotor());
   }
 
-  public void algaeL3() {
-    closedLoopController.setReference(2.2, ControlType.kMAXMotionPositionControl);
+  public Command algaeL3() {
+    return this.runOnce(() -> closedLoopController.setReference(2.2, ControlType.kMAXMotionPositionControl));
   }
 
-  public void algaeBarge() {
-    closedLoopController.setReference(7, ControlType.kMAXMotionPositionControl);
+  public Command algaeBarge() {
+    return this.runOnce(() -> closedLoopController.setReference(7, ControlType.kMAXMotionPositionControl));
   }
 
-  public void coralL1() {
-    closedLoopController.setReference(1.1, ControlType.kMAXMotionPositionControl);
+  public Command coralL1() {
+    return this.runOnce(() -> closedLoopController.setReference(1.1, ControlType.kMAXMotionPositionControl));
   }
 
-  public void coralL2() {
-    closedLoopController.setReference(2.41, ControlType.kMAXMotionPositionControl);
+  public Command coralL2() {
+    return this.runOnce(() -> closedLoopController.setReference(2.41, ControlType.kMAXMotionPositionControl));
   }
 
-  public void coralL3() {
-    closedLoopController.setReference(4.27, ControlType.kMAXMotionPositionControl);
+  public Command coralL3() {
+    return this.runOnce(() -> closedLoopController.setReference(4.27, ControlType.kMAXMotionPositionControl));
   }
 
-  public void coralL4() {
-    closedLoopController.setReference(7.19, ControlType.kMAXMotionPositionControl);
+  public Command coralL4() {
+    return this.runOnce(() -> closedLoopController.setReference(7.19, ControlType.kMAXMotionPositionControl));
   }
 
-  public void storage() {
-    closedLoopController.setReference(0.2, ControlType.kMAXMotionPositionControl);
+  public Command storage() {
+    return this.runOnce(() -> closedLoopController.setReference(0.2, ControlType.kMAXMotionPositionControl));
   }
 }

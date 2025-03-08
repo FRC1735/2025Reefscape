@@ -107,35 +107,29 @@ public class RobotContainer {
         }));
         */
 
+
+    Command lockOn = new LockXOnAprilTag(
+      swerveDriveSubsystem,
+      () -> MathUtil.applyDeadband(-driver.getLeftY(), 0.05),
+      () -> 0,
+      new ControllerRumbleCallback() {
+        @Override
+        public void update(RumbleState rumbleState) {
+          // TODO
+        }
+      });
+
     driver.rightBumper()
       .onTrue(new InstantCommand(() -> {
         SmartDashboard.putBoolean("Target Left Reef", false);
       }))
-      .whileTrue(new LockXOnAprilTag(
-        swerveDriveSubsystem,
-        () -> 0,
-        driver::getRightX,
-        new ControllerRumbleCallback() {
-          @Override
-          public void update(RumbleState rumbleState) {
-            // TODO
-          }
-        }));
+      .whileTrue(lockOn);
 
     driver.leftBumper()
       .onTrue(new InstantCommand(() -> {
         SmartDashboard.putBoolean("Target Left Reef", true);
       }))
-      .whileTrue(new LockXOnAprilTag(
-        swerveDriveSubsystem,
-        () -> 0,
-        driver::getRightX,
-        new ControllerRumbleCallback() {
-          @Override
-          public void update(RumbleState rumbleState) {
-            // TODO
-          }
-        }));
+      .whileTrue(lockOn);
 
     driver.a().onTrue(new InstantCommand(swerveDriveSubsystem::zeroGyro, swerveDriveSubsystem));
     /*

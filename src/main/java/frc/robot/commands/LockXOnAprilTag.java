@@ -7,6 +7,7 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -15,21 +16,24 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.ControllerRumbleCallback;
+import frc.robot.FieldConstants;
 import frc.robot.LimelightHelpers;
 import frc.robot.RumbleState;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 public class LockXOnAprilTag extends Command {
   private final SwerveDriveSubsystem swerve;
-  private DoubleSupplier translationY; // TODO - use this!
+  private DoubleSupplier translationX; // TODO - use this!
   private DoubleSupplier heading;
   private double targetX;
   private ControllerRumbleCallback controllerRumbleCallback;
 
   private double startingYOffset;
 
-  private PIDController xPIDController = new PIDController(0.01, 0, 0);
-  private PIDController yPIDController = new PIDController(0.1, 0, 0);
+  private PIDController yPIDController = new PIDController(0.01, 0, 0);
+  private PIDController headingPIDController = new PIDController(1, 0, 0);
+  //private PIDController yPIDController = new PIDController(0.1, 0, 0);
+
 
   // I think we may care more about the heading here as opposed to 'Y'
   // Strafe on X and only adjust heading to be consistent w/ the specific tag we are looking at
@@ -38,11 +42,18 @@ public class LockXOnAprilTag extends Command {
   // we detect the tag we are looking at and adjust the desired heading based on that and the original
   // 0 heading
 
+
+  // x is front and back
+  // y is left and right
+
+  double targetTagId;
+  Rotation2d targetHeading;
+
   private static final boolean DEBUG = true;
 
-  public LockXOnAprilTag(SwerveDriveSubsystem swerveDriveSubsystem, DoubleSupplier translationY, DoubleSupplier heading, ControllerRumbleCallback controllerRumbleCallback) {
+  public LockXOnAprilTag(SwerveDriveSubsystem swerveDriveSubsystem, DoubleSupplier translationX, DoubleSupplier heading, ControllerRumbleCallback controllerRumbleCallback) {
     this.swerve = swerveDriveSubsystem;
-    this.translationY = translationY;
+    this.translationX = translationX;
     this.heading = heading;
     this.controllerRumbleCallback = controllerRumbleCallback;
 
@@ -52,6 +63,10 @@ public class LockXOnAprilTag extends Command {
   @Override
   public void initialize() {
     startingYOffset = swerve.getTargetYOffset();
+    targetTagId = LimelightHelpers.getFiducialID("limelight");
+    // TODO - should check for the default value of 0 which would not help us
+
+    targetHeading = FieldConstants.Reef.reefMap.get((int)targetTagId).left().getRotation();
   }
 
   @Override
@@ -73,12 +88,14 @@ public class LockXOnAprilTag extends Command {
     }
     ////////////
 
-    double translateX = 0;
     double translateY = 0;
+    double headingAdjustment = 0;
 
     if(swerve.hasTarget()){
-      translateX = xPIDController.calculate(swerve.getTargetXOffset(), 0);
-      translateY = 0; //yPIDController.calculate(swerve.getTargetYOffset(), startingYOffset);
+      translateY = yPIDController.calculate(swerve.getTargetXOffset(), 0);
+      headingAdjustment = headingPIDController.calculate(
+                    swerve.getSwerve().getOdometryHeading().getRadians(),
+                    targetHeading.getRadians());
 
       //controllerRumbleCallback.update(RumbleState.TARGET_LOCKED_ON);
     }else{
@@ -89,10 +106,11 @@ public class LockXOnAprilTag extends Command {
     }
  
     swerve.getSwerve().drive(
-      new Translation2d(0,
-      (translateX) * swerve.getSwerve().getMaximumChassisVelocity()
+      new Translation2d(
+      translationX.getAsDouble() * swerve.getSwerve().getMaximumChassisVelocity() ,
+      (translateY) * swerve.getSwerve().getMaximumChassisVelocity()
       ),
-    0,
+      -headingAdjustment,
 false,
 false);
 

@@ -59,6 +59,13 @@ public class CoralSubystem extends SubsystemBase {
     return this.runOnce(() -> leadMotor.set(-0.2));
   }
 
+  public Command load() {
+    return this.runOnce(() -> {
+      // TODO - use sensors to automate this
+      leadMotor.set(0.05);
+    });
+  }
+
   public Command stop() {
     return this.runOnce(() -> leadMotor.stopMotor());
   }

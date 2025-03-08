@@ -178,6 +178,11 @@ public class KeyboardController {
         return controller.button(3,2)
             .or(controller.button(3,3));
     }
+
+    public Trigger load() {
+        return controller.button(4, 2)
+            .or(controller.button(4,3));
+    }
   }
 
   public static final record Elevator(KeyboardController controller) {

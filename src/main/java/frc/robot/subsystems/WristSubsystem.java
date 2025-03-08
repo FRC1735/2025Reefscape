@@ -50,12 +50,11 @@ public class WristSubsystem extends SubsystemBase {
       .maxAcceleration(216)
       .allowedClosedLoopError(0.025);
 
-      // TODO - not confident this is working
     motorConfig.softLimit
       .forwardSoftLimitEnabled(true)
       .forwardSoftLimit(0.5532)
       .reverseSoftLimitEnabled(true)
-      .reverseSoftLimit(0.2341); // TODO
+      .reverseSoftLimit(0.1678); // TODO
 
     motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 

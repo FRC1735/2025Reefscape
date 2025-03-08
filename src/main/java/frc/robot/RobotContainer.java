@@ -160,7 +160,7 @@ public class RobotContainer {
     //// Manual Controls
     operatorController.elevator().up().and(coralSubystem.isSafeForElevator()).onTrue(elevator.up()).onFalse(elevator.stop());
     operatorController.elevator().down().and(coralSubystem.isSafeForElevator()).onTrue(elevator.down()).onFalse(elevator.stop());
-    
+
     //// Algae Delivery Setpoints
     operatorController.elevator().algaeBarge().and(coralSubystem.isSafeForElevator()).onTrue(elevator.algaeBarge());
     // Algae L3

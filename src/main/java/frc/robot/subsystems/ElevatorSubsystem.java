@@ -42,7 +42,7 @@ public class ElevatorSubsystem extends SubsystemBase {
       .forwardSoftLimitEnabled(true) 
       .forwardSoftLimit(7.25)
       .reverseSoftLimitEnabled(true) // TODO - figure out how to set this based on where the enocder starts (it prob wont be 0)
-      .reverseSoftLimit(initialZeroPoint); // ????
+      .reverseSoftLimit(initialZeroPoint + 0.05); // ????
 
     leadMotorConfig.closedLoop
       .feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder)
@@ -62,7 +62,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     closedLoopController = leadMotor.getClosedLoopController();
 
-    smartDashboardPIDTuner = new SmartDashboardPIDTuner("Elevator", leadMotor, leadMotorConfig, 0.2, 0, 0, -1, 1, FeedbackSensor.kAlternateOrExternalEncoder, false, DEBUG);
+    smartDashboardPIDTuner = new SmartDashboardPIDTuner("Elevator", leadMotor, leadMotorConfig, 0.8, 0, 0, -1, 1, FeedbackSensor.kAlternateOrExternalEncoder, false, DEBUG);
   }
 
   @Override

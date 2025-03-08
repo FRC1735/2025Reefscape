@@ -8,6 +8,26 @@
         "layouts": [],
         "containers": [
           {
+            "title": "limelight",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 896.0,
+            "height": 768.0,
+            "type": "Camera Stream",
+            "properties": {
+              "topic": "/CameraPublisher/limelight",
+              "period": 0.06
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Swerve",
+      "grid_layout": {
+        "layouts": [],
+        "containers": [
+          {
             "title": "swerve",
             "x": 384.0,
             "y": 128.0,
@@ -457,7 +477,7 @@
       }
     },
     {
-      "name": "Elevater",
+      "name": "Elevator",
       "grid_layout": {
         "layouts": [],
         "containers": [

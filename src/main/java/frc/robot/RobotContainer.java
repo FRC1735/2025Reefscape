@@ -10,6 +10,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -94,6 +95,7 @@ public class RobotContainer {
     swerveDriveSubsystem.setDefaultCommand(driveRobotOrientedAngularVelocity);
 
     driver.start().onTrue((Commands.runOnce(swerveDriveSubsystem::zeroGyro)));
+    /*
     driver.rightBumper().whileTrue(new LockHeadingOnAprilTag(swerveDriveSubsystem,
         () -> MathUtil.applyDeadband(-driver.getLeftY(), 0.05),
         () -> MathUtil.applyDeadband(-driver.getLeftX(), 0.05),
@@ -103,8 +105,13 @@ public class RobotContainer {
             driverRumbleState = rumbleState;
           }
         }));
+        */
 
-    driver.leftBumper().whileTrue(new LockXOnAprilTag(
+    driver.rightBumper()
+      .onTrue(new InstantCommand(() -> {
+        SmartDashboard.putBoolean("Target Left Reef", false);
+      }))
+      .whileTrue(new LockXOnAprilTag(
         swerveDriveSubsystem,
         () -> 0,
         driver::getRightX,
@@ -115,10 +122,22 @@ public class RobotContainer {
           }
         }));
 
-    driver.a().onTrue(new InstantCommand(elevator::up, elevator)).onFalse(new InstantCommand(elevator::stop, elevator));
-    driver.b().onTrue(new InstantCommand(elevator::down, elevator))
-        .onFalse(new InstantCommand(elevator::stop, elevator));
+    driver.leftBumper()
+      .onTrue(new InstantCommand(() -> {
+        SmartDashboard.putBoolean("Target Left Reef", true);
+      }))
+      .whileTrue(new LockXOnAprilTag(
+        swerveDriveSubsystem,
+        () -> 0,
+        driver::getRightX,
+        new ControllerRumbleCallback() {
+          @Override
+          public void update(RumbleState rumbleState) {
+            // TODO
+          }
+        }));
 
+    driver.a().onTrue(new InstantCommand(swerveDriveSubsystem::zeroGyro, swerveDriveSubsystem));
     /*
      * driver
      * .a()

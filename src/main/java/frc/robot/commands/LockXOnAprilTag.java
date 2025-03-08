@@ -89,11 +89,11 @@ public class LockXOnAprilTag extends Command {
     }
  
     swerve.getSwerve().drive(
-      new Translation2d(-translateY * swerve.getSwerve().getMaximumChassisVelocity(),
-      (-translateX) * swerve.getSwerve().getMaximumChassisVelocity()
+      new Translation2d(0,
+      (translateX) * swerve.getSwerve().getMaximumChassisVelocity()
       ),
-    heading.getAsDouble() * swerve.getSwerve().getMaximumChassisAngularVelocity(),
-true,
+    0,
+false,
 false);
 
     if (DEBUG) {

@@ -15,6 +15,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.WristSubystemConstants;
 import frc.robot.utils.SmartDashboardPIDTuner;
@@ -47,7 +48,7 @@ public class WristSubsystem extends SubsystemBase {
       .maxMotion
       .maxVelocity(54.272)
       .maxAcceleration(216)
-      .allowedClosedLoopError(0.0025);
+      .allowedClosedLoopError(0.025);
 
       // TODO - not confident this is working
     motorConfig.softLimit
@@ -97,12 +98,23 @@ public class WristSubsystem extends SubsystemBase {
 
   }
 
-  public void up() {
-    closedLoopController.setReference(TOP_LIMIT, ControlType.kMAXMotionPositionControl);
+  public Command up() {
+    return this.run(() -> {
+      double nextPosition = motor.getAbsoluteEncoder().getPosition() + 0.05;
+      closedLoopController.setReference(nextPosition, ControlType.kMAXMotionPositionControl);
+    });
   }
 
-  public void down() {
-    closedLoopController.setReference(BOTTOM_LIMIT, ControlType.kMAXMotionPositionControl);
+  public Command down() {
+    return this.run(() -> {
+      double nextPosition = motor.getAbsoluteEncoder().getPosition() - 0.05;
+      closedLoopController.setReference(nextPosition, ControlType.kMAXMotionPositionControl);
+    });
+  }
+
+  // This doesn't work the way I want it to
+  public void maintainEncoderPosition() {
+    //closedLoopController.setReference(motor.getAbsoluteEncoder().getPosition(), ControlType.kMAXMotionPositionControl);
   }
 
 

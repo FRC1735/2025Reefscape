@@ -187,10 +187,8 @@ public class RobotContainer {
     // Wrist
 
     //// Manual Controls
-    operatorController.wrist().rotateDown().onTrue(new InstantCommand(wristSubsystem::down, wristSubsystem))
-        .onFalse(new InstantCommand(wristSubsystem::stop, wristSubsystem));
-    operatorController.wrist().rotateUp().onTrue(new InstantCommand(wristSubsystem::up, wristSubsystem))
-        .onFalse(new InstantCommand(wristSubsystem::stop, wristSubsystem));
+    operatorController.wrist().rotateDown().whileTrue(wristSubsystem.down());
+    operatorController.wrist().rotateUp().whileTrue(wristSubsystem.up());
       
     //// Algae Collector Setpoints
     // Storage

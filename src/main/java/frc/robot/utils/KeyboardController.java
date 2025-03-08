@@ -153,6 +153,11 @@ public class KeyboardController {
     public Trigger ground() {
         return controller.button(8, 2)
             .or(controller.button(8, 3));
+    } 
+
+    public Trigger held() {
+      return controller.button(8,4)
+        .or(controller.button(8, 5));
     }
   }
 

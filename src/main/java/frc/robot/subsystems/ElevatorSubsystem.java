@@ -28,6 +28,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private SmartDashboardPIDTuner smartDashboardPIDTuner;
   private SparkClosedLoopController closedLoopController;
   private double initialZeroPoint = leadMotor.getExternalEncoder().getPosition();
+  private double bottomPosition = initialZeroPoint +.2;
 
   public ElevatorSubsystem() {
     SparkFlexConfig leadMotorConfig = new SparkFlexConfig();
@@ -40,9 +41,9 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     leadMotorConfig.softLimit
       .forwardSoftLimitEnabled(true) 
-      .forwardSoftLimit(7.25)
+      .forwardSoftLimit(8.2)
       .reverseSoftLimitEnabled(true) // TODO - figure out how to set this based on where the enocder starts (it prob wont be 0)
-      .reverseSoftLimit(initialZeroPoint + 0.05); // ????
+      .reverseSoftLimit(initialZeroPoint + .1); // ????
 
     leadMotorConfig.closedLoop
       .feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder)
@@ -90,12 +91,28 @@ public class ElevatorSubsystem extends SubsystemBase {
     return this.runOnce(() -> leadMotor.stopMotor());
   }
 
+  public Command algaeL2() {
+    return this.runOnce(() -> closedLoopController.setReference(3.1197, ControlType.kMAXMotionPositionControl));
+  }
+
   public Command algaeL3() {
-    return this.runOnce(() -> closedLoopController.setReference(2.2, ControlType.kMAXMotionPositionControl));
+    return this.runOnce(() -> closedLoopController.setReference(5.13, ControlType.kMAXMotionPositionControl));
+  }
+
+  public Command algaeProcessor() {
+    return storage();
+  }
+
+  public Command algaeGround() {
+    return storage();
+  }
+
+  public Command algaeHeld() {
+    return storage();
   }
 
   public Command algaeBarge() {
-    return this.runOnce(() -> closedLoopController.setReference(7, ControlType.kMAXMotionPositionControl));
+    return this.runOnce(() -> closedLoopController.setReference(8.1, ControlType.kMAXMotionPositionControl));
   }
 
   public Command coralL1() {
@@ -115,6 +132,6 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public Command storage() {
-    return this.runOnce(() -> closedLoopController.setReference(initialZeroPoint, ControlType.kMAXMotionPositionControl));
+    return this.runOnce(() -> closedLoopController.setReference(bottomPosition, ControlType.kMAXMotionPositionControl));
   }
 }

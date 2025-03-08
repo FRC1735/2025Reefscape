@@ -75,27 +75,35 @@ public class WristSubsystem extends SubsystemBase {
     }
   }
 
-  public void testPositionControl() {
-      closedLoopController.setReference(0.4, ControlType.kMAXMotionPositionControl);
+  public Command algaeL2() {
+    return this.runOnce(() -> closedLoopController.setReference(0.2351, ControlType.kMAXMotionPositionControl));
   }
 
-  public void testPositionControl2() {
-    closedLoopController.setReference(0.3, ControlType.kMAXMotionPositionControl);
 
+  public Command algaeL3() {
+    return this.runOnce(() -> closedLoopController.setReference(0.2351, ControlType.kMAXMotionPositionControl));
   }
 
-  
-  public void testPositionControl3() {
-    closedLoopController.setReference(0.5, ControlType.kMAXMotionPositionControl);
+  public Command algaeProcessor() {
+    return this.runOnce(() -> closedLoopController.setReference(0.2351, ControlType.kMAXMotionPositionControl));
   }
 
-  public void algaeReef() {
-    closedLoopController.setReference(0.5, ControlType.kMAXMotionPositionControl);
+  public Command algaeGround() {
+    return this.runOnce(() -> closedLoopController.setReference(0.1628, ControlType.kMAXMotionPositionControl));
   }
 
-  public void setPosition(double newPosition) {
-
+  public Command algaeStorage() {
+    return this.runOnce(() -> closedLoopController.setReference(0.5805, ControlType.kMAXMotionPositionControl));
   }
+
+  public Command algaeHeld() {
+    return this.runOnce(() -> closedLoopController.setReference(0.5287, ControlType.kMAXMotionPositionControl));
+  }
+
+  public Command algaeBarge() {
+    return algaeHeld();
+  }
+
 
   public Command up() {
     return this.run(() -> {

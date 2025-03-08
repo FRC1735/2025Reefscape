@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.LockHeadingOnAprilTag;
@@ -55,9 +56,9 @@ public class RobotContainer {
    * by angular velocity.
    */
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(swerveDriveSubsystem.getSwerveDrive(),
-      () -> driver.getLeftY() * -1,
-      () -> driver.getLeftX() * -1)
-      .withControllerRotationAxis(driver::getRightX)
+      () -> MathUtil.applyDeadband(driver.getLeftY() * -1, 0.05),
+      () -> MathUtil.applyDeadband(driver.getLeftX() * -1, 0.05))
+      .withControllerRotationAxis(() -> MathUtil.applyDeadband(driver.getRightX(), 0.05))
       .deadband(0.1)
       .scaleTranslation(0.8)
       .allianceRelativeControl(true);
@@ -66,8 +67,9 @@ public class RobotContainer {
    * Clone's the angular velocity input stream and converts it to a fieldRelative
    * input stream.
    */
-  SwerveInputStream driveDirectAngle = driveAngularVelocity.copy().withControllerHeadingAxis(driver::getRightX,
-      driver::getRightY)
+  SwerveInputStream driveDirectAngle = driveAngularVelocity.copy()
+    .withControllerHeadingAxis(() -> MathUtil.applyDeadband(driver.getRightX(), 0.05),
+    () -> MathUtil.applyDeadband(driver.getRightY(), 0.05))
       .headingWhile(true);
 
   /**
@@ -175,13 +177,20 @@ public class RobotContainer {
     operatorController.elevator().down().and(coralSubystem.isSafeForElevator()).onTrue(elevator.down()).onFalse(elevator.stop());
 
     //// Algae Delivery Setpoints
-    operatorController.elevator().algaeBarge().and(coralSubystem.isSafeForElevator()).onTrue(elevator.algaeBarge());
+    operatorController.elevator().algaeBarge().and(coralSubystem.isSafeForElevator())
+      .onTrue(
+          elevator.algaeBarge()
+      );
     // Algae L3
-    operatorController.elevator().algaeL3().and(coralSubystem.isSafeForElevator()).onTrue(elevator.algaeL3());
+    operatorController.elevator().algaeL3().and(coralSubystem.isSafeForElevator())
+      .onTrue(
+          elevator.algaeL3());
     // Algae L2
-    operatorController.elevator().algaeL2().and(coralSubystem.isSafeForElevator()).onTrue(new PrintCommand("Elevator - Algae L2 (L)"));
+    operatorController.elevator().algaeL2().and(coralSubystem.isSafeForElevator())
+      .onTrue(
+          elevator.algaeL2());
     // Algae Processor
-    operatorController.elevator().algaeProcessor().and(coralSubystem.isSafeForElevator()).onTrue(new PrintCommand("Elevator - Algae Processor (L)"));
+    operatorController.elevator().algaeProcessor().and(coralSubystem.isSafeForElevator()).onTrue(elevator.algaeProcessor());
     
     //// Coral Delivery Setpoints
     // Coral L4
@@ -206,12 +215,13 @@ public class RobotContainer {
       
     //// Algae Collector Setpoints
     // Storage
-    operatorController.algaeCollector().storage().onTrue(new PrintCommand("Algae - Storage (L)"));
-    // Reef
-    Command algaeReefCommand = new InstantCommand(wristSubsystem::algaeReef, wristSubsystem);
-    operatorController.algaeCollector().reef().onTrue(algaeReefCommand);
+    operatorController.algaeCollector().storage().onTrue(wristSubsystem.algaeStorage());
     // Ground
-    operatorController.algaeCollector().ground().onTrue(new PrintCommand("Algae - Ground (L)"));
+    operatorController.algaeCollector().ground().onTrue(wristSubsystem.algaeGround());
+    // Reef
+    operatorController.algaeCollector().reef().onTrue(wristSubsystem.algaeL2());
+    // Algae in Posession
+    operatorController.algaeCollector().held().onTrue(wristSubsystem.algaeHeld());
 
     //////////  
     // Algae Collector

@@ -27,6 +27,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   boolean DEBUG = true;
   private SmartDashboardPIDTuner smartDashboardPIDTuner;
   private SparkClosedLoopController closedLoopController;
+  private double initialZeroPoint = leadMotor.getExternalEncoder().getPosition();
 
   public ElevatorSubsystem() {
     SparkFlexConfig leadMotorConfig = new SparkFlexConfig();
@@ -41,7 +42,7 @@ public class ElevatorSubsystem extends SubsystemBase {
       .forwardSoftLimitEnabled(true) 
       .forwardSoftLimit(7.25)
       .reverseSoftLimitEnabled(true) // TODO - figure out how to set this based on where the enocder starts (it prob wont be 0)
-      .reverseSoftLimit(0.1); // ????
+      .reverseSoftLimit(initialZeroPoint); // ????
 
     leadMotorConfig.closedLoop
       .feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder)
@@ -71,6 +72,7 @@ public class ElevatorSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("Elevator Encoder", leadMotor.getExternalEncoder().getPosition());
       smartDashboardPIDTuner.periodic();
       SmartDashboard.putNumber("Elevator Voltage", leadMotor.getAppliedOutput());
+      SmartDashboard.putNumber("Elevator intial zero point", initialZeroPoint);
     }
   }
 
@@ -113,6 +115,6 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public Command storage() {
-    return this.runOnce(() -> closedLoopController.setReference(0.2, ControlType.kMAXMotionPositionControl));
+    return this.runOnce(() -> closedLoopController.setReference(initialZeroPoint, ControlType.kMAXMotionPositionControl));
   }
 }

@@ -47,6 +47,7 @@ public class CoralSubystem extends SubsystemBase {
     if (DEBUG) {
       SmartDashboard.putNumber("Coral - Top Distance Sensor", topDistanceSensor.getRangeCM());
       SmartDashboard.putNumber("Coral - Bottom Distance Sensor", bottomDistanceSensor.getRangeCM());
+      SmartDashboard.putBoolean("Coral - Safe for Elevator Movement", isSafeForElevator().getAsBoolean());
     }
   }
 
@@ -65,6 +66,10 @@ public class CoralSubystem extends SubsystemBase {
   // TODO - all elevator related commands should check this and not do anything if
   // coral isn't considered safe (ie it will block the elevator from moving)
   public BooleanSupplier isSafeForElevator() {
-    return () -> false;
+    return () -> 
+      // no coral detected
+      (topDistanceSensor.getRangeCM() >= 14 && bottomDistanceSensor.getRangeCM() >= 14)
+      // coral loaded properly
+      || (topDistanceSensor.getRangeCM() >= 14 && bottomDistanceSensor.getRangeCM() <= 4.2);
   }
 }

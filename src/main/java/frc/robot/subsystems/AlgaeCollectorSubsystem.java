@@ -22,8 +22,7 @@ public class AlgaeCollectorSubsystem extends SubsystemBase {
 
   private final boolean DEBUG = true;
 
-  // TODO - verify channel and actually use this
-  SharpIR distanceSensor = SharpIR.GP2Y0A41SK0F(2);
+  SharpIR distanceSensor = SharpIR.GP2Y0A41SK0F(0);
 
   public AlgaeCollectorSubsystem() {
     SparkFlexConfig motorConfig = new SparkFlexConfig();
@@ -40,7 +39,7 @@ public class AlgaeCollectorSubsystem extends SubsystemBase {
   }
 
   private boolean algaePresent() {
-    return true;
+    return distanceSensor.getRangeCM() < 4.5;
   }
 
   public Command in() {
@@ -54,13 +53,7 @@ public class AlgaeCollectorSubsystem extends SubsystemBase {
   }
 
   public Command out() {
-    return this.runOnce(() -> {
-      if (algaePresent()) {
-        motor.set(0);
-      } else {
-        motor.set(1);
-      }
-    });
+    return this.runOnce(() -> motor.set(1));
   }
 
   public Command stop() {

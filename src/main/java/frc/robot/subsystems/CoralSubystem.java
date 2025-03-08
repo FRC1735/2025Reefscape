@@ -24,9 +24,8 @@ public class CoralSubystem extends SubsystemBase {
   private SparkFlex leadMotor = new SparkFlex(CoralSubystemConstants.LEAD_MOTOR_ID, MotorType.kBrushless);
   private SparkFlex followMotor = new SparkFlex(CoralSubystemConstants.FOLLOW_MOTOR_ID, MotorType.kBrushless);
 
-  // TODO - verify these are the correct sensors
-  private SharpIR topDistanceSensor = SharpIR.GP2Y0A41SK0F(0);
-  private SharpIR bottomDistanceSensor = SharpIR.GP2Y0A41SK0F(1);
+  private SharpIR topDistanceSensor = SharpIR.GP2Y0A41SK0F(1);
+  private SharpIR bottomDistanceSensor = SharpIR.GP2Y0A41SK0F(2);
 
   private final boolean DEBUG = true;
 
@@ -66,6 +65,6 @@ public class CoralSubystem extends SubsystemBase {
   // TODO - all elevator related commands should check this and not do anything if
   // coral isn't considered safe (ie it will block the elevator from moving)
   public BooleanSupplier isSafeForElevator() {
-    return () -> true;
+    return () -> false;
   }
 }

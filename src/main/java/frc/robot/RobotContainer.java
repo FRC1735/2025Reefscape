@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.LoadCoral;
 import frc.robot.commands.LockHeadingOnAprilTag;
 import frc.robot.commands.LockXOnAprilTag;
 import frc.robot.subsystems.AlgaeCollectorSubsystem;
@@ -82,6 +83,7 @@ public class RobotContainer {
   public RobotContainer() {
     configureBindings();
 
+    coralSubystem.setDefaultCommand(new LoadCoral(coralSubystem));
   }
 
   private void configureBindings() {
@@ -165,10 +167,9 @@ public class RobotContainer {
   public void configureOperatorController() {
     //////////  
     // Coral Shooter
-    operatorController.coralCollector().score().onTrue(coralSubystem.shoot()).onFalse(coralSubystem.stop());
-    operatorController.coralCollector().reverse().onTrue(coralSubystem.reverse()).onFalse(coralSubystem.stop());
-    operatorController.coralCollector().load().onTrue(coralSubystem.load()).onFalse(coralSubystem.stop());
-
+    operatorController.coralCollector().score().whileTrue(coralSubystem.shoot()).onFalse(coralSubystem.stop());
+    operatorController.coralCollector().reverse().whileTrue(coralSubystem.reverse()).onFalse(coralSubystem.stop());
+    //operatorController.coralCollector().load().onTrue(coralSubystem.load()).onFalse(coralSubystem.stop());
     //////////  
     // Elevator
     

@@ -44,25 +44,31 @@ public class CoralSubystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("Coral - Safe for Elevator Movement", isSafeForElevator().getAsBoolean());
+
     if (DEBUG) {
       SmartDashboard.putNumber("Coral - Top Distance Sensor", topDistanceSensor.getRangeCM());
       SmartDashboard.putNumber("Coral - Bottom Distance Sensor", bottomDistanceSensor.getRangeCM());
-      SmartDashboard.putBoolean("Coral - Safe for Elevator Movement", isSafeForElevator().getAsBoolean());
+      SmartDashboard.putBoolean("Coral - is loaded?", isCoralLoaded().getAsBoolean());
     }
   }
 
   public Command shoot() {
-    return this.runOnce(() -> leadMotor.set(0.15));
+    return this.run(() -> leadMotor.set(0.15));
   }
 
   public Command reverse() {
-    return this.runOnce(() -> leadMotor.set(-0.2));
+    return this.run(() -> leadMotor.set(-0.2));
   }
 
   public Command load() {
-    return this.runOnce(() -> {
+    return this.run(() -> {
       // TODO - use sensors to automate this
-      leadMotor.set(0.1);
+      if (!isCoralLoaded().getAsBoolean()) {
+        leadMotor.set(0.1);
+      } else {
+        leadMotor.stopMotor();
+      }
     });
   }
 
@@ -77,6 +83,26 @@ public class CoralSubystem extends SubsystemBase {
       // no coral detected
       (topDistanceSensor.getRangeCM() >= 14 && bottomDistanceSensor.getRangeCM() >= 14)
       // coral loaded properly
-      || (topDistanceSensor.getRangeCM() >= 14 && bottomDistanceSensor.getRangeCM() <= 4.2);
+      || isCoralLoaded().getAsBoolean();
+  }
+
+  public BooleanSupplier isCoralLoaded() {
+    return () -> (topDistanceSensor.getRangeCM() >= 14 && bottomDistanceSensor.getRangeCM() <= 5);
+  }
+
+  public void loadCoral() {
+    leadMotor.set(0.1);
+  }
+
+  public boolean coralDetected() {
+    return topDistanceSensor.getRangeCM() <= 10.5;
+  }
+
+  public boolean coralInPosition() {
+    return bottomDistanceSensor.getRangeCM() <= 7;
+  }
+
+  public void stopCollectin() {
+    leadMotor.stopMotor();
   }
 }

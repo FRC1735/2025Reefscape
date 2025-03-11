@@ -28,7 +28,7 @@ public class WristSubsystem extends SubsystemBase {
   private SmartDashboardPIDTuner smartDashboardPIDTuner;
 
   private double TOP_LIMIT = 0.5532;
-  private double BOTTOM_LIMIT = 0.2341;
+  private double BOTTOM_LIMIT = 0.160;
 
   private double setpoint = 0;
 
@@ -89,7 +89,7 @@ public class WristSubsystem extends SubsystemBase {
   }
 
   public Command algaeGround() {
-    return this.runOnce(() -> closedLoopController.setReference(0.1628, ControlType.kMAXMotionPositionControl));
+    return this.runOnce(() -> closedLoopController.setReference(0.161, ControlType.kMAXMotionPositionControl));
   }
 
   public Command algaeStorage() {

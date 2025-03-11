@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.LoadAlgae;
 import frc.robot.commands.LoadCoral;
 import frc.robot.commands.LockHeadingOnAprilTag;
 import frc.robot.commands.LockXOnAprilTag;
@@ -84,6 +85,7 @@ public class RobotContainer {
     configureBindings();
 
     coralSubystem.setDefaultCommand(new LoadCoral(coralSubystem));
+    algaeCollectorSubsystem.setDefaultCommand(new LoadAlgae(algaeCollectorSubsystem));
   }
 
   private void configureBindings() {
@@ -226,8 +228,8 @@ public class RobotContainer {
 
     //////////  
     // Algae Collector
-    operatorController.algaeCollector().collect().onTrue(algaeCollectorSubsystem.in()).onFalse(algaeCollectorSubsystem.stop());
-    operatorController.algaeCollector().release().onTrue(algaeCollectorSubsystem.out()).onFalse(algaeCollectorSubsystem.stop());
+    operatorController.algaeCollector().collect().whileTrue(algaeCollectorSubsystem.in()).onFalse(algaeCollectorSubsystem.stop());
+    operatorController.algaeCollector().release().whileTrue(algaeCollectorSubsystem.out()).onFalse(algaeCollectorSubsystem.stop());
   }
 
   public void setRumble(double val) {

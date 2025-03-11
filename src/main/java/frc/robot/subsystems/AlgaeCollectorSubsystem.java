@@ -39,11 +39,11 @@ public class AlgaeCollectorSubsystem extends SubsystemBase {
   }
 
   private boolean algaePresent() {
-    return distanceSensor.getRangeCM() < 4.5;
+    return distanceSensor.getRangeCM() < 6;
   }
 
   public Command in() {
-    return this.runOnce(() -> {
+    return this.run(() -> {
       if (algaePresent()) {
         motor.set(0);
       } else {
@@ -52,11 +52,28 @@ public class AlgaeCollectorSubsystem extends SubsystemBase {
     });
   }
 
+
   public Command out() {
-    return this.runOnce(() -> motor.set(1));
+    return this.run(() -> motor.set(1));
   }
 
   public Command stop() {
     return this.runOnce(() -> motor.stopMotor());
+  }
+
+  public boolean isAlgaeHeld() {
+    return distanceSensor.getRangeCM() < 7;
+  }
+
+  public boolean isAlgaeCloseEnoughToGrab() {
+    return distanceSensor.getRangeCM() < 15;
+  }
+
+  public void collect() {
+    motor.set(-1);
+  }
+
+  public void stopCollecting() {
+    motor.stopMotor();
   }
 }

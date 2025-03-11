@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.CompositeCommands;
 import frc.robot.commands.LoadAlgae;
 import frc.robot.commands.LoadCoral;
 import frc.robot.commands.LockHeadingOnAprilTag;
@@ -182,32 +183,40 @@ public class RobotContainer {
     //// Algae Delivery Setpoints
     operatorController.elevator().algaeBarge().and(coralSubystem.isSafeForElevator())
       .onTrue(
-          elevator.algaeBarge()
+          CompositeCommands.elevatorAlgaeBarge(elevator, wristSubsystem)
       );
     // Algae L3
     operatorController.elevator().algaeL3().and(coralSubystem.isSafeForElevator())
       .onTrue(
-          elevator.algaeL3());
+        CompositeCommands.elevatorAlgaeL3(elevator, wristSubsystem)
+      );
     // Algae L2
     operatorController.elevator().algaeL2().and(coralSubystem.isSafeForElevator())
       .onTrue(
-          elevator.algaeL2());
+        CompositeCommands.elevatorAlgaeL2(elevator, wristSubsystem)
+      );
     // Algae Processor
-    operatorController.elevator().algaeProcessor().and(coralSubystem.isSafeForElevator()).onTrue(elevator.algaeProcessor());
+    operatorController.elevator().algaeProcessor().and(coralSubystem.isSafeForElevator())
+      .onTrue(
+        CompositeCommands.elevatorAlgaeProcessor(elevator, wristSubsystem)
+      );
     
     //// Coral Delivery Setpoints
     // Coral L4
-    operatorController.elevator().coralL4().and(coralSubystem.isSafeForElevator()).onTrue(elevator.coralL4());
+    operatorController.elevator().coralL4().and(coralSubystem.isSafeForElevator()).onTrue(CompositeCommands.elevatorCoralL4(elevator, wristSubsystem));
     // Coral L3
-    operatorController.elevator().coralL3().and(coralSubystem.isSafeForElevator()).onTrue(elevator.coralL3());
+    operatorController.elevator().coralL3().and(coralSubystem.isSafeForElevator()).onTrue(CompositeCommands.elevatorCoralL3(elevator, wristSubsystem));
     // Coral L2
-    operatorController.elevator().coralL2().and(coralSubystem.isSafeForElevator()).onTrue(elevator.coralL2());
+    operatorController.elevator().coralL2().and(coralSubystem.isSafeForElevator()).onTrue(CompositeCommands.elevatorCoralL2(elevator, wristSubsystem));
     // Coral L1
-    operatorController.elevator().coralL1().and(coralSubystem.isSafeForElevator()).onTrue(elevator.coralL1());
+    operatorController.elevator().coralL1().and(coralSubystem.isSafeForElevator()).onTrue(CompositeCommands.elevatorCoralL1(elevator, wristSubsystem));
     
     //// Storage
     // TODO - this needs to be expanded to include the AlgaeCollector position, verify that CoralCollector is safe, etc
-    operatorController.elevator().storage().and(coralSubystem.isSafeForElevator()).onTrue(elevator.storage());
+    operatorController.elevator().storage().and(coralSubystem.isSafeForElevator())
+      .onTrue(
+        CompositeCommands.elevatorStorage(elevator, wristSubsystem)
+      );
 
     //////////  
     // Wrist

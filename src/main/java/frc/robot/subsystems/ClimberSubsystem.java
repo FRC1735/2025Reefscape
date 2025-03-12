@@ -16,7 +16,7 @@ public class ClimberSubsystem extends SubsystemBase {
   
   /** Creates a new ClimberSubsystem. */
   public ClimberSubsystem() {
-    this.servo = new Servo(0);
+    this.servo = new Servo(3);
   }
 
   @Override

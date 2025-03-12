@@ -26,6 +26,7 @@ import frc.robot.subsystems.AlgaeCollectorSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralSubystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.Lighting;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import frc.robot.utils.KeyboardController;
@@ -52,7 +53,8 @@ public class RobotContainer {
   private final AlgaeCollectorSubsystem algaeCollectorSubsystem = new AlgaeCollectorSubsystem();
   private final WristSubsystem wristSubsystem = new WristSubsystem();
   private final ElevatorSubsystem elevator = new ElevatorSubsystem();
-  private final ClimberSubsystem climber = new ClimberSubsystem();
+  //private final ClimberSubsystem climber = new ClimberSubsystem();
+  private final Lighting lighting = new Lighting();
 
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled

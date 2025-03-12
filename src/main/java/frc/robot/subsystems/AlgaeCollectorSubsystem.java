@@ -33,6 +33,7 @@ public class AlgaeCollectorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("Algae Held", algaePresent());
     if (DEBUG) {
       SmartDashboard.putNumber("Algae Collector - Distance Sensor", distanceSensor.getRangeCM());
     }

@@ -45,6 +45,7 @@ public class CoralSubystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("Coral - Safe for Elevator Movement", isSafeForElevator().getAsBoolean());
+    SmartDashboard.putBoolean("Coral - is loaded?", isCoralLoaded().getAsBoolean());
 
     if (DEBUG) {
       SmartDashboard.putNumber("Coral - Top Distance Sensor", topDistanceSensor.getRangeCM());

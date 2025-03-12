@@ -88,7 +88,7 @@ public class CoralSubystem extends SubsystemBase {
   }
 
   public BooleanSupplier isCoralLoaded() {
-    return () -> (topDistanceSensor.getRangeCM() >= 14 && bottomDistanceSensor.getRangeCM() <= 5);
+    return () -> (topDistanceSensor.getRangeCM() >= 18 && bottomDistanceSensor.getRangeCM() <= 5);
   }
 
   public void loadCoral() {

@@ -46,7 +46,7 @@ public class LockXOnAprilTag extends Command {
   // x is front and back
   // y is left and right
 
-  double targetTagId;
+  double targetTagId = 0;
   Rotation2d targetHeading;
 
   private static final boolean DEBUG = true;
@@ -64,9 +64,11 @@ public class LockXOnAprilTag extends Command {
   public void initialize() {
     startingYOffset = swerve.getTargetYOffset();
     targetTagId = LimelightHelpers.getFiducialID("limelight");
-    // TODO - should check for the default value of 0 which would not help us
 
-    targetHeading = FieldConstants.Reef.reefMap.get((int)targetTagId).left().getRotation();
+    if (targetTagId != 0 && FieldConstants.Reef.reefMap.containsKey((int)targetTagId)) {
+      targetHeading = FieldConstants.Reef.reefMap.get((int)targetTagId).left().getRotation();
+      System.out.println("TARGETING " + targetTagId + " AT " + targetHeading);
+    }
   }
 
   @Override
@@ -92,6 +94,7 @@ public class LockXOnAprilTag extends Command {
     double headingAdjustment = 0;
 
     if(swerve.hasTarget()){
+      System.out.println("TARGET HEADING IS: " + targetHeading);
       translateY = yPIDController.calculate(swerve.getTargetXOffset(), 0);
       headingAdjustment = headingPIDController.calculate(
                     swerve.getSwerve().getOdometryHeading().getRadians(),
@@ -104,13 +107,16 @@ public class LockXOnAprilTag extends Command {
       }
       controllerRumbleCallback.update(RumbleState.TARGET_NONE);
     }
+
+    System.out.println("HEADING ADJUSTMNT: " + -headingAdjustment);
  
     swerve.getSwerve().drive(
       new Translation2d(
       translationX.getAsDouble() * swerve.getSwerve().getMaximumChassisVelocity() ,
       (translateY) * swerve.getSwerve().getMaximumChassisVelocity()
       ),
-      -headingAdjustment,
+      0,
+      //-headingAdjustment,
 false,
 false);
 

@@ -3,6 +3,7 @@ import usb.util
 import usb.backend.libusb1
 from usbmonitor import USBMonitor
 from networktables import NetworkTables
+import time
 
 # XK-80 Vendor and Product ID
 VENDOR_ID = 1523
@@ -47,6 +48,34 @@ def set_up_NT():
 
 set_up_NT()
 
+def reconnect_device():
+    global device
+    # Try to find the device again
+    device = usb.core.find(idVendor=VENDOR_ID, idProduct=PRODUCT_ID, backend=backend)
+    if device is not None:
+        print("Device reconnected!")
+        device.set_configuration()
+        # Reinitialize endpoint
+        cfg = device.get_active_configuration()
+        interface = cfg[(0, 0)]
+        endpoint = usb.util.find_descriptor(
+            interface,
+            custom_match=lambda e: usb.util.endpoint_direction(e.bEndpointAddress) == usb.util.ENDPOINT_IN
+        )
+        return endpoint
+    else:
+        return None
+
+def check_networktables_connection():
+    try:
+        # Just make a simple operation to verify connectivity
+        NetworkTables.getTable('AdvantageKit/DriverStation/Keyboard' + str(KEYBOARD)).getBoolean('isConnected', False)
+    except Exception as e:
+        print(f"NetworkTables connection lost: {e}. Reconnecting...")
+        try:
+            NetworkTables.initialize(server=SERVER)
+        except Exception as e:
+            print(f"Failed to reconnect to NetworkTables: {e}")
 
 # Find the XK-80 device
 backend = usb.backend.libusb1.get_backend()
@@ -84,9 +113,17 @@ print("Listening for XK-80 key presses...")
 try:
     while True:
         try:
+            if device is None:  # Device is disconnected
+                print("Device disconnected, attempting to reconnect...")
+                endpoint = reconnect_device()
+                if endpoint is None:  # Reconnection failed
+                    print("Reconnection failed. Retrying...")
+                    time.sleep(0.1)  # Wait before retrying
+                continue
             if connected is True:
                 keyboard_status_table.putBoolean('isConnected', True)
                 pass
+            #check_networktables_connection()
             data = device.read(endpoint.bEndpointAddress, endpoint.wMaxPacketSize, timeout=5000)
 
             if data:
@@ -117,9 +154,15 @@ try:
 
         except usb.core.USBError as e:
             if e.errno == 5:  # Input/Output Error = Disconnected device
-                print("Device disconnected! Exiting loop...")
-                keyboard_status_table.putBoolean('isConnected', False)
-                break  # Exit the loop when the device disconnects
+                print("Device disconnected! Retrying...")
+                endpoint = reconnect_device()
+                if endpoint is None:  # Reconnection failed
+                    print("Reconnection failed. Retrying...")
+                    time.sleep(.1)  # Wait before retrying
+
+        except Exception as e:
+            print(e)
+            pass
 
 except KeyboardInterrupt:
     print("\nStopping script.")

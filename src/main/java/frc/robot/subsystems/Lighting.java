@@ -22,7 +22,7 @@ public class Lighting extends SubsystemBase {
   int selectedG = 0;
   int selectedB = 0;
 
-  private int LED_COUNT = 30; // 60
+  private int LED_COUNT = 60; // 60
 
   /** Creates a new Lighting. */
   public Lighting() {

@@ -157,7 +157,7 @@ public class RobotContainer {
 
     driver.a().onTrue(new InstantCommand(swerveDriveSubsystem::zeroGyro, swerveDriveSubsystem));
 
-    driver.b().whileTrue(driveRobotOrientedAngularVelocity);
+    driver.rightTrigger().onTrue(driveRobotOrientedAngularVelocity).onFalse(driveNew);
     /*
      * driver
      * .a()

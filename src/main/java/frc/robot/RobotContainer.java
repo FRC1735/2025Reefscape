@@ -9,6 +9,7 @@ import java.io.File;
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -155,6 +156,8 @@ public class RobotContainer {
       .whileTrue(lockOn);
 
     driver.a().onTrue(new InstantCommand(swerveDriveSubsystem::zeroGyro, swerveDriveSubsystem));
+
+    driver.b().whileTrue(driveRobotOrientedAngularVelocity);
     /*
      * driver
      * .a()
@@ -262,7 +265,16 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
+    return Commands.run(() -> swerveDriveSubsystem.getSwerve().drive(new ChassisSpeeds(1, 0, 0)),swerveDriveSubsystem).withTimeout(1.75); 
+    /*
+    var alliance = DriverStation.getAlliance();
+    if  (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
+        return Commands.run(() -> swerveDriveSubsystem.getSwerve().drive(new ChassisSpeeds(1, 0, 0)),swerveDriveSubsystem).withTimeout(3); 
+    } else {
+      return Commands.run(() -> swerveDriveSubsystem.getSwerve().drive(new ChassisSpeeds(-1, 0, 0)),swerveDriveSubsystem).withTimeout(3); 
+    }
+      */
+      //return autoChooser.getSelected();
   }
 
   public void rumblePeriodic() {

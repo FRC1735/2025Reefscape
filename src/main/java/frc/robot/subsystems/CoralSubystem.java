@@ -66,7 +66,7 @@ public class CoralSubystem extends SubsystemBase {
     return this.run(() -> {
       // TODO - use sensors to automate this
       if (!isCoralLoaded().getAsBoolean()) {
-        leadMotor.set(0.1);
+        leadMotor.set(0.12);
       } else {
         leadMotor.stopMotor();
       }

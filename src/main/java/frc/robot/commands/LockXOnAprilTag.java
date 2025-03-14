@@ -67,7 +67,6 @@ public class LockXOnAprilTag extends Command {
 
     if (targetTagId != 0 && FieldConstants.Reef.reefMap.containsKey((int)targetTagId)) {
       targetHeading = FieldConstants.Reef.reefMap.get((int)targetTagId).left().getRotation();
-      System.out.println("TARGETING " + targetTagId + " AT " + targetHeading);
     }
   }
 
@@ -94,7 +93,6 @@ public class LockXOnAprilTag extends Command {
     double headingAdjustment = 0;
 
     if(swerve.hasTarget()){
-      System.out.println("TARGET HEADING IS: " + targetHeading);
       translateY = yPIDController.calculate(swerve.getTargetXOffset(), 0);
       headingAdjustment = headingPIDController.calculate(
                     swerve.getSwerve().getOdometryHeading().getRadians(),
@@ -107,8 +105,6 @@ public class LockXOnAprilTag extends Command {
       }
       controllerRumbleCallback.update(RumbleState.TARGET_NONE);
     }
-
-    System.out.println("HEADING ADJUSTMNT: " + -headingAdjustment);
  
     swerve.getSwerve().drive(
       new Translation2d(

@@ -248,7 +248,7 @@ public class RobotContainer {
 
     //////////  
     // Algae Collector
-    operatorController.algaeCollector().collect().whileTrue(algaeCollectorSubsystem.in()).onFalse(algaeCollectorSubsystem.stop());
+    operatorController.algaeCollector().collect().whileTrue(algaeCollectorSubsystem.in1()).onFalse(algaeCollectorSubsystem.stop());
     operatorController.algaeCollector().release().whileTrue(algaeCollectorSubsystem.out()).onFalse(algaeCollectorSubsystem.stop());
   }
 

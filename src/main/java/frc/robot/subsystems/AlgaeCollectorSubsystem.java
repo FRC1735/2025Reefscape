@@ -43,14 +43,10 @@ public class AlgaeCollectorSubsystem extends SubsystemBase {
     return distanceSensor.getRangeCM() < 6;
   }
 
-  public Command in() {
+  public Command in1() {
     return this.run(() -> {
       if (algaePresent()) {
-        if (distanceSensor.getRangeCM() <= 4.1) {
-          motor.set(0);
-        } else {
-        motor.set(-.2);
-        }
+        motor.set(0);
       } else {
         motor.set(-1);
       }

@@ -188,7 +188,7 @@ public class RobotContainer {
     // Coral Shooter
     operatorController.coralCollector().score().whileTrue(coralSubystem.shoot()).onFalse(coralSubystem.stop());
     operatorController.coralCollector().reverse().whileTrue(coralSubystem.reverse()).onFalse(coralSubystem.stop());
-    //operatorController.coralCollector().load().onTrue(coralSubystem.load()).onFalse(coralSubystem.stop());
+    operatorController.coralCollector().load().onTrue(coralSubystem.load()).onFalse(coralSubystem.stop());
     //////////  
     // Elevator
     

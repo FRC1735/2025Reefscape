@@ -27,6 +27,16 @@ public class CoralSubystem extends SubsystemBase {
   private SharpIR topDistanceSensor = SharpIR.GP2Y0A41SK0F(1);
   private SharpIR bottomDistanceSensor = SharpIR.GP2Y0A41SK0F(2);
 
+
+  final double SHOOT_SPEED = 0.15;
+  final double REVERSE_SPEED= -0.2;
+  final double LOAD_SPEED = 0.04;
+
+  final double BOTTOM_MODIFIER = 0.03;
+  final double BOTTOM_SHOOT_SPEED = SHOOT_SPEED + BOTTOM_MODIFIER;
+  final double BOTTOM_REVERSE_SPEED = REVERSE_SPEED - BOTTOM_MODIFIER;
+  final double BOTTOM_LOAD_SPEED = LOAD_SPEED + BOTTOM_MODIFIER;
+
   private final boolean DEBUG = false;
 
   /** Creates a new CoralSubystem. */
@@ -37,7 +47,7 @@ public class CoralSubystem extends SubsystemBase {
 
     SparkFlexConfig followMotorConfig = new SparkFlexConfig();
     followMotorConfig.idleMode(IdleMode.kBrake);
-    followMotorConfig.follow(CoralSubystemConstants.LEAD_MOTOR_ID, false);
+    //followMotorConfig.follow(CoralSubystemConstants.LEAD_MOTOR_ID, false);
     followMotor.configure(followMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
@@ -55,26 +65,28 @@ public class CoralSubystem extends SubsystemBase {
   }
 
   public Command shoot() {
-    return this.run(() -> leadMotor.set(0.15));
+    return this.run(() -> {
+      leadMotor.set(SHOOT_SPEED);
+      followMotor.set(BOTTOM_SHOOT_SPEED);
+    });
   }
 
   public Command reverse() {
-    return this.run(() -> leadMotor.set(-0.2));
-  }
-
-  public Command load() {
     return this.run(() -> {
-      // TODO - use sensors to automate this
-      if (!isCoralLoaded().getAsBoolean()) {
-        leadMotor.set(0.12);
-      } else {
-        leadMotor.stopMotor();
-      }
+      leadMotor.set(REVERSE_SPEED);
+      followMotor.set(BOTTOM_REVERSE_SPEED);
     });
   }
 
   public Command stop() {
-    return this.runOnce(() -> leadMotor.stopMotor());
+    return this.runOnce(() -> {
+      leadMotor.stopMotor();
+      followMotor.stopMotor();
+    });
+  }
+
+  public Command load() {
+    return this.run(() -> this.loadCoral());
   }
 
   // TODO - all elevator related commands should check this and not do anything if
@@ -92,7 +104,8 @@ public class CoralSubystem extends SubsystemBase {
   }
 
   public void loadCoral() {
-    leadMotor.set(0.1);
+    leadMotor.set(LOAD_SPEED);
+    followMotor.set(BOTTOM_LOAD_SPEED);
   }
 
   public boolean coralDetected() {
@@ -105,5 +118,6 @@ public class CoralSubystem extends SubsystemBase {
 
   public void stopCollectin() {
     leadMotor.stopMotor();
+    followMotor.stopMotor();
   }
 }

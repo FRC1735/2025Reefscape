@@ -58,6 +58,9 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
+    // TODO this will be a problem when PathPlanner is restored
+    m_robotContainer.setSwerveOdometry(); 
+
     setLimelightPipeline();
   }
 

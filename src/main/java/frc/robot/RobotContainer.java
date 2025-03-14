@@ -9,6 +9,8 @@ import java.io.File;
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -258,6 +260,12 @@ public class RobotContainer {
     // Algae Collector
     operatorController.algaeCollector().collect().whileTrue(algaeCollectorSubsystem.in2()).onFalse(algaeCollectorSubsystem.stop());
     operatorController.algaeCollector().release().whileTrue(algaeCollectorSubsystem.out()).onFalse(algaeCollectorSubsystem.stop());
+  }
+
+
+  public void setSwerveOdometry() {
+    Pose2d initialPose = swerveDriveSubsystem.getPose();
+    swerveDriveSubsystem.resetOdometry(initialPose.rotateBy(new Rotation2d(Math.PI)));
   }
 
   public void setRumble(double val) {

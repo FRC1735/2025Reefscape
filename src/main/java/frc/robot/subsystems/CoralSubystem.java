@@ -82,13 +82,13 @@ public class CoralSubystem extends SubsystemBase {
   public BooleanSupplier isSafeForElevator() {
     return () -> 
       // no coral detected
-      (topDistanceSensor.getRangeCM() >= 14 && bottomDistanceSensor.getRangeCM() >= 14)
+      (topDistanceSensor.getRangeCM() >= 14)
       // coral loaded properly
       || isCoralLoaded().getAsBoolean();
   }
 
   public BooleanSupplier isCoralLoaded() {
-    return () -> (topDistanceSensor.getRangeCM() >= 18 && bottomDistanceSensor.getRangeCM() <= 5);
+    return () -> (topDistanceSensor.getRangeCM() >= 14 && bottomDistanceSensor.getRangeCM() <= 6);
   }
 
   public void loadCoral() {

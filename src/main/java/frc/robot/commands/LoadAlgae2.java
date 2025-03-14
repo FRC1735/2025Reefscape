@@ -8,11 +8,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.AlgaeCollectorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class LoadAlgae extends Command {
+public class LoadAlgae2 extends Command {
   private AlgaeCollectorSubsystem algaeCollectorSubsystem;
 
   /** Creates a new LoadAlgae. */
-  public LoadAlgae(AlgaeCollectorSubsystem algaeCollectorSubsystem) {
+  public LoadAlgae2(AlgaeCollectorSubsystem algaeCollectorSubsystem) {
     this.algaeCollectorSubsystem = algaeCollectorSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(algaeCollectorSubsystem);
@@ -25,14 +25,14 @@ public class LoadAlgae extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (algaeCollectorSubsystem.isAlgaeHeld()) {
-      algaeCollectorSubsystem.stopCollecting();
-    } else
-    if (algaeCollectorSubsystem.isAlgaeCloseEnoughToGrab()) {
-      algaeCollectorSubsystem.collect();
-    } else {
-      algaeCollectorSubsystem.stopCollecting();
-    }
+      if(algaeCollectorSubsystem.distanceSensor.getRangeCM() < 6 || algaeCollectorSubsystem.distanceSensor.getRangeCM() > 16) {
+        algaeCollectorSubsystem.stopCollecting();
+      } else
+      if (algaeCollectorSubsystem.isAlgaeHeld()) {
+        algaeCollectorSubsystem.collectSlow();
+      } else {
+        algaeCollectorSubsystem.collect();
+      }
   }
 
   // Called once the command ends or is interrupted.

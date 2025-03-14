@@ -24,9 +24,9 @@ public class AlgaeCollectorSubsystem extends SubsystemBase {
 
   private final boolean DEBUG = true;
 
-  SharpIR distanceSensor = SharpIR.GP2Y0A41SK0F(0);
+  public SharpIR distanceSensor = SharpIR.GP2Y0A41SK0F(0);
 
-  PIDController in3PIDController = new PIDController(1, 0, 0);
+  PIDController in3PIDController = new PIDController(0.1, 0, 0);
 
   public AlgaeCollectorSubsystem() {
     SparkFlexConfig motorConfig = new SparkFlexConfig();
@@ -94,6 +94,10 @@ public class AlgaeCollectorSubsystem extends SubsystemBase {
 
   public boolean isAlgaeCloseEnoughToGrab() {
     return distanceSensor.getRangeCM() < 15;
+  }
+
+  public void collectSlow() {
+    motor.set(-.2);
   }
 
   public void collect() {

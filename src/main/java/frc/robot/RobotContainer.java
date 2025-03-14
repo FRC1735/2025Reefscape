@@ -21,7 +21,8 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.CompositeCommands;
-import frc.robot.commands.LoadAlgae;
+import frc.robot.commands.LoadAlgae1;
+import frc.robot.commands.LoadAlgae2;
 import frc.robot.commands.LoadCoral;
 import frc.robot.commands.LockHeadingOnAprilTag;
 import frc.robot.commands.LockXOnAprilTag;
@@ -97,7 +98,7 @@ public class RobotContainer {
     configureBindings();
 
     coralSubystem.setDefaultCommand(new LoadCoral(coralSubystem));
-    algaeCollectorSubsystem.setDefaultCommand(new LoadAlgae(algaeCollectorSubsystem));
+    algaeCollectorSubsystem.setDefaultCommand(new LoadAlgae2(algaeCollectorSubsystem));
   }
 
   private void configureBindings() {
@@ -108,9 +109,13 @@ public class RobotContainer {
   public void configureDriverController() {
     Command driveRobotOrientedAngularVelocity = swerveDriveSubsystem.driveFieldOriented(driveRobotOriented);
     Command driveFieldOrientedDirectAngle = swerveDriveSubsystem.driveFieldOriented(driveDirectAngle);
+    Command driveNew = swerveDriveSubsystem.driveFieldOriented(driveAngularVelocity);
+    
 
     // swerveDriveSubsystem.setDefaultCommand(driveFieldOrientedDirectAngle);
-    swerveDriveSubsystem.setDefaultCommand(driveRobotOrientedAngularVelocity);
+    // swerveDriveSubsystem.setDefaultCommand(driveRobotOrientedAngularVelocity);
+    swerveDriveSubsystem.setDefaultCommand(driveNew);
+
 
     driver.start().onTrue((Commands.runOnce(swerveDriveSubsystem::zeroGyro)));
     /*
@@ -248,7 +253,7 @@ public class RobotContainer {
 
     //////////  
     // Algae Collector
-    operatorController.algaeCollector().collect().whileTrue(algaeCollectorSubsystem.in1()).onFalse(algaeCollectorSubsystem.stop());
+    operatorController.algaeCollector().collect().whileTrue(algaeCollectorSubsystem.in2()).onFalse(algaeCollectorSubsystem.stop());
     operatorController.algaeCollector().release().whileTrue(algaeCollectorSubsystem.out()).onFalse(algaeCollectorSubsystem.stop());
   }
 

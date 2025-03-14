@@ -27,7 +27,7 @@ public class CoralSubystem extends SubsystemBase {
   private SharpIR topDistanceSensor = SharpIR.GP2Y0A41SK0F(1);
   private SharpIR bottomDistanceSensor = SharpIR.GP2Y0A41SK0F(2);
 
-  private final boolean DEBUG = true;
+  private final boolean DEBUG = false;
 
   /** Creates a new CoralSubystem. */
   public CoralSubystem() {

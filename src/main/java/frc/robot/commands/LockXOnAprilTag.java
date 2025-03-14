@@ -49,7 +49,7 @@ public class LockXOnAprilTag extends Command {
   double targetTagId = 0;
   Rotation2d targetHeading;
 
-  private static final boolean DEBUG = true;
+  private static final boolean DEBUG = false;
 
   public LockXOnAprilTag(SwerveDriveSubsystem swerveDriveSubsystem, DoubleSupplier translationX, DoubleSupplier heading, ControllerRumbleCallback controllerRumbleCallback) {
     this.swerve = swerveDriveSubsystem;

@@ -27,7 +27,7 @@ public class LockHeadingOnAprilTag extends Command {
   private double lastGoodHeading;
   private ControllerRumbleCallback controllerRumbleCallback;
 
-  private static final boolean DEBUG = true;
+  private static final boolean DEBUG = false;
 
   public LockHeadingOnAprilTag(SwerveDriveSubsystem swerveDriveSubsystem, DoubleSupplier translationX, DoubleSupplier translationY, ControllerRumbleCallback controllerRumbleCallback) {
     this.swerve = swerveDriveSubsystem;

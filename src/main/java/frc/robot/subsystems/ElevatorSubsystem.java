@@ -24,7 +24,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private SparkFlex leadMotor = new SparkFlex(ElevatorSubystemConstants.LEAD_MOTOR_ID, MotorType.kBrushless);
   private SparkFlex followMotor = new SparkFlex(ElevatorSubystemConstants.FOLLOW_MOTOR_ID, MotorType.kBrushless); 
 
-  boolean DEBUG = true;
+  boolean DEBUG = false;
   private SmartDashboardPIDTuner smartDashboardPIDTuner;
   private SparkClosedLoopController closedLoopController;
   private double initialZeroPoint = leadMotor.getExternalEncoder().getPosition();
@@ -89,8 +89,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Elevator Encoder", leadMotor.getExternalEncoder().getPosition());
+
     if (DEBUG) {
-      SmartDashboard.putNumber("Elevator Encoder", leadMotor.getExternalEncoder().getPosition());
       smartDashboardPIDTuner.periodic();
       SmartDashboard.putNumber("Elevator Voltage", leadMotor.getAppliedOutput());
       SmartDashboard.putNumber("Elevator intial zero point", initialZeroPoint);

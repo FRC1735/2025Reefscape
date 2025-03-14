@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class ClimberSubsystem extends SubsystemBase {
   Servo servo;
 
-  boolean DEBUG = true;
+  boolean DEBUG = false;
 
   
   /** Creates a new ClimberSubsystem. */

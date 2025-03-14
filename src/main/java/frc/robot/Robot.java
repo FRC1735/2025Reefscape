@@ -59,7 +59,7 @@ public class Robot extends TimedRobot {
     }
 
     // TODO this will be a problem when PathPlanner is restored
-    m_robotContainer.setSwerveOdometry(); 
+    //m_robotContainer.setSwerveOdometry(); 
 
     setLimelightPipeline();
   }

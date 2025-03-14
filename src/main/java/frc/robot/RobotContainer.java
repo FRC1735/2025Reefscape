@@ -28,6 +28,7 @@ import frc.robot.commands.LoadAlgae1;
 import frc.robot.commands.LoadAlgae2;
 import frc.robot.commands.LoadCoral;
 import frc.robot.commands.LockHeadingOnAprilTag;
+import frc.robot.commands.LockXOnAlgae;
 import frc.robot.commands.LockXOnAprilTag;
 import frc.robot.subsystems.AlgaeCollectorSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -158,6 +159,18 @@ public class RobotContainer {
       .whileTrue(lockOn);
 
     driver.a().onTrue(new InstantCommand(swerveDriveSubsystem::zeroGyro, swerveDriveSubsystem));
+
+    Command lockOnAlgae = new LockXOnAlgae(
+      swerveDriveSubsystem,
+      () -> MathUtil.applyDeadband(-driver.getLeftY(), 0.05),
+      () -> 0,
+      new ControllerRumbleCallback() {
+        @Override
+        public void update(RumbleState rumbleState) {
+          // TODO
+        }
+      });
+    driver.leftTrigger().whileTrue(lockOnAlgae);
 
     driver.rightTrigger().onTrue(driveRobotOrientedAngularVelocity).onFalse(driveNew);
     /*

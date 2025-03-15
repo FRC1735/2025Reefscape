@@ -37,7 +37,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   // Algae specific
   private final double ALGAE_BARGE = 7.19;
-  private final double ALGAE_L2 = 2.8;
+  private final double ALGAE_L2 = 3.05;
   private final double ALGAE_L3 = 4.69;
   private final double ALGAE_PROCESSOR = STORAGE;
   private final double ALGAE_HELD = STORAGE;

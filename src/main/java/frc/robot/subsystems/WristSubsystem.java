@@ -68,8 +68,8 @@ public class WristSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Wrist Encoder", motor.getAbsoluteEncoder().getPosition());
     if (DEBUG) {
-      SmartDashboard.putNumber("Wrist Encoder", motor.getAbsoluteEncoder().getPosition());
       smartDashboardPIDTuner.periodic();
       SmartDashboard.putNumber("Wrist Output", motor.getAppliedOutput());
     }
@@ -93,11 +93,15 @@ public class WristSubsystem extends SubsystemBase {
   }
 
   public Command algaeStorage() {
-    return this.runOnce(() -> closedLoopController.setReference(0.5805, ControlType.kMAXMotionPositionControl));
-  }
+    if (SmartDashboard.getBoolean("Algae Held", false)) {
+      return algaeHeld();
+    } else {
+      return this.runOnce(() -> closedLoopController.setReference(0.5805, ControlType.kMAXMotionPositionControl));
+    }
+    }
 
   public Command algaeHeld() {
-    return this.runOnce(() -> closedLoopController.setReference(0.5287, ControlType.kMAXMotionPositionControl));
+    return this.runOnce(() -> closedLoopController.setReference(0.550, ControlType.kMAXMotionPositionControl));
   }
 
   public Command algaeBarge() {

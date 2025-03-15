@@ -83,9 +83,7 @@ public class LockXOnAlgae extends Command {
 
     if(swerve.hasTarget()){
       translateY = yPIDController.calculate(swerve.getTargetXOffset(), 0);
-      headingAdjustment = headingPIDController.calculate(
-                    swerve.getSwerve().getOdometryHeading().getRadians(),
-                    targetHeading.getRadians());
+
 
       //controllerRumbleCallback.update(RumbleState.TARGET_LOCKED_ON);
     }else{

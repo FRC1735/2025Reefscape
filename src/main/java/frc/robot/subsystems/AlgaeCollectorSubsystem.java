@@ -49,7 +49,7 @@ public class AlgaeCollectorSubsystem extends SubsystemBase {
   }
 
   private boolean algaePresent() {
-    return distanceSensor.getRangeCM() < 6;
+    return distanceSensor.getRangeCM() < 13;
   }
 
   public Command in1() {
@@ -89,7 +89,7 @@ public class AlgaeCollectorSubsystem extends SubsystemBase {
   }
 
   public boolean isAlgaeHeld() {
-    return distanceSensor.getRangeCM() < 7;
+    return distanceSensor.getRangeCM() < 11;
   }
 
   public boolean isAlgaeCloseEnoughToGrab() {

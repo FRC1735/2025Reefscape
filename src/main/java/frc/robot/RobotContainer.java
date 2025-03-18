@@ -151,32 +151,6 @@ public class RobotContainer {
     driver.leftTrigger().whileTrue(lockOnAlgae);
 
     driver.rightTrigger().onTrue(driveRobotOrientedAngularVelocity).onFalse(driveNew);
-    /*
-     * driver
-     * .a()
-     * .onTrue(new InstantCommand(coralSubystem::shoot, coralSubystem))
-     * .onFalse(new InstantCommand(coralSubystem::stop, coralSubystem));
-     * 
-     * driver
-     * .b()
-     * .onTrue(new InstantCommand(coralSubystem::returnToFunnel, coralSubystem))
-     * .onFalse(new InstantCommand(coralSubystem::stop, coralSubystem));
-     */
-
-    /*
-     * driver.a().onTrue(new InstantCommand(wristSubsystem::testPositionControl,
-     * wristSubsystem));
-     * 
-     * driver.x().onTrue(new InstantCommand(wristSubsystem::testPositionControl2,
-     * wristSubsystem));
-     * 
-     * 
-     * driver.y().onTrue(new InstantCommand(wristSubsystem::testPositionControl3,
-     * wristSubsystem));
-     */
-
-    // driver.b().onTrue(new InstantCommand(wristSubsystem::stop, wristSubsystem));
-
   }
 
   public void configureOperatorController() {

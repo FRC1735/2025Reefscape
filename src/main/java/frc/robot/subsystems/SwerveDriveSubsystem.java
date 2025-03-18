@@ -89,12 +89,13 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-
     if (hasTarget()) {
       controllerRumbleCallback.update(RumbleState.TARGET_FOUND);
     } else {
       controllerRumbleCallback.update(RumbleState.TARGET_NONE);
     }
+
+    SmartDashboard.putNumber("YAW", swerveDrive.getYaw().getDegrees());
 
     if (DEBUG) {
       SmartDashboard.putBoolean(

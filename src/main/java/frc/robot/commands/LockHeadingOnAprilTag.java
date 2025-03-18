@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.ControllerRumbleCallback;
 import frc.robot.LimelightHelpers;
 import frc.robot.RumbleState;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -25,16 +24,14 @@ public class LockHeadingOnAprilTag extends Command {
   private DoubleSupplier translationY;
   private double heading;
   private double lastGoodHeading;
-  private ControllerRumbleCallback controllerRumbleCallback;
 
   private static final boolean DEBUG = false;
 
-  public LockHeadingOnAprilTag(SwerveDriveSubsystem swerveDriveSubsystem, DoubleSupplier translationX, DoubleSupplier translationY, ControllerRumbleCallback controllerRumbleCallback) {
+  public LockHeadingOnAprilTag(SwerveDriveSubsystem swerveDriveSubsystem, DoubleSupplier translationX, DoubleSupplier translationY) {
     this.swerve = swerveDriveSubsystem;
     this.translationX = translationX;
     this.translationY = translationY;
     lastGoodHeading = 0;
-    this.controllerRumbleCallback = controllerRumbleCallback;
 
     addRequirements(swerve);
   }
@@ -76,12 +73,10 @@ public class LockHeadingOnAprilTag extends Command {
         //+ (targetLeft? 7 : -7) 
         //+ ((targetLeft? -0.1: 0.1) * LimelightHelpers.getTY("limelight"))
         ) / 70);
-      controllerRumbleCallback.update(RumbleState.TARGET_LOCKED_ON);
     }else{
       if (DEBUG) {
         System.out.println("Warning: Swerve Aim: Lost Target!");
       }
-      controllerRumbleCallback.update(RumbleState.TARGET_NONE);
       heading = 0;
     }
     lastGoodHeading = heading;
@@ -109,7 +104,6 @@ false);
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    controllerRumbleCallback.update(RumbleState.TARGET_NONE);
   }
 
   // Returns true when the command should end.

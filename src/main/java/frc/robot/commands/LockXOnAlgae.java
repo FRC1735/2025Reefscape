@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.ControllerRumbleCallback;
 import frc.robot.FieldConstants;
 import frc.robot.LimelightHelpers;
 import frc.robot.RumbleState;
@@ -26,7 +25,6 @@ public class LockXOnAlgae extends Command {
   private DoubleSupplier translationX; // TODO - use this!
   private DoubleSupplier heading;
   private double targetX;
-  private ControllerRumbleCallback controllerRumbleCallback;
 
   private double startingYOffset;
 
@@ -51,11 +49,10 @@ public class LockXOnAlgae extends Command {
 
   private static final boolean DEBUG = false;
 
-  public LockXOnAlgae(SwerveDriveSubsystem swerveDriveSubsystem, DoubleSupplier translationX, DoubleSupplier heading, ControllerRumbleCallback controllerRumbleCallback) {
+  public LockXOnAlgae(SwerveDriveSubsystem swerveDriveSubsystem, DoubleSupplier translationX, DoubleSupplier heading) {
     this.swerve = swerveDriveSubsystem;
     this.translationX = translationX;
     this.heading = heading;
-    this.controllerRumbleCallback = controllerRumbleCallback;
 
     addRequirements(swerve);
   }
@@ -90,7 +87,6 @@ public class LockXOnAlgae extends Command {
       if (DEBUG) {
         System.out.println("Warning: Swerve Aim: Lost Target!");
       }
-      controllerRumbleCallback.update(RumbleState.TARGET_NONE);
     }
  
     swerve.getSwerve().drive(
@@ -111,7 +107,6 @@ false);
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    controllerRumbleCallback.update(RumbleState.TARGET_NONE);
   }
 
   // Returns true when the command should end.

@@ -28,7 +28,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.ControllerRumbleCallback;
 import frc.robot.LimelightHelpers;
 import frc.robot.RumbleState;
 import swervelib.SwerveDrive;
@@ -44,9 +43,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   NetworkTableEntry validLimeLightTarget;
   NetworkTableEntry targetXOffset;
   NetworkTableEntry targetYOffset;
-  private final ControllerRumbleCallback controllerRumbleCallback;
 
-  public SwerveDriveSubsystem(File directory, ControllerRumbleCallback controllerRumbleCallback) {
+  public SwerveDriveSubsystem(File directory) {
     SwerveDriveTelemetry.verbosity = DEBUG ? TelemetryVerbosity.HIGH : TelemetryVerbosity.NONE;
 
     try {
@@ -58,8 +56,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     } catch(Exception e) {
       throw new RuntimeException(e);
     }
-
-    this.controllerRumbleCallback = controllerRumbleCallback;
 
     ////
     NetworkTable limeLightTable = NetworkTableInstance.getDefault().getTable("limelight");
@@ -89,12 +85,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (hasTarget()) {
-      controllerRumbleCallback.update(RumbleState.TARGET_FOUND);
-    } else {
-      controllerRumbleCallback.update(RumbleState.TARGET_NONE);
-    }
-
     SmartDashboard.putNumber("YAW", swerveDrive.getYaw().getDegrees());
 
     if (DEBUG) {

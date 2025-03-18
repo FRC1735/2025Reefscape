@@ -48,13 +48,7 @@ public class RobotContainer {
 
   // Subsystems
   private final SwerveDriveSubsystem swerveDriveSubsystem = new SwerveDriveSubsystem(
-      new File(Filesystem.getDeployDirectory(), "swerve-2025"),
-      new ControllerRumbleCallback() {
-        @Override
-        public void update(RumbleState rumbleState) {
-          driverRumbleState = rumbleState;
-        }
-      });
+      new File(Filesystem.getDeployDirectory(), "swerve-2025"));
   private final AlgaeCollectorSubsystem algaeCollectorSubsystem = new AlgaeCollectorSubsystem();
   private final WristSubsystem wristSubsystem = new WristSubsystem();
   private final ElevatorSubsystem elevator = new ElevatorSubsystem();
@@ -134,13 +128,7 @@ public class RobotContainer {
     Command lockOn = new LockXOnAprilTag(
       swerveDriveSubsystem,
       () -> MathUtil.applyDeadband(-driver.getLeftY(), 0.05),
-      () -> 0,
-      new ControllerRumbleCallback() {
-        @Override
-        public void update(RumbleState rumbleState) {
-          // TODO
-        }
-      });
+      () -> 0);
  
     driver.rightBumper()
       .onTrue(new InstantCommand(() -> {
@@ -159,13 +147,7 @@ public class RobotContainer {
     Command lockOnAlgae = new LockXOnAlgae(
       swerveDriveSubsystem,
       () -> MathUtil.applyDeadband(-driver.getLeftY(), 0.05),
-      () -> 0,
-      new ControllerRumbleCallback() {
-        @Override
-        public void update(RumbleState rumbleState) {
-          // TODO
-        }
-      });
+      () -> 0);
     driver.leftTrigger().whileTrue(lockOnAlgae);
 
     driver.rightTrigger().onTrue(driveRobotOrientedAngularVelocity).onFalse(driveNew);
@@ -276,32 +258,5 @@ public class RobotContainer {
     }
       */
       //return autoChooser.getSelected();
-  }
-
-  public void rumblePeriodic() {
-    if (DriverStation.isTeleopEnabled()) {
-      switch (driverRumbleState) {
-        case TARGET_FOUND:
-          if (driverRumbleIntensity > 0.5) {
-            driverRumbleIntensity = 0.2;
-          } else {
-            driverRumbleIntensity += 0.01;
-          }
-          break;
-
-        case TARGET_LOCKED_ON:
-          driverRumbleIntensity = 1;
-          break;
-
-        case TARGET_NONE:
-        default:
-          driverRumbleIntensity = 0;
-          break;
-      }
-    } else {
-      driverRumbleState = RumbleState.TARGET_NONE;
-    }
-
-    driver.setRumble(RumbleType.kBothRumble, driverRumbleIntensity);
   }
 }

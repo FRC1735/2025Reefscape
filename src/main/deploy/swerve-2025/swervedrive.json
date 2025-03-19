@@ -1,6 +1,6 @@
 {
   "imu": {
-    "type": "navx_spi",
+    "type": "adis16470",
     "id": 0,
     "canbus": null
   },

@@ -4,27 +4,40 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkFlexConfig;
+
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class ClimberSubsystem extends SubsystemBase {
-  Servo servo;
+  SparkFlex motor = new SparkFlex(Constants.ClimberConstants.MOTOR_ID, MotorType.kBrushless);
+  DigitalInput lowerLimitSwitch = new DigitalInput(Constants.ClimberConstants.LOWER_LIMIT_ID);
+  DigitalInput upperLimitSwitch = new DigitalInput(Constants.ClimberConstants.UPPER_LIMIT_ID);
 
-  boolean DEBUG = false;
+  boolean DEBUG = true;
 
   
   /** Creates a new ClimberSubsystem. */
   public ClimberSubsystem() {
-    this.servo = new Servo(3);
+    SparkFlexConfig motorConfig = new SparkFlexConfig();
+    motorConfig.idleMode(IdleMode.kBrake);
+    motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     if (DEBUG) {
-      SmartDashboard.putNumber("Climber servo angle", servo.getAngle());
-      SmartDashboard.putNumber("Climber servo position", servo.getPosition());
+      SmartDashboard.putBoolean("Climber - upper limit", upperLimitSwitch.get());
+      SmartDashboard.putBoolean("Climber - lower limit", lowerLimitSwitch.get());
     }
   }
 }

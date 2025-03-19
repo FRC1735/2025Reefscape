@@ -34,9 +34,6 @@ public class AlgaeCollectorSubsystem extends SubsystemBase {
     motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
     in3PIDController.setTolerance(0.25);
-
-
-  
   }
 
   @Override

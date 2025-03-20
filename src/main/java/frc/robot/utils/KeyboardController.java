@@ -26,6 +26,8 @@ public class KeyboardController {
   private final Elevator elevator;
   private final Wrist wrist;
 
+  private final WPIOperatorController wpiOperatorController;
+
   public KeyboardController(int port) {
     this(port, 80);
   }
@@ -40,6 +42,7 @@ public class KeyboardController {
     this.coralCollector = new CoralCollector(this);
     this.elevator = new Elevator(this);
     this.wrist = new Wrist(this);
+    this.wpiOperatorController = new WPIOperatorController(this);
 
     buttonSubscribers = new BooleanSubscriber[this.numButtons];
     for (int i = 0; i < this.numButtons; i++) {
@@ -117,6 +120,10 @@ public class KeyboardController {
 
   public Wrist wrist() {
     return wrist;
+  }
+
+  public WPIOperatorController wpiOperatorController() {
+    return wpiOperatorController;
   }
 
   public Trigger resetHeading() {

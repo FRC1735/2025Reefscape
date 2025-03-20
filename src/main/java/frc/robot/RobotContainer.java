@@ -97,7 +97,8 @@ public class RobotContainer {
 
   private void configureBindings() {
     configureDriverController();
-    configureOperatorController();
+    //configureOperatorController();
+    configureWPIOperatorController();
   }
 
   public void configureDriverController() {
@@ -153,72 +154,121 @@ public class RobotContainer {
     driver.rightTrigger().onTrue(driveRobotOrientedAngularVelocity).onFalse(driveNew);
   }
 
-  public void configureOperatorController() {
-    // Elevator
-    
-    //// Manual Controls
-    operatorController.elevator().up().onTrue(elevator.up()).onFalse(elevator.stop());
-    operatorController.elevator().down().onTrue(elevator.down()).onFalse(elevator.stop());
+  public void configureWPIOperatorController() {
 
-    //// Algae Delivery Setpoints
-    operatorController.elevator().algaeBarge()
-      .onTrue(
-          CompositeCommands.elevatorAlgaeBarge(elevator, wristSubsystem)
-      );
-    // Algae L3
-    operatorController.elevator().algaeL3()
-      .onTrue(
-        CompositeCommands.elevatorAlgaeL3(elevator, wristSubsystem)
-      );
-    // Algae L2
-    operatorController.elevator().algaeL2()
-      .onTrue(
-        CompositeCommands.elevatorAlgaeL2(elevator, wristSubsystem)
-      );
-    // Algae Processor
-    operatorController.elevator().algaeProcessor()
-      .onTrue(
-        CompositeCommands.elevatorAlgaeProcessor(elevator, wristSubsystem)
-      );
-    
-    //// Storage
-    // TODO - this needs to be expanded to include the AlgaeCollector position, verify that CoralCollector is safe, etc
-    operatorController.elevator().storage()
-      .onTrue(
-        CompositeCommands.elevatorStorage(elevator, wristSubsystem)
-      );
+    //// Manual Wrist Control
+    // Rotate Up
+    operatorController.wpiOperatorController()
+      .rotateWristUp()
+      .whileTrue(wristSubsystem.up());
 
-    //////////  
-    // Wrist
+    // Rotate Down
+    operatorController.wpiOperatorController()
+      .rotateWristDown()
+      .whileTrue(wristSubsystem.down());
 
-    //// Manual Controls
-    operatorController.wrist().rotateDown().whileTrue(wristSubsystem.down());
-    operatorController.wrist().rotateUp().whileTrue(wristSubsystem.up());
-      
-    //// Algae Collector Setpoints
+    //// Wrist Setpoints
     // Storage
-    operatorController.algaeCollector().storage().onTrue(wristSubsystem.algaeStorage());
-    // Ground
-    operatorController.algaeCollector().ground().onTrue(wristSubsystem.algaeGround());
-    // Reef
-    operatorController.algaeCollector().reef().onTrue(wristSubsystem.algaeL2());
-    // Algae in Posession
-    operatorController.algaeCollector().held().onTrue(wristSubsystem.algaeHeld());
+    operatorController.wpiOperatorController()
+      .wristToStorage()
+      .onTrue(wristSubsystem.algaeStorage());
 
-    //////////  
-    // Algae Collector
-    operatorController.algaeCollector().collect().whileTrue(algaeCollectorSubsystem.in2()).onFalse(algaeCollectorSubsystem.stop());
-    operatorController.algaeCollector().release().whileTrue(algaeCollectorSubsystem.out()).onFalse(algaeCollectorSubsystem.stop());
+    // Hold Algae
+    operatorController.wpiOperatorController()
+      .wristToHold()
+      .onTrue(wristSubsystem.algaeHeld());
+
+    // Reef
+    operatorController.wpiOperatorController()
+      .wristToReef()
+      .onTrue(wristSubsystem.algaeL2());
+
+    // Ground
+    operatorController.wpiOperatorController()
+      .wristToGround()
+      .onTrue(wristSubsystem.algaeGround());
+
+    //// Manual Algae Collector Control
+    // Collect
+    operatorController.wpiOperatorController()
+      .algaeCollect()
+      .whileTrue(algaeCollectorSubsystem.in2())
+      .onFalse(algaeCollectorSubsystem.stop());
+
+    // Release
+    operatorController.wpiOperatorController()
+      .algaeCollect()
+      .whileTrue(algaeCollectorSubsystem.out())
+      .onFalse(algaeCollectorSubsystem.stop());
+
+    //// Climber Control
+    // climb1 - TODO
+    operatorController.wpiOperatorController()
+      .climb1()
+      .onTrue(new PrintCommand("TODO - climb1"));
+
+    // climb2 - TODO
+    operatorController.wpiOperatorController()
+      .climb2()
+      .onTrue(new PrintCommand("TODO - climb2"));
+
+    //// Manual Elevator Control
+    // Up
+    operatorController.wpiOperatorController()
+      .elevatorUp()
+      .onTrue(elevator.up())
+      .onFalse(elevator.stop());
+
+    // Down
+    operatorController.wpiOperatorController()
+      .elevatorDown()
+      .onTrue(elevator.down())
+      .onFalse(elevator.stop());
+
+    //// Elevator / Wrist Setpoints
+    // Barge Back 
+    // TODO - need to insure that the elevator is at a height where it can go back
+    operatorController.wpiOperatorController()
+      .bargeBack()
+      .onTrue(new PrintCommand("TODO - bargeBack"));
+
+    // Barge Front
+    operatorController.wpiOperatorController()
+      .bargeFront()
+      .onTrue(new PrintCommand("TODO - bargeFront"));
+
+    // Algae L3
+    operatorController.wpiOperatorController()
+      .algaeL3()
+      .onTrue(CompositeCommands.elevatorAlgaeL3(elevator, wristSubsystem));
+
+    // Algae L2
+    operatorController.wpiOperatorController()
+      .algaeL2()
+      .onTrue(CompositeCommands.elevatorAlgaeL2(elevator, wristSubsystem));
+
+    // Ground
+    operatorController.wpiOperatorController()
+      .elevatorGround()
+      .onTrue(new PrintCommand("TODO - elevator ground"));
+
+    // Processor
+    operatorController.wpiOperatorController()
+      .elevatorGround()
+      .onTrue(CompositeCommands.elevatorAlgaeProcessor(elevator, wristSubsystem));
+
+    // Storage
+    operatorController.wpiOperatorController()
+      .elevatorStorage()
+      .onTrue(CompositeCommands.elevatorStorage(elevator, wristSubsystem));
   }
+
+
 
 
   public void setSwerveOdometry() {
     Pose2d initialPose = swerveDriveSubsystem.getPose();
     swerveDriveSubsystem.resetOdometry(initialPose.rotateBy(new Rotation2d(Math.PI)));
-  }
-
-  public void setRumble(double val) {
-    driver.setRumble(RumbleType.kRightRumble, 1);
   }
 
   public Command getAutonomousCommand() {

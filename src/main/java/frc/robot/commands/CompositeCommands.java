@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import frc.robot.utils.KeyboardController.CoralCollector;
@@ -16,10 +17,13 @@ import frc.robot.utils.KeyboardController.Wrist;
 public class CompositeCommands {
 
     // General
+
+    // TODO - test this first before building out other elevator safety commands
     public static Command elevatorStorage(ElevatorSubsystem elevator, WristSubsystem wrist) {
-        return new ParallelCommandGroup(
-            elevator.storage(),
-            wrist.algaeStorage()
+        return new SequentialCommandGroup(
+            wrist.algaeStorage(),
+            Commands.waitUntil(wrist.safeForElevatorMovement()),
+            elevator.storage()
         );
     }
 

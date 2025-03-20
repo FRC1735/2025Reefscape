@@ -7,6 +7,9 @@ package frc.robot.subsystems;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+
+import java.util.function.BooleanSupplier;
+
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -29,6 +32,9 @@ public class WristSubsystem extends SubsystemBase {
 
   private double TOP_LIMIT = 0.5532;
   private double BOTTOM_LIMIT = 0.160;
+
+  // TODO - this value is not correct, need to determine position where wrist will not get hurt when elevator moves down
+  private double ELEVATOR_SAFETY_LIMIT = 0.2340; 
 
   private double setpoint = 0;
 
@@ -121,6 +127,11 @@ public class WristSubsystem extends SubsystemBase {
       double nextPosition = motor.getAbsoluteEncoder().getPosition() - 0.05;
       closedLoopController.setReference(nextPosition, ControlType.kMAXMotionPositionControl);
     });
+  }
+
+  // TODO - not correct
+  public BooleanSupplier safeForElevatorMovement() {
+    return () -> motor.getAbsoluteEncoder().getPosition() > ELEVATOR_SAFETY_LIMIT;
   }
 
   // This doesn't work the way I want it to

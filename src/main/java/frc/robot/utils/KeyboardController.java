@@ -258,4 +258,113 @@ public class KeyboardController {
         return controller.button(7, 1);
     }
   }
+
+  public static final record WPIOperatorController(KeyboardController controller) {
+    // Manual Wrist Control
+    public Trigger rotateWristUp() {
+      return controller.button(2,2)
+              .or(controller.button(2, 3));
+    }
+
+    public Trigger rotateWristDown() {
+      return controller.button(2,4)
+              .or(controller.button(2, 5));
+    }
+
+    // Wrist Position Setpoints
+    public Trigger wristToStorage() {
+      return controller.button(3,2)
+              .or(controller.button(3, 3));
+    }
+
+    public Trigger wristToHold() {
+      return controller.button(3,4)
+              .or(controller.button(3, 5));
+    }
+
+    public Trigger wristToReef() {
+      return controller.button(4,2)
+              .or(controller.button(4, 3));
+    }
+
+    public Trigger wristToGround() {
+      return controller.button(4,4)
+              .or(controller.button(4, 5));
+    }
+
+    // Manual Algae Collector Control
+    public Trigger algaeCollect() {
+      return controller.button(6,2)
+              .or(controller.button(6, 3));
+    }
+
+    public Trigger algaeRelease() {
+      return controller.button(6,4)
+              .or(controller.button(6, 5));
+    }
+
+    // Climber
+    public Trigger climb1() {
+      return controller.button(8,2)
+              .or(controller.button(8, 3));
+    }
+
+    public Trigger climb2() {
+      return controller.button(8,4)
+              .or(controller.button(8, 5));
+    }
+
+    // Manual Elevator Control
+    public Trigger elevatorUp() {
+      return controller.button(2,7)
+              .or(controller.button(2, 8));
+    }
+
+    public Trigger elevatorDown() {
+      return controller.button(2,9)
+              .or(controller.button(2, 10));
+    }
+
+    // Elevator / Algae Position Setpoints
+    public Trigger bargeBack() {
+      return controller.button(4,7)
+              .or(controller.button(4, 8));
+    }
+
+    public Trigger bargeFront() {
+      return controller.button(4,9)
+              .or(controller.button(4, 10));
+    }
+
+    public Trigger algaeL3() {
+      return controller.button(5, 7)
+              .or(controller.button(5, 8))
+              .or(controller.button(5, 9))
+              .or(controller.button(5, 10));
+    }
+
+    public Trigger algaeL2() {
+      return controller.button(6, 7)
+              .or(controller.button(6, 8))
+              .or(controller.button(6, 9))
+              .or(controller.button(6, 10));
+    }
+
+    public Trigger elevatorGround() {
+      return controller.button(7,7)
+              .or(controller.button(7, 8));
+    }
+
+    public Trigger elevatorProcessor() {
+      return controller.button(7,9)
+              .or(controller.button(7, 10));
+    }
+
+    public Trigger elevatorStorage() {
+      return controller.button(8, 7)
+              .or(controller.button(8, 8))
+              .or(controller.button(8, 9))
+              .or(controller.button(8, 10));
+    }
+  }
 }

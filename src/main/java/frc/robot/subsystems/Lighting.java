@@ -60,11 +60,11 @@ public class Lighting extends SubsystemBase {
       } else {
         setColor(selectedR, selectedG, selectedB);
       }
-    } else if (!SmartDashboard.getBoolean("Coral - Safe for Elevator Movement", false)) {
+    } /*else if (!SmartDashboard.getBoolean("Coral - Safe for Elevator Movement", false)) {
       red();
     } else if (SmartDashboard.getBoolean("Coral - is loaded?", false)) {
       coral();
-    } else if (SmartDashboard.getBoolean("Algae Held", false)) {
+    }*/ else if (SmartDashboard.getBoolean("Algae Held", false)) {
       algae();
     } else {
       green();

@@ -231,15 +231,16 @@ public class RobotContainer {
 
     //// Elevator / Wrist Setpoints
     // Barge Back 
+
     // TODO - need to insure that the elevator is at a height where it can go back
     operatorController.wpiOperatorController()
       .bargeBack()
-      .onTrue(new PrintCommand("TODO - bargeBack"));
+      .onTrue(CompositeCommands.elevatorBargeBack(elevator, wristSubsystem));
 
     // Barge Front
     operatorController.wpiOperatorController()
       .bargeFront()
-      .onTrue(new PrintCommand("TODO - bargeFront"));
+      .onTrue(CompositeCommands.elevatorBargeFront(elevator, wristSubsystem));
 
     // Algae L3
     operatorController.wpiOperatorController()
@@ -266,9 +267,6 @@ public class RobotContainer {
       .elevatorStorage()
       .onTrue(CompositeCommands.elevatorStorage(elevator, wristSubsystem));
   }
-
-
-
 
   public void setSwerveOdometry() {
     Pose2d initialPose = swerveDriveSubsystem.getPose();

@@ -7,6 +7,9 @@ package frc.robot.subsystems;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+
+import java.util.function.BooleanSupplier;
+
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -36,12 +39,16 @@ public class ElevatorSubsystem extends SubsystemBase {
   private final double STORAGE = 0.2;
 
   // Algae specific
-  private final double ALGAE_BARGE = 7.19;
+  private final double ALGAE_BARGE = 6.454;
   private final double ALGAE_L2 = 3.869;
   private final double ALGAE_L3 = 5.666;
   private final double ALGAE_PROCESSOR = STORAGE;
   private final double ALGAE_HELD = STORAGE;
   private final double ALGAE_GROUND = STORAGE;
+  
+  // When the elevator is beyond this point, the wrist can move to the 'algae back' position safely 
+  // BUT it is not safe for the elevator to move down
+  private double ELEVATOR_WRIST_UPPER_SAFETY_LIMIT = 5.311;
 
   // Coral specific
   private final double CORAL_L1 = 1.1;
@@ -152,8 +159,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     return this.runOnce(() -> closedLoopController.setReference(CORAL_L4, ControlType.kMAXMotionPositionControl));
   }
 
-  public Command 
-  storage() {
+  public Command storage() {
     return this.runOnce(() -> closedLoopController.setReference(STORAGE, ControlType.kMAXMotionPositionControl));
+  }
+
+  public BooleanSupplier safeForBargeBack() {
+    return () -> leadMotor.getAbsoluteEncoder().getPosition() > ELEVATOR_WRIST_UPPER_SAFETY_LIMIT;
   }
 }

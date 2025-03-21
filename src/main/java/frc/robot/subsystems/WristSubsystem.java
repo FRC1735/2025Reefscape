@@ -31,10 +31,7 @@ public class WristSubsystem extends SubsystemBase {
   private SmartDashboardPIDTuner smartDashboardPIDTuner;
 
   private double TOP_LIMIT = 0.5532;
-  private double BOTTOM_LIMIT = 0.160;
-
-  // TODO - this value is not correct, need to determine position where wrist will not get hurt when elevator moves down
-  private double ELEVATOR_SAFETY_LIMIT = 0.2340; 
+  private double BOTTOM_LIMIT = 0.1678;
 
   private double setpoint = 0;
 
@@ -57,10 +54,10 @@ public class WristSubsystem extends SubsystemBase {
       .allowedClosedLoopError(0.025);
 
     motorConfig.softLimit
-      .forwardSoftLimitEnabled(true)
-      .forwardSoftLimit(0.5532)
+      .forwardSoftLimitEnabled(false) // TODO - can we change this or only apply it when doing manual wrist movement?
+      .forwardSoftLimit(TOP_LIMIT)
       .reverseSoftLimitEnabled(true)
-      .reverseSoftLimit(0.1678); // TODO
+      .reverseSoftLimit(BOTTOM_LIMIT);
 
     motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
@@ -114,6 +111,13 @@ public class WristSubsystem extends SubsystemBase {
     return algaeHeld();
   }
 
+  public Command algaeBargeBack() {
+    return this.runOnce(() -> closedLoopController.setReference(0.6293, ControlType.kMAXMotionPositionControl));
+  }
+
+  public Command algaeBargeFront() {
+    return this.runOnce(() -> closedLoopController.setReference(0.4478, ControlType.kMAXMotionPositionControl));
+  }
 
   public Command up() {
     return this.run(() -> {
@@ -129,9 +133,9 @@ public class WristSubsystem extends SubsystemBase {
     });
   }
 
-  // TODO - not correct
-  public BooleanSupplier safeForElevatorMovement() {
-    return () -> true;//motor.getAbsoluteEncoder().getPosition() > ELEVATOR_SAFETY_LIMIT;
+  // when this returns true it means the elevator can move down without hurting the wrist
+  public BooleanSupplier safeForElevatorDownMovement() {
+    return () -> motor.getAbsoluteEncoder().getPosition() <= TOP_LIMIT;
   }
 
   // This doesn't work the way I want it to

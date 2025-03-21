@@ -52,7 +52,7 @@ public class RobotContainer {
   private final AlgaeCollectorSubsystem algaeCollectorSubsystem = new AlgaeCollectorSubsystem();
   private final WristSubsystem wristSubsystem = new WristSubsystem();
   private final ElevatorSubsystem elevator = new ElevatorSubsystem();
-  //private final ClimberSubsystem climber = new ClimberSubsystem();
+  private final ClimberSubsystem climber = new ClimberSubsystem();
   private final Lighting lighting = new Lighting();
 
   // Auto Chooser
@@ -152,6 +152,10 @@ public class RobotContainer {
     driver.leftTrigger().whileTrue(lockOnAlgae);
 
     driver.rightTrigger().onTrue(driveRobotOrientedAngularVelocity).onFalse(driveNew);
+
+    // TODO - remove these, test out the motor on the climber
+    driver.b().whileTrue(climber.testPositive()).onFalse(climber.testStop());
+    driver.x().whileTrue(climber.testNegative()).onFalse(climber.testStop());
   }
 
   public void configureWPIOperatorController() {
@@ -202,15 +206,15 @@ public class RobotContainer {
       .onFalse(algaeCollectorSubsystem.stop());
 
     //// Climber Control
-    // climb1 - TODO
+    // climb1 - DEPLOY
     operatorController.wpiOperatorController()
       .climb1()
-      .onTrue(new PrintCommand("TODO - climb1"));
+      .onTrue(climber.deploy());
 
-    // climb2 - TODO
+    // climb2 - CLIMB
     operatorController.wpiOperatorController()
       .climb2()
-      .onTrue(new PrintCommand("TODO - climb2"));
+      .onTrue(climber.climb2());
 
     //// Manual Elevator Control
     // Up

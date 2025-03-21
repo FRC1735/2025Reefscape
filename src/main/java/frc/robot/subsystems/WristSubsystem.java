@@ -82,12 +82,12 @@ public class WristSubsystem extends SubsystemBase {
   }
 
   public Command algaeL2() {
-    return this.runOnce(() -> closedLoopController.setReference(0.2351, ControlType.kMAXMotionPositionControl));
+    return this.runOnce(() -> closedLoopController.setReference(0.2029, ControlType.kMAXMotionPositionControl));
   }
 
 
   public Command algaeL3() {
-    return this.runOnce(() -> closedLoopController.setReference(0.2351, ControlType.kMAXMotionPositionControl));
+    return this.runOnce(() -> closedLoopController.setReference(0.2029, ControlType.kMAXMotionPositionControl));
   }
 
   public Command algaeProcessor() {
@@ -95,19 +95,19 @@ public class WristSubsystem extends SubsystemBase {
   }
 
   public Command algaeGround() {
-    return this.runOnce(() -> closedLoopController.setReference(0.161, ControlType.kMAXMotionPositionControl));
+    return this.runOnce(() -> closedLoopController.setReference(0.226, ControlType.kMAXMotionPositionControl));
   }
 
   public Command algaeStorage() {
     if (SmartDashboard.getBoolean("Algae Held", false)) {
       return algaeHeld();
     } else {
-      return this.runOnce(() -> closedLoopController.setReference(0.5805, ControlType.kMAXMotionPositionControl));
+      return this.runOnce(() -> closedLoopController.setReference(0.5473, ControlType.kMAXMotionPositionControl));
     }
     }
 
   public Command algaeHeld() {
-    return this.runOnce(() -> closedLoopController.setReference(0.550, ControlType.kMAXMotionPositionControl));
+    return this.runOnce(() -> closedLoopController.setReference(0.509, ControlType.kMAXMotionPositionControl));
   }
 
   public Command algaeBarge() {
@@ -131,7 +131,7 @@ public class WristSubsystem extends SubsystemBase {
 
   // TODO - not correct
   public BooleanSupplier safeForElevatorMovement() {
-    return () -> motor.getAbsoluteEncoder().getPosition() > ELEVATOR_SAFETY_LIMIT;
+    return () -> true;//motor.getAbsoluteEncoder().getPosition() > ELEVATOR_SAFETY_LIMIT;
   }
 
   // This doesn't work the way I want it to

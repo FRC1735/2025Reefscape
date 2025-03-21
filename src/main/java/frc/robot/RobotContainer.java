@@ -154,8 +154,8 @@ public class RobotContainer {
     driver.rightTrigger().onTrue(driveRobotOrientedAngularVelocity).onFalse(driveNew);
 
     // TODO - remove these, test out the motor on the climber
-    driver.b().whileTrue(climber.testPositive()).onFalse(climber.testStop());
-    driver.x().whileTrue(climber.testNegative()).onFalse(climber.testStop());
+    //driver.b().whileTrue(climber.testPositive()).onFalse(climber.testStop());
+    //driver.x().whileTrue(climber.testNegative()).onFalse(climber.testStop());
   }
 
   public void configureWPIOperatorController() {
@@ -201,7 +201,7 @@ public class RobotContainer {
 
     // Release
     operatorController.wpiOperatorController()
-      .algaeCollect()
+      .algaeRelease()
       .whileTrue(algaeCollectorSubsystem.out())
       .onFalse(algaeCollectorSubsystem.stop());
 
@@ -276,7 +276,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return Commands.run(() -> swerveDriveSubsystem.getSwerve().drive(new ChassisSpeeds(1, 0, 0)),swerveDriveSubsystem).withTimeout(1.75); 
+    //return Commands.run(() -> swerveDriveSubsystem.getSwerve().drive(new ChassisSpeeds(1, 0, 0)),swerveDriveSubsystem).withTimeout(1.75); 
     /*
     var alliance = DriverStation.getAlliance();
     if  (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
@@ -285,6 +285,6 @@ public class RobotContainer {
       return Commands.run(() -> swerveDriveSubsystem.getSwerve().drive(new ChassisSpeeds(-1, 0, 0)),swerveDriveSubsystem).withTimeout(3); 
     }
       */
-      //return autoChooser.getSelected();
+    return autoChooser.getSelected();
   }
 }

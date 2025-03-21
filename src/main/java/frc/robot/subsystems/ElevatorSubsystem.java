@@ -37,8 +37,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   // Algae specific
   private final double ALGAE_BARGE = 7.19;
-  private final double ALGAE_L2 = 3.05;
-  private final double ALGAE_L3 = 4.69;
+  private final double ALGAE_L2 = 3.869;
+  private final double ALGAE_L3 = 5.666;
   private final double ALGAE_PROCESSOR = STORAGE;
   private final double ALGAE_HELD = STORAGE;
   private final double ALGAE_GROUND = STORAGE;
@@ -152,7 +152,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     return this.runOnce(() -> closedLoopController.setReference(CORAL_L4, ControlType.kMAXMotionPositionControl));
   }
 
-  public Command storage() {
+  public Command 
+  storage() {
     return this.runOnce(() -> closedLoopController.setReference(STORAGE, ControlType.kMAXMotionPositionControl));
   }
 }

@@ -36,7 +36,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   // setpoints
 
   // General
-  private final double TOP_LIMIT = 8.2;
+  private final double TOP_LIMIT = 7.4;
   private final double STORAGE = 0.2;
 
   // Algae specific

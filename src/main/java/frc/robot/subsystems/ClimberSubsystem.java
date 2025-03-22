@@ -24,7 +24,7 @@ public class ClimberSubsystem extends SubsystemBase {
   SparkFlex motor = new SparkFlex(Constants.ClimberConstants.MOTOR_ID, MotorType.kBrushless);
   DigitalInput lowerLimitSwitch = new DigitalInput(Constants.ClimberConstants.LOWER_LIMIT_ID);
   DigitalInput upperLimitSwitch = new DigitalInput(Constants.ClimberConstants.UPPER_LIMIT_ID);
-  boolean DEBUG = true;
+  boolean DEBUG = false;
   
   /** Creates a new ClimberSubsystem. */
   public ClimberSubsystem() {

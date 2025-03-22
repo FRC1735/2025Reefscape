@@ -15,6 +15,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.SharpIR;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AlgaeSubystemConstants;
 import frc.robot.utils.SmartDashboardPIDTuner;
@@ -104,4 +105,16 @@ public class AlgaeCollectorSubsystem extends SubsystemBase {
   public void stopCollecting() {
     motor.stopMotor();
   }
+
+  public Command stopCollectingCmd() {
+    return Commands.run(() -> motor.stopMotor(), this);
+  }
+
+  public Command  autoCollect() {
+    return Commands.runEnd(
+      () -> motor.set(-0.2),
+      () -> motor.stopMotor())
+      .until(() -> isAlgaeHeld());
+  }
+
 }

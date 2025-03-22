@@ -91,7 +91,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     NamedCommands.registerCommand("Algae L2", CompositeCommands.elevatorAlgaeL2(elevator, wristSubsystem));
-    NamedCommands.registerCommand("Collect Algae", algaeCollectorSubsystem.in2().withTimeout(2));
+    NamedCommands.registerCommand("Collect Algae",algaeCollectorSubsystem.autoCollect());
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
 

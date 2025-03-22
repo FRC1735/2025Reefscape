@@ -373,5 +373,15 @@ public class KeyboardController {
               .or(controller.button(8, 9))
               .or(controller.button(8, 10));
     }
+
+    public Trigger forceElevatorUp() {
+      return controller.button(1,6);
+    }
+
+    public Trigger forceElevatorDown() {
+      return controller.button(2,6);
+    }
+
+
   }
 }

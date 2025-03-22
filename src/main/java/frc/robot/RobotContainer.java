@@ -273,6 +273,16 @@ public class RobotContainer {
     operatorController.wpiOperatorController()
       .elevatorStorage()
       .onTrue(CompositeCommands.elevatorStorage(elevator, wristSubsystem));
+
+    operatorController.wpiOperatorController()
+      .forceElevatorDown()
+      .onTrue(Commands.sequence(elevator.turnLimitsOff(), elevator.downOverrideLimit()))
+      .onFalse(Commands.sequence(elevator.stop(), elevator.turnLimitsOn()));
+
+    operatorController.wpiOperatorController()
+      .forceElevatorUp()
+      .onTrue(Commands.sequence(elevator.turnLimitsOff(), elevator.upOverrideLimit()))
+      .onFalse(Commands.sequence(elevator.stop(), elevator.turnLimitsOn()));
   }
 
   public void setSwerveOdometry() {

@@ -36,6 +36,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   // setpoints
 
   // General
+  private final double TOP_LIMIT = 8.2;
   private final double STORAGE = 0.2;
 
   // Algae specific
@@ -56,7 +57,6 @@ public class ElevatorSubsystem extends SubsystemBase {
   private final double CORAL_L3 = 4.27;
   private final double CORAL_L4 = 7.19;
 
-
   public ElevatorSubsystem() {
     SparkFlexConfig leadMotorConfig = new SparkFlexConfig();
     leadMotorConfig.idleMode(IdleMode.kBrake);
@@ -68,7 +68,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     leadMotorConfig.softLimit
       .forwardSoftLimitEnabled(true) 
-      .forwardSoftLimit(8.2)
+      .forwardSoftLimit(TOP_LIMIT)
       .reverseSoftLimitEnabled(true) // TODO - figure out how to set this based on where the enocder starts (it prob wont be 0)
       .reverseSoftLimit(STORAGE); // ????
 
@@ -165,5 +165,48 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public BooleanSupplier safeForBargeBack() {
     return () -> leadMotor.getExternalEncoder().getPosition() > ELEVATOR_WRIST_UPPER_SAFETY_LIMIT;
+  }
+
+  public void turnSoftLimitsOff() {
+    SparkFlexConfig leadMotorConfig = new SparkFlexConfig();
+
+    leadMotorConfig.softLimit
+      .forwardSoftLimitEnabled(false) 
+      .forwardSoftLimit(TOP_LIMIT)
+      .reverseSoftLimitEnabled(false) 
+      .reverseSoftLimit(STORAGE); // 
+
+      leadMotor.configure(leadMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+  }
+
+  public void turnSoftLimitsOn() {
+    SparkFlexConfig leadMotorConfig = new SparkFlexConfig();
+
+    leadMotorConfig.softLimit
+      .forwardSoftLimitEnabled(true) 
+      .forwardSoftLimit(TOP_LIMIT)
+      .reverseSoftLimitEnabled(true) 
+      .reverseSoftLimit(STORAGE); // 
+
+      leadMotor.configure(leadMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+  }
+
+  public Command turnLimitsOff() {
+    return this.runOnce(() -> turnSoftLimitsOff());
+  }
+
+  public Command turnLimitsOn() {
+    return this.runOnce(() -> turnSoftLimitsOn());
+  }
+
+  public Command upOverrideLimit() {
+    return this.runOnce(() -> {
+      leadMotor.set(0.4);
+    });
+  } 
+
+  // TODO - don't really like this, should probably be going towards the bottom and maintain that position
+  public Command downOverrideLimit() {
+    return this.runOnce(() -> leadMotor.set(-0.4));
   }
 }

@@ -7,6 +7,7 @@ package frc.robot;
 import java.io.File;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -39,6 +40,8 @@ import frc.robot.utils.KeyboardController;
 import swervelib.SwerveInputStream;
 
 public class RobotContainer {
+
+
 
   // Controllers
   final CommandXboxController driver = new CommandXboxController(0);
@@ -87,8 +90,12 @@ public class RobotContainer {
       .allianceRelativeControl(false);
 
   public RobotContainer() {
+    NamedCommands.registerCommand("Algae L2", CompositeCommands.elevatorAlgaeL2(elevator, wristSubsystem));
+    NamedCommands.registerCommand("Collect Algae", algaeCollectorSubsystem.in2().withTimeout(2));
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
+
+
 
     configureBindings();
 

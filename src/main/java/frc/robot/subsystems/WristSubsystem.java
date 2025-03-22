@@ -88,7 +88,7 @@ public class WristSubsystem extends SubsystemBase {
   }
 
   public Command algaeProcessor() {
-    return this.runOnce(() -> closedLoopController.setReference(0.161, ControlType.kMAXMotionPositionControl));
+    return this.runOnce(() -> closedLoopController.setReference(0.288, ControlType.kMAXMotionPositionControl));
   }
 
   public Command algaeGround() {

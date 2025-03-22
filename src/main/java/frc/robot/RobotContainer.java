@@ -255,11 +255,11 @@ public class RobotContainer {
     // Ground
     operatorController.wpiOperatorController()
       .elevatorGround()
-      .onTrue(new PrintCommand("TODO - elevator ground"));
+      .onTrue(CompositeCommands.elevatorAlgaeGround(elevator, wristSubsystem));
 
     // Processor
     operatorController.wpiOperatorController()
-      .elevatorGround()
+      .elevatorProcessor()
       .onTrue(CompositeCommands.elevatorAlgaeProcessor(elevator, wristSubsystem));
 
     // Storage

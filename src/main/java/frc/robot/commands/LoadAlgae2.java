@@ -25,7 +25,7 @@ public class LoadAlgae2 extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      if(algaeCollectorSubsystem.distanceSensor.getRangeCM() < 6.4 || algaeCollectorSubsystem.distanceSensor.getRangeCM() > 20) {
+      if(algaeCollectorSubsystem.distanceSensor.getRangeCM() < 6.4 || algaeCollectorSubsystem.distanceSensor.getRangeCM() > 28.5) {
         algaeCollectorSubsystem.stopCollecting();
       } else if (algaeCollectorSubsystem.isAlgaeHeld()) {
         algaeCollectorSubsystem.collectSlow();

@@ -24,7 +24,7 @@ public class CompositeCommands {
         // in either case elevator should not move until we know that the wrist is safe
 
         return new SequentialCommandGroup(
-            wrist.algaeStorage(), // This command knows wether to go to "held" or "storage" based on algae hold state
+            wrist.algaeHeld(), // This command knows wether to go to "held" or "storage" based on algae hold state
             Commands.waitUntil(wrist.safeForElevatorDownMovement()),
             elevator.storage()
         );
@@ -65,9 +65,20 @@ public class CompositeCommands {
 
     public static Command elevatorBargeBack(ElevatorSubsystem elevator, WristSubsystem wrist) {
         return new SequentialCommandGroup(
+            wrist.algaeHeld(),
+            Commands.waitUntil(wrist.safeForElevatorDownMovement()),
             elevator.algaeBarge(),
             Commands.waitUntil(elevator.safeForBargeBack()),
             wrist.algaeBargeBack()
+        );
+    }
+
+    public static Command elevatorAlgaeGround(ElevatorSubsystem elevator, WristSubsystem wrist) {
+        return new SequentialCommandGroup(
+            wrist.algaeHeld(),
+            Commands.waitUntil(wrist.safeForElevatorDownMovement()),
+            elevator.storage(),
+            wrist.algaeGround()
         );
     }
  

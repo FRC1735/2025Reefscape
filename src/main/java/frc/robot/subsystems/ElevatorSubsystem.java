@@ -27,7 +27,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private SparkFlex leadMotor = new SparkFlex(ElevatorSubystemConstants.LEAD_MOTOR_ID, MotorType.kBrushless);
   private SparkFlex followMotor = new SparkFlex(ElevatorSubystemConstants.FOLLOW_MOTOR_ID, MotorType.kBrushless); 
 
-  boolean DEBUG = false;
+  boolean DEBUG = true;
   private SmartDashboardPIDTuner smartDashboardPIDTuner;
   private SparkClosedLoopController closedLoopController;
   private double initialZeroPoint = leadMotor.getExternalEncoder().getPosition();
@@ -164,6 +164,6 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public BooleanSupplier safeForBargeBack() {
-    return () -> leadMotor.getAbsoluteEncoder().getPosition() > ELEVATOR_WRIST_UPPER_SAFETY_LIMIT;
+    return () -> leadMotor.getExternalEncoder().getPosition() > ELEVATOR_WRIST_UPPER_SAFETY_LIMIT;
   }
 }

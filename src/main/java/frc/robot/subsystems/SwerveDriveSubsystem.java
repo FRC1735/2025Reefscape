@@ -15,10 +15,12 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -31,6 +33,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
 import frc.robot.RumbleState;
 import swervelib.SwerveDrive;
+import swervelib.SwerveModule;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
@@ -196,4 +199,45 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   public SwerveDrive getSwerve() {
     return swerveDrive;
   }
+
+  private int FRONT_LEFT = 3;
+  private int FRONT_RIGHT = 2;
+  private int BACK_LEFT = 1;
+  private int BACK_RIGHT = 0;
+
+  public void pathPlannerStartPose() {
+    // Sets states
+    for (SwerveModule swerveModule : swerveDrive.getModules()) {
+
+      System.out.println(swerveModule.moduleNumber + ": " + swerveModule.configuration.moduleLocation.getAngle());
+
+      double desiredAngle = 0;
+      /*
+      if (swerveModule.moduleNumber == FRONT_LEFT) {
+        //desiredAngle = MathUtil.angleModulus(swerveModule.configuration.moduleLocation.getAngle().getDegrees() + 45);
+        desiredAngle = swerveModule.configuration.moduleLocation.getAngle().getRadians(); 
+        System.out.println("Module " + swerveModule.moduleNumber + ": " + desiredAngle);
+      } 
+        */
+
+      
+      /*else if (swerveModule.moduleNumber == FRONT_RIGHT) {
+        desiredAngle = Math.PI / 2;
+      } else if (swerveModule.moduleNumber == BACK_LEFT) {
+        desiredAngle = Math.PI;
+      } else if (swerveModule.moduleNumber == BACK_RIGHT) {
+        desiredAngle = Math.PI * 1.5;
+      }*/
+
+      SwerveModuleState desiredState =
+          new SwerveModuleState(0, new Rotation2d(0));
+      if (SwerveDriveTelemetry.verbosity.ordinal() >= TelemetryVerbosity.INFO.ordinal()) {
+        SwerveDriveTelemetry.desiredStatesObj[swerveModule.moduleNumber] = desiredState;
+      }
+      swerveModule.setDesiredState(desiredState, false, true);
+    }
+
+    swerveDrive.kinematics.toSwerveModuleStates(new ChassisSpeeds());
+  }
+
 }

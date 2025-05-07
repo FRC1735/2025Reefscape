@@ -119,7 +119,7 @@ public class RobotContainer {
     swerveDriveSubsystem.setDefaultCommand(driveNew);
 
 
-    driver.y().whileTrue(Commands.runOnce(() -> swerveDriveSubsystem.pathPlannerStartPose()));
+    //driver.y().whileTrue(Commands.runOnce(() -> swerveDriveSubsystem.pathPlannerStartPose()));
     driver.x().whileTrue(Commands.runOnce(() -> swerveDriveSubsystem.getSwerve().lockPose()));
 
 

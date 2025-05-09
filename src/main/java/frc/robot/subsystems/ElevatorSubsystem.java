@@ -27,7 +27,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private SparkFlex leadMotor = new SparkFlex(ElevatorSubystemConstants.LEAD_MOTOR_ID, MotorType.kBrushless);
   private SparkFlex followMotor = new SparkFlex(ElevatorSubystemConstants.FOLLOW_MOTOR_ID, MotorType.kBrushless); 
 
-  boolean DEBUG = false;
+  boolean DEBUG = true;
   private SmartDashboardPIDTuner smartDashboardPIDTuner;
   private SparkClosedLoopController closedLoopController;
   private double initialZeroPoint = leadMotor.getExternalEncoder().getPosition();
@@ -102,6 +102,7 @@ public class ElevatorSubsystem extends SubsystemBase {
       smartDashboardPIDTuner.periodic();
       SmartDashboard.putNumber("Elevator Voltage", leadMotor.getAppliedOutput());
       SmartDashboard.putNumber("Elevator intial zero point", initialZeroPoint);
+      SmartDashboard.putBoolean("Elevator safe for barge", safeForBargeBack().getAsBoolean());
     }
   }
 

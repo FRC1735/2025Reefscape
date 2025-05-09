@@ -23,7 +23,7 @@ import frc.robot.utils.SmartDashboardPIDTuner;
 public class AlgaeCollectorSubsystem extends SubsystemBase {
   private SparkFlex motor = new SparkFlex(AlgaeSubystemConstants.MOTOR_ID, MotorType.kBrushless);
 
-  private final boolean DEBUG = false;
+  private final boolean DEBUG = true;
 
   public SharpIR distanceSensor = SharpIR.GP2Y0A41SK0F(0);
 
@@ -86,6 +86,10 @@ public class AlgaeCollectorSubsystem extends SubsystemBase {
     return this.runOnce(() -> motor.stopMotor());
   }
 
+  public Command stop2() {
+    return this.run(() -> motor.stopMotor());
+  }
+
   public boolean isAlgaeHeld() {
     return distanceSensor.getRangeCM() < 11;
   }
@@ -113,8 +117,16 @@ public class AlgaeCollectorSubsystem extends SubsystemBase {
   public Command  autoCollect() {
     return Commands.runEnd(
       () -> motor.set(-0.2),
-      () -> motor.stopMotor())
+      () -> motor.stopMotor(),
+      this)
       .until(() -> isAlgaeHeld());
   }
 
+  public Command autoRelease() {
+    return Commands.runEnd(
+      () -> motor.set(1),
+      () -> motor.stopMotor(),
+      this)
+      .withTimeout(1);
+  }
 }

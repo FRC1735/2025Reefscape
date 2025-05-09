@@ -40,6 +40,54 @@
           "data": {
             "pathName": "Leave Reef, Go To Barge"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Barge Back"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.2
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Release Algae"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop algae collector"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Storage"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Leave barge"
+          }
         }
       ]
     }

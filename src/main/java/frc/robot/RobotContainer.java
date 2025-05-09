@@ -92,7 +92,12 @@ public class RobotContainer {
   public RobotContainer() {
     NamedCommands.registerCommand("Algae L2", CompositeCommands.elevatorAlgaeL2(elevator, wristSubsystem));
     NamedCommands.registerCommand("Collect Algae",algaeCollectorSubsystem.autoCollect());
+    NamedCommands.registerCommand("Barge Back", CompositeCommands.elevatorBargeBack(elevator, wristSubsystem));
+    NamedCommands.registerCommand("Release Algae", algaeCollectorSubsystem.autoRelease());
+    NamedCommands.registerCommand("Stop algae collector", algaeCollectorSubsystem.stop());
+    NamedCommands.registerCommand("Storage", CompositeCommands.elevatorStorage(elevator, wristSubsystem));
     autoChooser = AutoBuilder.buildAutoChooser();
+
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
 

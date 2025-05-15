@@ -5,22 +5,15 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Go Straight"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Algae L2"
-                }
-              }
-            ]
+            "name": "Algae L2"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
           }
         },
         {
@@ -36,16 +29,10 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Approach Reef"
+                  "pathName": "Move from Center Start to Reef"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Leave Reef, Go To Barge"
           }
         }
       ]

@@ -27,7 +27,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private SparkFlex leadMotor = new SparkFlex(ElevatorSubystemConstants.LEAD_MOTOR_ID, MotorType.kBrushless);
   private SparkFlex followMotor = new SparkFlex(ElevatorSubystemConstants.FOLLOW_MOTOR_ID, MotorType.kBrushless); 
 
-  boolean DEBUG = true;
+  boolean DEBUG = false;
   private SmartDashboardPIDTuner smartDashboardPIDTuner;
   private SparkClosedLoopController closedLoopController;
   private double initialZeroPoint = leadMotor.getExternalEncoder().getPosition();

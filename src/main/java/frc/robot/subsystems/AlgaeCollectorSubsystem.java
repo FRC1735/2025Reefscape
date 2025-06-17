@@ -114,12 +114,28 @@ public class AlgaeCollectorSubsystem extends SubsystemBase {
     return Commands.run(() -> motor.stopMotor(), this);
   }
 
-  public Command  autoCollect() {
+  public Command autoCollect() {
     return Commands.runEnd(
-      () -> motor.set(-0.2),
-      () -> motor.stopMotor(),
+      () -> {
+        motor.set(-1);
+      },
+      () -> {
+        motor.stopMotor();
+      },
       this)
       .until(() -> isAlgaeHeld());
+  }
+
+  public Command autoCollectWithTimeout() {
+    return Commands.runEnd(
+      () -> {
+        motor.set(-1);
+      },
+      () -> {
+        motor.stopMotor();
+      },
+      this)
+      .withTimeout(2.5);
   }
 
   public Command autoRelease() {

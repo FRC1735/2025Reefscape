@@ -97,6 +97,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Release Algae", algaeCollectorSubsystem.autoRelease());
     NamedCommands.registerCommand("Stop algae collector", algaeCollectorSubsystem.stop());
     NamedCommands.registerCommand("Storage", CompositeCommands.elevatorStorage(elevator, wristSubsystem));
+    NamedCommands.registerCommand("Turn 90 degrees", null /* TODO */);
     autoChooser = AutoBuilder.buildAutoChooser();
 
     SmartDashboard.putData("Auto Chooser", autoChooser);

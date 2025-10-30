@@ -30,6 +30,7 @@ import frc.robot.commands.LoadAlgae2;
 import frc.robot.commands.LockHeadingOnAprilTag;
 import frc.robot.commands.LockXOnAlgae;
 import frc.robot.commands.LockXOnAprilTag;
+import frc.robot.commands.TrackAprilTagCommand;
 import frc.robot.subsystems.AlgaeCollectorSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -97,8 +98,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("Release Algae", algaeCollectorSubsystem.autoRelease());
     NamedCommands.registerCommand("Stop algae collector", algaeCollectorSubsystem.stop());
     NamedCommands.registerCommand("Storage", CompositeCommands.elevatorStorage(elevator, wristSubsystem));
-    NamedCommands.registerCommand("Turn 90 degrees", null /* TODO */);
     autoChooser = AutoBuilder.buildAutoChooser();
+    autoChooser.addOption("Track April Tag", new TrackAprilTagCommand(swerveDriveSubsystem));
+
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
 

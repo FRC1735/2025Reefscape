@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
@@ -29,8 +30,65 @@ public class TrackAprilTagCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println(driveline.getTargetXOffset());
+    double xOffset = (driveline.getTargetXOffset());
+    if (Math.abs(xOffset) < 6){
+      stop();
+      turn(0);
+    }
+     else if (xOffset > 0) {
+      goRight();
+      turn(.5);
+    }else{
+      goLeft();
+      turn(-.5);
+    }
   }
+
+  private void turn(double speed) {
+    driveline.getSwerve().drive(
+      new Translation2d(
+        0,
+        0
+      ),
+      speed,
+      false,
+      false);
+  }
+
+  private void goRight() {
+    driveline.getSwerve().drive(
+      new Translation2d(
+        0,
+        -1 * driveline.getSwerve().getMaximumChassisVelocity()
+      ),
+      0,
+      false,
+      false);
+
+  }
+  private void goLeft() {
+    driveline.getSwerve().drive(
+      new Translation2d(
+        0,
+        1 * driveline.getSwerve().getMaximumChassisVelocity()
+      ),
+      0,
+      false,
+      false);
+  }
+  private void stop() {
+    
+      driveline.getSwerve().drive(
+        new Translation2d(
+          0,
+          0
+        ),
+        0,
+        false,
+        false);
+    
+  }
+
 
   // Called once the command ends or is interrupted.
   @Override

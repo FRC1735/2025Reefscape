@@ -144,6 +144,8 @@ public class RobotContainer {
         */
 
 
+        /* 
+
     Command lockOn = new LockXOnAprilTag(
       swerveDriveSubsystem,
       () -> MathUtil.applyDeadband(-driver.getLeftY(), 0.05),
@@ -161,8 +163,14 @@ public class RobotContainer {
       }))
       .whileTrue(lockOn);
 
+      */
+
+      driver.rightBumper()
+        .whileTrue(new TrackAprilTagCommand(swerveDriveSubsystem));
+
     driver.a().onTrue(new InstantCommand(swerveDriveSubsystem::zeroGyro, swerveDriveSubsystem));
 
+    /* 
     Command lockOnAlgae = new LockXOnAlgae(
       swerveDriveSubsystem,
       () -> MathUtil.applyDeadband(-driver.getLeftY(), 0.05),
@@ -170,6 +178,7 @@ public class RobotContainer {
     driver.leftTrigger().whileTrue(lockOnAlgae);
 
     driver.rightTrigger().onTrue(driveRobotOrientedAngularVelocity).onFalse(driveNew);
+    */
 
     // TODO - remove these, test out the motor on the climber
     //driver.b().whileTrue(climber.testPositive()).onFalse(climber.testStop());

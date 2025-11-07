@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -11,6 +12,7 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class TrackAprilTagCommand extends Command {
   SwerveDriveSubsystem driveline;
+  PIDController apirlTagController = new PIDController(.1, 0, 0);
 
   /** Creates a new TrackAprilTagCommand. */
   public TrackAprilTagCommand(SwerveDriveSubsystem driveline) {
@@ -29,6 +31,7 @@ public class TrackAprilTagCommand extends Command {
   @Override
   public void execute() {
     double xOffset = (driveline.getTargetXOffset());
+    /* 
     if (Math.abs(xOffset) < 6){
       stop();
       turn(0);
@@ -39,7 +42,9 @@ public class TrackAprilTagCommand extends Command {
     }else{
       goLeft();
       turn(-.5);
-    }
+    }*/
+
+    turn(-apirlTagController.calculate(xOffset, 0));
   }
 
   private void turn(double speed) {

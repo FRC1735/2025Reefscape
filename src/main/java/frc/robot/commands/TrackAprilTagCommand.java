@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -27,6 +28,18 @@ public class TrackAprilTagCommand extends Command {
   public void initialize() {
     }
 
+/* 
+  public double getDistanceToAprilTag() {
+      double[] defaultPose = new double[6];
+      
+      double[] camToTarget = LimelightHelpers.getTargetPose3d_CameraSpace("limelight").
+
+      // camToTarget[2] is the Z distance (forward from camera to tag) in meters
+      double zDistanceMeters = camToTarget[2];
+
+      return zDistanceMeters; // returns distance in meters
+  }
+      */
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {

@@ -22,6 +22,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -31,6 +32,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
+import frc.robot.LimelightHelpers.PoseEstimate;
 import frc.robot.RumbleState;
 import swervelib.SwerveDrive;
 import swervelib.SwerveModule;
@@ -46,6 +48,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   NetworkTableEntry validLimeLightTarget;
   NetworkTableEntry targetXOffset;
   NetworkTableEntry targetYOffset;
+
+  private final DoubleSubscriber ppTranslationP = DogLog.tunable("Swerve/PP/Translation/P",5);
+  private final DoubleSubscriber ppRotateP = DogLog.tunable("Swerve/PP/Rotate/P", 0.15);
 
   public SwerveDriveSubsystem(File directory) {
     SwerveDriveTelemetry.verbosity = DEBUG ? TelemetryVerbosity.HIGH : TelemetryVerbosity.NONE;
@@ -65,6 +70,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     validLimeLightTarget = limeLightTable.getEntry("tv");
     targetXOffset = limeLightTable.getEntry("tx");
     targetYOffset = limeLightTable.getEntry("ty");
+    /// 
     /// 
 
 
@@ -99,6 +105,20 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         "Target X Offset", getTargetXOffset()
       );
     }
+
+    PoseEstimate blueEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+
+    Pose2d pose = blueEstimate.pose;
+    double timestamp = blueEstimate.timestampSeconds;
+
+    SmartDashboard.putNumber("pose x", pose.getX());
+    SmartDashboard.putNumber("pose y", pose.getY());
+
+    if(pose.getX() != 0 && pose.getY() != 0){
+      swerveDrive.addVisionMeasurement(pose, timestamp);
+    
+    }
+
   }
 
   public void zeroGyro()
@@ -137,9 +157,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
           // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
           new PPHolonomicDriveController(
               // PPHolonomicController is the built in path following controller for holonomic drive trains
-              new PIDConstants(/*2.4*/4.8, 0.0, 1.6),
+              new PIDConstants(ppTranslationP,0,0,0),
               // Translation PID constants
-              new PIDConstants(0.5, 0.0, 0.0)
+              new PIDConstants(ppRotateP, 0.0, 0.0)
               // Rotation PID constants
           ),
           config,
